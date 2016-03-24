@@ -43,7 +43,7 @@ class ThrillerTest(unittest.TestCase):
       self.game.take( 'stone' )
       self.game.take( 'bird' )
       object1 = self.game.use( 'stone', 'bird' )
-      assert ( not self.game.is_in_world( 'injured bird' ) is None )
+      assert ( not self.game.has( 'injured bird' ) is None )
 
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
       self.game.take( 'stone' )

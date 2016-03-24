@@ -74,9 +74,9 @@ class Game:
          if action.tool == tool.name and action.subject == subject.name:
             self.use_actions.remove( action )
             self.destroy( name_of_tool )
-            self.destroy( name_of_subject )
+            entity.take( name_of_subject )
             retval = self.change_subject_according_to_prototype( subject, action.prototype )
-            self.world.put( retval )
+            entity.put( retval )
             return retval
       return None
 
