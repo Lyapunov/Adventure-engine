@@ -1,8 +1,8 @@
 
 class GameObjectAction:
-   def __init__( self, main, manipulator, actionDescription, prototype ):
-      self.main              = main
-      self.manipulator       = manipulator
+   def __init__( self, actor, tool, actionDescription, prototype ):
+      self.actor             = actor
+      self.tool              = tool
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
@@ -37,10 +37,3 @@ class GameObject:
    def put( self, child ):
       self.childObjects.append( child )
 
-   def use( self, manipulator, actions ):
-      for action in actions:
-         if action.main == self and manipulator == action.manipulator:
-            actions.remove(action)
-            self.makeEqualTo( action.prototype ) 
-            return action.actionDescription
-      return None
