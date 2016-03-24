@@ -49,11 +49,8 @@ class Game:
       actor = self.find( name_of_actor )
       if ( actor is None ):
          return None
-      print '===',tool.name, actor.name
       for action in self.use_actions:
-         print '---',action.tool, action.actor,(action.tool == tool.name),(action.actor == actor.name)
          if action.tool == tool.name and action.actor == actor.name:
-            print action.actionDescription
             self.destroy( name_of_tool )
             self.destroy( name_of_actor )
             self.use_actions.remove( action )
