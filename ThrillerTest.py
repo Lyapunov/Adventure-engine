@@ -3,18 +3,24 @@ import unittest
 from GameObject import GameObject
 from GameObject import GameObjectAction
 
+class Game:
+   def __init__( self, world, inventory, actions ):
+      self.world = world
+      self.inventory = inventory
+      self.actions = actions
+
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game     = GameObject( 'room','dark room', [ GameObject( 'candle' ), GameObject('match') ] )
+      self.world     = GameObject( 'room','dark room', [ GameObject( 'candle' ), GameObject('match') ] )
       self.inventory = GameObject( 'inventory', 'my inventory', [] );
       self.actions  = [ GameObjectAction( GameObject('candle'), GameObject('match'), 'you light the candle with the match', GameObject('burning candle') ) ]
 
    def test_look_in_room(self):
-      text = self.game.look()
+      text = self.world.look()
       assert( text == 'dark room' )
 
    def test_take_candle(self):
-      object = self.game.take('candle')
+      object = self.world.take('candle')
       assert ( not object is None and object.name == 'candle' )
 
    def test_put_knife_in_inventory(self):
