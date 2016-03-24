@@ -60,7 +60,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( not self.game.has( 'match' ) is None )
       object1 = self.game.use( 'candle', 'match' )
       assert ( not object1 is None )
-#      assert ( self.game.world.look() == 'light room' )
+      assert ( self.game.world.look() == 'light room' )
 
 if __name__ == '__main__' :
    unittest.main()
