@@ -1,9 +1,9 @@
 class Game:
-   def __init__( self, world, inventory, use_actions, auto_actions ):
+   def __init__( self, world, inventory, use_actions, view_actions ):
       self.world = world
       self.inventory = inventory
       self.use_actions = use_actions
-      self.auto_actions = auto_actions
+      self.view_actions = view_actions
 
    def move_between_entities( self, name, from_entity, to_entity ):
       object = from_entity.take( name )
