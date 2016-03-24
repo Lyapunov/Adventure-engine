@@ -47,8 +47,11 @@ class ThrillerTest(unittest.TestCase):
       object2 = self.game.use( 'stone', 'bird' )
       assert ( object2 is None )
 
-   def test_put_burning_candle_to_inventory_to_light_room(self):
-      self.game.inventory.put( GameObject( 'burning candle' ) )
+   def test_action_hit_the_bird_with_the_stone_but_both_are_in_inventory(self):
+      self.game.take( 'stone' )
+      self.game.take( 'bird' )
+      object1 = self.game.use( 'stone', 'bird' )
+      assert ( not self.game.is_in_world( 'injured bird' ) is None )
 
 if __name__ == '__main__' :
    unittest.main()
