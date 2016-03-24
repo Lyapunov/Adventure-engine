@@ -35,6 +35,9 @@ class ThrillerTest(unittest.TestCase):
       assert ( bird.name == 'injured bird' )
       assert ( not action in self.actions )
 
+   def test_put_burning_candle_to_inventory_to_light_room(self):
+      self.inventory.put( GameObject( 'burning candle' ) )
+
 if __name__ == '__main__' :
    unittest.main()
 
