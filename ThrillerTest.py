@@ -9,19 +9,18 @@ class Game:
       self.inventory = inventory
       self.actions = actions
 
-   def take( self, name ):
-      object = self.world.take( name )
+   def move_between_entities( self, name, from_entity, to_entity ):
+      object = from_entity.take( name )
       if ( not object is None ):
-         self.inventory.put( object )
+         to_entity.put( object )
          return object
       return None
 
+   def take( self, name ):
+      return self.move_between_entities( name, self.world, self.inventory )
+
    def drop( self, name ):
-      object = self.inventory.take( name )
-      if ( not object is None ):
-         self.world.put( object )
-         return object
-      return None
+      return self.move_between_entities( name, self.inventory, self.world )
 
    def has( self, name ):
       object = self.inventory.find( name )
