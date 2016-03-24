@@ -6,7 +6,7 @@ from GameObject import GameObjectAction
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       self.game     = GameObject( 'room','dark room', [ GameObject( 'candle' ), GameObject('match') ] )
-      self.backpack = GameObject( 'backpack', 'my backpack', [] );
+      self.inventory = GameObject( 'inventory', 'my inventory', [] );
       self.actions  = [ GameObjectAction( GameObject('candle'), GameObject('match'), 'you light the candle with the match', GameObject('burning candle') ) ]
 
    def test_look_in_room(self):
@@ -17,10 +17,10 @@ class ThrillerTest(unittest.TestCase):
       object = self.game.take('candle')
       assert ( not object is None and object.name == 'candle' )
 
-   def test_put_knife_in_backpack(self):
+   def test_put_knife_in_inventory(self):
       object = GameObject( 'knife' )
-      self.backpack.put( object )
-      assert ( not self.backpack.take('knife') is None )
+      self.inventory.put( object )
+      assert ( not self.inventory.take('knife') is None )
 
    def test_use_bird_on_stone(self):
       bird  = GameObject( 'bird' )
