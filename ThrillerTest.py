@@ -68,12 +68,10 @@ class ThrillerTest(unittest.TestCase):
    def test_action_hit_the_bird_with_the_stone(self):
       self.game.take( 'stone' )
       object1 = self.game.use( 'stone', 'bird' )
-
       assert ( not object1 is None )
       assert ( self.game.is_in_world( 'bird' ) is None )
       assert ( self.game.has( 'stone' ) is None )
       assert ( not self.game.is_in_world( 'injured bird' ) is None )
-
       object2 = self.game.use( 'stone', 'bird' )
       assert ( object2 is None )
 
