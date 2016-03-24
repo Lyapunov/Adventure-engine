@@ -23,7 +23,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game.has( 'candle' ) is None )
       assert ( not self.game.is_in_world( 'candle' ) is None )
 
-   def test_take_not_existing_object(self):
+   def test_trying_take_not_existing_object(self):
       name_of_not_existing_object = 'banana'
       object = self.game.take( name_of_not_existing_object )
       assert ( object is None )
