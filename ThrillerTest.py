@@ -22,25 +22,39 @@ class Game:
    def drop( self, name ):
       return self.move_between_entities( name, self.inventory, self.world )
 
+   def destroy( self, name ):
+      self.world.take( name )
+      self.inventory.take( name )
+      return None 
+
    def has( self, name ):
       object = self.inventory.find( name )
       return object
+
+   def find( self, name ):
+      object = self.inventory.find( name )
+      if ( not object is None ):
+         return object
+      object = self.world.find( name )
+      if ( not object is None ):
+         return object
+      return None
 
    def use( self, name_of_tool, name_of_actor ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
          return None
-      actor = self.world.find( name_of_actor )
+      actor = self.find( name_of_actor )
       if ( actor is None ):
          return None
       print actor.name
       print tool.name
       for action in self.actions:
          if action.tool == tool.name and action.actor == actor.name:
-            tool = self.inventory.take( name_of_tool )
-            actor = self.world.take( name_of_actor )
-            retval = self.world.put( action.prototype )
+            self.destroy( name_of_tool )
+            self.destroy( name_of_actor )
             self.actions.remove( action )
+            retval = self.world.put( action.prototype )
             return action.prototype
       return None
 
