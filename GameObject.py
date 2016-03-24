@@ -1,9 +1,11 @@
+import copy
+
 class Game:
-   def __init__( self, world, inventory, use_actions, view_actions ):
+   def __init__( self, world, inventory, use_actions, views ):
       self.world = world
       self.inventory = inventory
       self.use_actions = use_actions
-      self.view_actions = view_actions
+      self.views = views
 
    def move_between_entities( self, name, from_entity, to_entity ):
       object = from_entity.take( name )
@@ -27,6 +29,18 @@ class Game:
       object = self.inventory.find( name )
       return object
 
+   def change_subject_according_to_prototype( self, subject, prototype ):
+      retval = copy.copy(prototype)
+      retval.childObjects = subject.childObjects
+      return retval
+
+   def see_object_through_views( self, actor ):
+      for action in self.views:
+         for tool in self.inventory:
+            if action.tool == tool.name and action.actor == actor.name:
+               return self.change_subject_according_to_prototype( actor, action.prototype )
+      return actor
+
    def find_in_entities( self, name, entities ):
       for entity in entities:
          object = entity.find( name ) 
@@ -37,34 +51,35 @@ class Game:
    def find( self, name ):
       return self.find_in_entities( name, [ self.inventory, self.world ] )
 
-   def use( self, name_of_tool, name_of_actor ):
-      retval = self.use_one_direction( name_of_tool, name_of_actor )
+   def use( self, name_of_tool, name_of_subject ):
+      retval = self.use_one_direction( name_of_tool, name_of_subject )
       if ( not retval is None ):
          return retval
-      return self.use_one_direction( name_of_actor, name_of_tool )
+      return self.use_one_direction( name_of_subject, name_of_tool )
 
-   def use_one_direction( self, name_of_tool, name_of_actor ):
+   def use_one_direction( self, name_of_tool, name_of_subject ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
          return None
-      actor = self.find( name_of_actor )
-      if ( actor is None ):
+      subject = self.find( name_of_subject )
+      if ( subject is None ):
          return None
       for action in self.use_actions:
-         if action.tool == tool.name and action.actor == actor.name:
-            self.destroy( name_of_tool )
-            self.destroy( name_of_actor )
+         if action.tool == tool.name and action.subject == subject.name:
             self.use_actions.remove( action )
-            retval = self.world.put( action.prototype )
-            return action.prototype
+            self.destroy( name_of_tool )
+            self.destroy( name_of_subject )
+            retval = self.change_subject_according_to_prototype( subject, action.prototype )
+            self.world.put( retval )
+            return retval
       return None
 
    def is_in_world( self, name ):
       return self.world.find( name )
 
 class GameObjectAction:
-   def __init__( self, actor, tool, actionDescription, prototype ):
-      self.actor             = actor
+   def __init__( self, subject, tool, actionDescription, prototype ):
+      self.subject             = subject
       self.tool              = tool
       self.actionDescription = actionDescription
       self.prototype         = prototype
