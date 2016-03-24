@@ -20,6 +20,13 @@ class GameObject:
    def look( self ):
       return self.description
 
+   # todo: refactor with take if you will be more experienced
+   def find( self, name ):
+      for child in self.childObjects:
+         if child.name == name:
+            return child
+      return None 
+
    def take( self, name ):
       for child in self.childObjects:
          if child.name == name:

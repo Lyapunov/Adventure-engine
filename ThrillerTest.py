@@ -8,6 +8,13 @@ class Game:
       self.world = world
       self.inventory = inventory
       self.actions = actions
+   def take( self, name ):
+      object = self.world.take( name )
+      if ( not object is None ):
+         self.inventory.put( object )
+   def has( self, name ):
+      object = self.inventory.find( name )
+      return object
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
@@ -20,10 +27,10 @@ class ThrillerTest(unittest.TestCase):
       assert( text == 'dark room' )
 
    def test_take_candle(self):
-      object = self.game.world.take('candle')
-      assert ( not object is None and object.name == 'candle' )
+      object = self.game.take('candle')
+      assert ( not self.game.has( 'candle' ) is None )
 
-   def test_put_knife_in_inventory(self):
+   def test_put_knife_on_the_world(self):
       object = GameObject( 'knife' )
       self.game.inventory.put( object )
       assert ( not self.game.inventory.take('knife') is None )
