@@ -8,15 +8,25 @@ class Game:
       self.world = world
       self.inventory = inventory
       self.actions = actions
+
    def take( self, name ):
       object = self.world.take( name )
       if ( not object is None ):
          self.inventory.put( object )
          return object
       return None
+
+   def drop( self, name ):
+      object = self.inventory.take( name )
+      if ( not object is None ):
+         self.world.put( object )
+         return object
+      return None
+
    def has( self, name ):
       object = self.inventory.find( name )
       return object
+
    def use( self, name_of_tool, name_of_actor ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
@@ -34,6 +44,7 @@ class Game:
             self.actions.remove( action )
             return action.prototype
       return None
+
    def is_in_world( self, name ):
       return self.world.find( name )
 
@@ -48,11 +59,16 @@ class ThrillerTest(unittest.TestCase):
       text = self.game.world.look()
       assert( text == 'dark room' )
 
-   def test_take_existing_object(self):
+   def test_take_and_drop_existing_object(self):
       name_of_existing_object = 'candle'
       object = self.game.take( name_of_existing_object )
       assert ( not object is None )
       assert ( not self.game.has( 'candle' ) is None )
+      assert ( self.game.is_in_world( 'candle' ) is None )
+      object = self.game.drop( name_of_existing_object )
+      assert ( not object is None )
+      assert ( self.game.has( 'candle' ) is None )
+      assert ( not self.game.is_in_world( 'candle' ) is None )
 
    def test_take_not_existing_object(self):
       name_of_not_existing_object = 'banana'
