@@ -51,7 +51,7 @@ class Game:
       for entity in entities:
          subject = entity.find( name ) 
          if ( not subject is None ):
-            return self.see_subject_through_views( subject )
+            return self.see_subject_through_views( subject ), entity
       return None
 
    def find( self, name ):
@@ -67,7 +67,7 @@ class Game:
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
          return None
-      subject = self.find( name_of_subject )
+      subject, entity = self.find( name_of_subject )
       if ( subject is None ):
          return None
       for action in self.use_actions:
@@ -81,7 +81,8 @@ class Game:
       return None
 
    def is_in_world( self, name ):
-      return self.world.find( name )
+      subject = self.world.find( name )
+      return subject
 
 class GameObjectAction:
    def __init__( self, subject, tool, actionDescription, prototype ):
