@@ -6,14 +6,11 @@ from GameObject import GameObjectAction
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game = Game( GameObject( 'room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
+      self.game = Game( GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
                         GameObject( 'inventory', 'my inventory', [] ),
-                        [ GameObjectAction( 'candle', 'match', 'light the candle with the match', GameObject('burning candle') ),
-                          GameObjectAction( 'bird', 'stone',   'hit the bird with the stone', GameObject('injured bird') ) ] );
-
-   def test_look_in_room(self):
-      text = self.game.world.look()
-      assert( text == 'dark room' )
+                        [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
+                          GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
+                        [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room') ) ] );
 
    def test_take_and_drop_existing_object(self):
       name_of_existing_object = 'candle'
@@ -47,6 +44,23 @@ class ThrillerTest(unittest.TestCase):
       self.game.take( 'bird' )
       object1 = self.game.use( 'stone', 'bird' )
       assert ( not self.game.is_in_world( 'injured bird' ) is None )
+
+   def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
+      self.game.take( 'stone' )
+      object1 = self.game.use( 'bird', 'stone' )
+      assert ( not self.game.is_in_world( 'injured bird' ) is None )
+
+   def test_room_goes_light_from_dark_if_we_burn_the_candle(self):
+      assert ( self.game.world.look() == 'dark room'  )
+      assert ( self.game.has( 'candle' ) is None )
+      assert ( self.game.has( 'match' ) is None )
+      self.game.take( 'candle' )
+      self.game.take( 'match' )
+      assert ( not self.game.has( 'candle' ) is None )
+      assert ( not self.game.has( 'match' ) is None )
+      object1 = self.game.use( 'candle', 'match' )
+      assert ( not object1 is None )
+#      assert ( self.game.world.look() == 'light room' )
 
 if __name__ == '__main__' :
    unittest.main()

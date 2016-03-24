@@ -1,8 +1,9 @@
 class Game:
-   def __init__( self, world, inventory, actions ):
+   def __init__( self, world, inventory, use_actions, auto_actions ):
       self.world = world
       self.inventory = inventory
-      self.actions = actions
+      self.use_actions = use_actions
+      self.auto_actions = auto_actions
 
    def move_between_entities( self, name, from_entity, to_entity ):
       object = from_entity.take( name )
@@ -36,19 +37,26 @@ class Game:
       return None
 
    def use( self, name_of_tool, name_of_actor ):
+      retval = self.use_one_direction( name_of_tool, name_of_actor )
+      if ( not retval is None ):
+         return retval
+      return self.use_one_direction( name_of_actor, name_of_tool )
+
+   def use_one_direction( self, name_of_tool, name_of_actor ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
          return None
       actor = self.find( name_of_actor )
       if ( actor is None ):
          return None
-      print actor.name
-      print tool.name
-      for action in self.actions:
+      print '===',tool.name, actor.name
+      for action in self.use_actions:
+         print '---',action.tool, action.actor,(action.tool == tool.name),(action.actor == actor.name)
          if action.tool == tool.name and action.actor == actor.name:
+            print action.actionDescription
             self.destroy( name_of_tool )
             self.destroy( name_of_actor )
-            self.actions.remove( action )
+            self.use_actions.remove( action )
             retval = self.world.put( action.prototype )
             return action.prototype
       return None
