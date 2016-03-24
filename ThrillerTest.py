@@ -12,6 +12,7 @@ class Game:
       object = self.world.take( name )
       if ( not object is None ):
          self.inventory.put( object )
+         return object
    def has( self, name ):
       object = self.inventory.find( name )
       return object
@@ -26,9 +27,18 @@ class ThrillerTest(unittest.TestCase):
       text = self.game.world.look()
       assert( text == 'dark room' )
 
-   def test_take_candle(self):
-      object = self.game.take('candle')
+   def test_take_existing_object(self):
+      name_of_existing_object = 'candle'
+      object = self.game.take( name_of_existing_object )
+      assert ( not object is None )
       assert ( not self.game.has( 'candle' ) is None )
+
+   def test_take_not_existing_object(self):
+      name_of_not_existing_object = 'banana'
+      object = self.game.take( name_of_not_existing_object )
+      assert ( object is None )
+      assert ( self.game.has( name_of_not_existing_object ) is None )
+
 
    def test_put_knife_on_the_world(self):
       object = GameObject( 'knife' )
