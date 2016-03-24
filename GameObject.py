@@ -27,14 +27,15 @@ class Game:
       object = self.inventory.find( name )
       return object
 
-   def find( self, name ):
-      object = self.inventory.find( name )
-      if ( not object is None ):
-         return object
-      object = self.world.find( name )
-      if ( not object is None ):
-         return object
+   def find_in_entities( self, name, entities ):
+      for entity in entities:
+         object = entity.find( name ) 
+         if ( not object is None ):
+            return object
       return None
+
+   def find( self, name ):
+      return self.find_in_entities( name, [ self.inventory, self.world ] )
 
    def use( self, name_of_tool, name_of_actor ):
       retval = self.use_one_direction( name_of_tool, name_of_actor )
