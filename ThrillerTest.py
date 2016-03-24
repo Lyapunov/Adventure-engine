@@ -13,11 +13,27 @@ class Game:
       if ( not object is None ):
          self.inventory.put( object )
          return object
+      return None
    def has( self, name ):
       object = self.inventory.find( name )
       return object
-   def use( self, name1, name2 ):
-      pass 
+   def use( self, name_of_tool, name_of_actor ):
+      tool = self.inventory.find( name_of_tool )
+      if ( tool is None ):
+         return None
+      actor = self.world.find( name_of_actor )
+      if ( actor is None ):
+         return None
+      print actor.name
+      print tool.name
+      for action in self.actions:
+         if action.tool == tool.name and action.actor == actor.name:
+            tool = self.inventory.take( name_of_tool )
+            actor = self.world.take( name_of_actor )
+            retval = self.world.put( action.prototype )
+            self.actions.remove( action )
+            return action.prototype
+      return None
    def is_in_world( self, name ):
       return self.world.find( name )
 
@@ -25,8 +41,8 @@ class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       self.game = Game( GameObject( 'room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
                         GameObject( 'inventory', 'my inventory', [] ),
-                        [ GameObjectAction( GameObject('candle'), GameObject('match'), 'light the candle with the match', GameObject('burning candle') ),
-                          GameObjectAction( GameObject('bird'), GameObject('stone'),   'hit the bird with the stone', GameObject('injured bird') ) ] );
+                        [ GameObjectAction( 'candle', 'match', 'light the candle with the match', GameObject('burning candle') ),
+                          GameObjectAction( 'bird', 'stone',   'hit the bird with the stone', GameObject('injured bird') ) ] );
 
    def test_look_in_room(self):
       text = self.game.world.look()
@@ -52,11 +68,14 @@ class ThrillerTest(unittest.TestCase):
    def test_action_hit_the_bird_with_the_stone(self):
       self.game.take( 'stone' )
       object1 = self.game.use( 'stone', 'bird' )
-      assert ( object1 is not None )
+
+      assert ( not object1 is None )
       assert ( self.game.is_in_world( 'bird' ) is None )
+      assert ( self.game.has( 'stone' ) is None )
       assert ( not self.game.is_in_world( 'injured bird' ) is None )
+
       object2 = self.game.use( 'stone', 'bird' )
-      assert ( object2 is not None )
+      assert ( object2 is None )
 
    def test_put_burning_candle_to_inventory_to_light_room(self):
       self.game.inventory.put( GameObject( 'burning candle' ) )
