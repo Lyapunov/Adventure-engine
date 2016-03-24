@@ -32,11 +32,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( object is None )
       assert ( self.game.has( name_of_not_existing_object ) is None )
 
-   def test_put_knife_on_the_world(self):
-      object = GameObject( 'knife' )
-      self.game.inventory.put( object )
-      assert ( not self.game.inventory.take('knife') is None )
-
    def test_action_hit_the_bird_with_the_stone(self):
       self.game.take( 'stone' )
       object1 = self.game.use( 'stone', 'bird' )
