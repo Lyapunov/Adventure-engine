@@ -26,26 +26,32 @@ class Game:
       return None 
 
    def has( self, name ):
-      object = self.inventory.find( name )
-      return object
+      subject = self.inventory.find( name )
+      return subject
 
    def change_subject_according_to_prototype( self, subject, prototype ):
       retval = copy.copy(prototype)
       retval.childObjects = subject.childObjects
       return retval
 
-   def see_object_through_views( self, actor ):
+   def see_subject_through_views( self, subject ):
       for action in self.views:
-         for tool in self.inventory:
-            if action.tool == tool.name and action.actor == actor.name:
-               return self.change_subject_according_to_prototype( actor, action.prototype )
-      return actor
+         for tool in self.inventory.childObjects:
+            if action.tool == tool.name and action.subject == subject.name:
+               return self.change_subject_according_to_prototype( subject, action.prototype )
+         for tool in self.world.childObjects:
+            if action.tool == tool.name and action.subject == subject.name:
+               return self.change_subject_according_to_prototype( subject, action.prototype )
+      return subject
+
+   def look( self ):
+      return self.see_subject_through_views( self.world ).description
 
    def find_in_entities( self, name, entities ):
       for entity in entities:
-         object = entity.find( name ) 
-         if ( not object is None ):
-            return object
+         subject = entity.find( name ) 
+         if ( not subject is None ):
+            return self.see_subject_through_views( subject )
       return None
 
    def find( self, name ):

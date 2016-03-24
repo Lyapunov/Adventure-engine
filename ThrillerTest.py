@@ -10,7 +10,7 @@ class ThrillerTest(unittest.TestCase):
                         GameObject( 'inventory', 'my inventory', [] ),
                         [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
-                        [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room') ) ] );
+                        [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room') ) ] );
 
    def test_take_and_drop_existing_object(self):
       name_of_existing_object = 'candle'
@@ -51,7 +51,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( not self.game.is_in_world( 'injured bird' ) is None )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle(self):
-      assert ( self.game.world.look() == 'dark room'  )
+      assert ( self.game.look() == 'dark room'  )
       assert ( self.game.has( 'candle' ) is None )
       assert ( self.game.has( 'match' ) is None )
       self.game.take( 'candle' )
@@ -60,7 +60,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( not self.game.has( 'match' ) is None )
       object1 = self.game.use( 'candle', 'match' )
       assert ( not object1 is None )
-      assert ( self.game.world.look() == 'light room' )
+      assert ( self.game.look() == 'light room' )
 
 if __name__ == '__main__' :
    unittest.main()
