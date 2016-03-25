@@ -38,6 +38,13 @@ class Game:
             return self.see_subject_through_views( subject ), entity
       return None
 
+   def find_room( self, name ):
+      for room in self.rooms:
+         if room.name == name:
+            return room
+      else:
+         return None
+
    def use_one_direction( self, name_of_tool, name_of_subject ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
@@ -82,6 +89,23 @@ class Game:
          return retval
       return self.use_one_direction( name_of_subject, name_of_tool )
 
+   def directions( self ):
+      retval = []
+      for passage in self.passages:
+         if passage.room_name1 == self.room.name:
+            retval.append( [ passage.direction1, passage.room_name2 ] )
+         if passage.room_name2 == self.room.name:
+            retval.append( [ passage.direction2, passage.room_name1 ] )
+      return retval
+
+   def move( self, direction ):
+      topology = self.directions()
+      for [room_direction, room_name] in topology:
+         if room_direction == direction:
+            self.room = self.find_room( room_name )
+            return self.room
+      return None  
+
    def is_in_room( self, name ):
       subject = self.room.find( name )
       return subject
@@ -125,8 +149,8 @@ class GameObject:
       self.childObjects.append( child )
 
 class GamePassage:
-   def __init__( self, room1, room2, direction1, direction2 ):
-      self.room1 = room1
-      self.room2 = room2
+   def __init__( self, room_name1, room_name2, direction1, direction2 ):
+      self.room_name1 = room_name1
+      self.room_name2 = room_name2
       self.direction1 = direction1
       self.direction2 = direction2

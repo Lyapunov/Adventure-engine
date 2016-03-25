@@ -65,7 +65,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game.look() == 'light room' )
 
    def test_moving_between_rooms(self):
-      assert ( self.directions != ['N'] );
+      assert ( self.game.directions() != ['N'] );
       self.game.move('N')
       self.game.look() == 'other room'
 
