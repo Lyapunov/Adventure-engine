@@ -10,10 +10,10 @@ class Game:
       self.views = views
 
    def move_between_entities( self, name, from_entity, to_entity ):
-      object = from_entity.take( name )
-      if ( not object is None ):
-         to_entity.put( object )
-         return object
+      subject = from_entity.take( name )
+      if ( not subject is None ):
+         to_entity.put( subject )
+         return subject
       return None
 
    def change_subject_according_to_prototype( self, subject, prototype ):
