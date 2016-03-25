@@ -64,10 +64,19 @@ class ThrillerTest(unittest.TestCase):
       assert ( not object1 is None )
       assert ( self.game.look() == 'light room' )
 
-   def test_moving_between_rooms(self):
-      assert ( self.game.directions() != ['N'] );
+   def test_moving_between_rooms_and_carrying_object(self):
+      assert ( self.game.directions() == [['N', 'bathroom']] )
+      assert( not self.game.take('candle') is None )
       self.game.move('N')
-      self.game.look() == 'other room'
+      assert( self.game.look() == 'bathroom' )
+      assert( self.game.take('candle') is None )
+      self.game.drop('candle')
+      assert ( self.game.directions() == [['S', 'dark room']] )
+      self.game.move('S')
+      assert( self.game.look() == 'dark room' )
+      assert( self.game.take('candle') is None )
+      self.game.move('N')
+      assert( not self.game.take('candle') is None )
 
 if __name__ == '__main__' :
    unittest.main()
