@@ -14,21 +14,6 @@ class Game:
          return object
       return None
 
-   def take( self, name ):
-      return self.move_between_entities( name, self.world, self.inventory )
-
-   def drop( self, name ):
-      return self.move_between_entities( name, self.inventory, self.world )
-
-   def destroy( self, name ):
-      self.world.take( name )
-      self.inventory.take( name )
-      return None 
-
-   def has( self, name ):
-      subject = self.inventory.find( name )
-      return subject
-
    def change_subject_according_to_prototype( self, subject, prototype ):
       retval = copy.copy(prototype)
       retval.childObjects = subject.childObjects
@@ -44,24 +29,12 @@ class Game:
                return self.change_subject_according_to_prototype( subject, action.prototype )
       return subject
 
-   def look( self ):
-      return self.see_subject_through_views( self.world ).description
-
    def find_in_entities( self, name, entities ):
       for entity in entities:
          subject = entity.find( name ) 
          if ( not subject is None ):
             return self.see_subject_through_views( subject ), entity
       return None
-
-   def find( self, name ):
-      return self.find_in_entities( name, [ self.inventory, self.world ] )
-
-   def use( self, name_of_tool, name_of_subject ):
-      retval = self.use_one_direction( name_of_tool, name_of_subject )
-      if ( not retval is None ):
-         return retval
-      return self.use_one_direction( name_of_subject, name_of_tool )
 
    def use_one_direction( self, name_of_tool, name_of_subject ):
       tool = self.inventory.find( name_of_tool )
@@ -79,6 +52,33 @@ class Game:
             entity.put( retval )
             return retval
       return None
+
+   def take( self, name ):
+      return self.move_between_entities( name, self.world, self.inventory )
+
+   def drop( self, name ):
+      return self.move_between_entities( name, self.inventory, self.world )
+
+   def destroy( self, name ):
+      self.world.take( name )
+      self.inventory.take( name )
+      return None 
+
+   def has( self, name ):
+      subject = self.inventory.find( name )
+      return subject
+
+   def look( self ):
+      return self.see_subject_through_views( self.world ).description
+
+   def find( self, name ):
+      return self.find_in_entities( name, [ self.inventory, self.world ] )
+
+   def use( self, name_of_tool, name_of_subject ):
+      retval = self.use_one_direction( name_of_tool, name_of_subject )
+      if ( not retval is None ):
+         return retval
+      return self.use_one_direction( name_of_subject, name_of_tool )
 
    def is_in_world( self, name ):
       subject = self.world.find( name )
