@@ -84,6 +84,11 @@ class ThrillerTest(unittest.TestCase):
       assert( self.game1.take( 'picture' ) is None )
       object1 = self.game1.use( 'candle', 'match' )
       assert( self.game1.look() == 'light room' )
+      self.game1.take('burning candle')
+      self.game1.move('N')
+      self.game1.drop('burning candle')
+      self.game1.move('S')
+      assert( self.game1.look() == 'dark room' )
       assert( not self.game1.take( 'picture' ) is None )
 
 if __name__ == '__main__' :

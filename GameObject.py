@@ -17,6 +17,8 @@ class Game:
       return None
 
    def change_subject_according_to_prototype( self, subject, prototype ):
+      subject.childObjects = subject.childObjects + prototype.childObjects
+      prototype.childObjects = []
       retval = copy.copy(prototype)
       retval.childObjects = subject.childObjects
       return retval
