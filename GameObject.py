@@ -85,11 +85,12 @@ class Game:
       return subject
 
 class GameObjectAction:
-   def __init__( self, subject, tool, actionDescription, prototype ):
-      self.subject             = subject
+   def __init__( self, subject, tool, actionDescription, prototype, permanent = 0 ):
+      self.subject           = subject
       self.tool              = tool
       self.actionDescription = actionDescription
       self.prototype         = prototype
+      self.permanent         = permanent
 
 class GameObject:
    def __init__( self, name = '', description = '', childObjects = []):
