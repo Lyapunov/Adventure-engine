@@ -12,7 +12,7 @@ class ThrillerTest(unittest.TestCase):
                          [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ) ],
                          [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                            GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
-                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room') ) ] );
+                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room', [ GameObject( 'picture' ) ] ) ) ] );
 
    def test_take_and_drop_existing_object(self):
       name_of_existing_object = 'candle'
@@ -77,6 +77,14 @@ class ThrillerTest(unittest.TestCase):
       assert( self.game1.take('candle') is None )
       self.game1.move('N')
       assert( not self.game1.take('candle') is None )
+
+   def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
+      self.game1.take( 'match' )
+      assert( self.game1.look() == 'dark room' )
+      assert( self.game1.take( 'picture' ) is None )
+      object1 = self.game1.use( 'candle', 'match' )
+      assert( self.game1.look() == 'light room' )
+      assert( not self.game1.take( 'picture' ) is None )
 
 if __name__ == '__main__' :
    unittest.main()
