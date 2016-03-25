@@ -8,7 +8,7 @@ from GameObject import GamePassage
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       self.game1 = Game( [ GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
-                           GameObject( 'bathroom','bathroom', [ GameObject( 'mirror' ) ] ) ],
+                           GameObject( 'bathroom', 'bathroom' , [ GameObject( 'mirror' ) ] ) ],
                          [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ) ],
                          [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                            GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
