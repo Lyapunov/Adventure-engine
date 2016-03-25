@@ -1,8 +1,9 @@
 import copy
 
 class Game:
-   def __init__( self, world, use_actions, views ):
-      self.world = world
+   def __init__( self, rooms, use_actions, views ):
+      self.rooms = rooms
+      self.room = rooms[0]
       self.inventory = GameObject( 'inventory', 'my inventory', [] )
       self.use_actions = use_actions
       self.views = views
@@ -24,7 +25,7 @@ class Game:
          for tool in self.inventory.childObjects:
             if action.tool == tool.name and action.subject == subject.name:
                return self.change_subject_according_to_prototype( subject, action.prototype )
-         for tool in self.world.childObjects:
+         for tool in self.room.childObjects:
             if action.tool == tool.name and action.subject == subject.name:
                return self.change_subject_according_to_prototype( subject, action.prototype )
       return subject
@@ -54,13 +55,13 @@ class Game:
       return None
 
    def take( self, name ):
-      return self.move_between_entities( name, self.world, self.inventory )
+      return self.move_between_entities( name, self.room, self.inventory )
 
    def drop( self, name ):
-      return self.move_between_entities( name, self.inventory, self.world )
+      return self.move_between_entities( name, self.inventory, self.room )
 
    def destroy( self, name ):
-      self.world.take( name )
+      self.room.take( name )
       self.inventory.take( name )
       return None 
 
@@ -69,10 +70,10 @@ class Game:
       return subject
 
    def look( self ):
-      return self.see_subject_through_views( self.world ).description
+      return self.see_subject_through_views( self.room ).description
 
    def find( self, name ):
-      return self.find_in_entities( name, [ self.inventory, self.world ] )
+      return self.find_in_entities( name, [ self.inventory, self.room ] )
 
    def use( self, name_of_tool, name_of_subject ):
       retval = self.use_one_direction( name_of_tool, name_of_subject )
@@ -80,8 +81,8 @@ class Game:
          return retval
       return self.use_one_direction( name_of_subject, name_of_tool )
 
-   def is_in_world( self, name ):
-      subject = self.world.find( name )
+   def is_in_room( self, name ):
+      subject = self.room.find( name )
       return subject
 
 class GameObjectAction:

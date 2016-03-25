@@ -6,7 +6,7 @@ from GameObject import GameObjectAction
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game = Game( GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
+      self.game = Game( [ GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ) ],
                         [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room') ) ] );
@@ -16,11 +16,11 @@ class ThrillerTest(unittest.TestCase):
       object = self.game.take( name_of_existing_object )
       assert ( not object is None )
       assert ( not self.game.has( 'candle' ) is None )
-      assert ( self.game.is_in_world( 'candle' ) is None )
+      assert ( self.game.is_in_room( 'candle' ) is None )
       object = self.game.drop( name_of_existing_object )
       assert ( not object is None )
       assert ( self.game.has( 'candle' ) is None )
-      assert ( not self.game.is_in_world( 'candle' ) is None )
+      assert ( not self.game.is_in_room( 'candle' ) is None )
 
    def test_trying_take_not_existing_object(self):
       name_of_not_existing_object = 'banana'
@@ -32,9 +32,9 @@ class ThrillerTest(unittest.TestCase):
       self.game.take( 'stone' )
       object1 = self.game.use( 'stone', 'bird' )
       assert ( not object1 is None )
-      assert ( self.game.is_in_world( 'bird' ) is None )
+      assert ( self.game.is_in_room( 'bird' ) is None )
       assert ( self.game.has( 'stone' ) is None )
-      assert ( not self.game.is_in_world( 'injured bird' ) is None )
+      assert ( not self.game.is_in_room( 'injured bird' ) is None )
       object2 = self.game.use( 'stone', 'bird' )
       assert ( object2 is None )
 
@@ -47,7 +47,7 @@ class ThrillerTest(unittest.TestCase):
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
       self.game.take( 'stone' )
       object1 = self.game.use( 'bird', 'stone' )
-      assert ( not self.game.is_in_world( 'injured bird' ) is None )
+      assert ( not self.game.is_in_room( 'injured bird' ) is None )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle(self):
       assert ( self.game.look() == 'dark room'  )
