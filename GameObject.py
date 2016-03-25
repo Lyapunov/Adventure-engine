@@ -3,7 +3,7 @@ import copy
 class Game:
    def __init__( self, world, inventory, use_actions, views ):
       self.world = world
-      self.inventory = inventory
+      self.inventory = GameObject( 'inventory', 'my inventory', [] ),
       self.use_actions = use_actions
       self.views = views
 

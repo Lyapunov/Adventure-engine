@@ -7,7 +7,6 @@ from GameObject import GameObjectAction
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       self.game = Game( GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
-                        GameObject( 'inventory', 'my inventory', [] ),
                         [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room') ) ] );
