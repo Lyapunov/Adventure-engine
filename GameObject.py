@@ -1,10 +1,11 @@
 import copy
 
 class Game:
-   def __init__( self, rooms, use_actions, views ):
-      self.rooms = rooms
-      self.room = rooms[0]
-      self.inventory = GameObject( 'inventory', 'my inventory', [] )
+   def __init__( self, rooms, passages, use_actions, views ):
+      self.rooms       = rooms
+      self.room        = rooms[0]
+      self.passages    = passages
+      self.inventory   = GameObject( 'inventory', 'my inventory', [] )
       self.use_actions = use_actions
       self.views = views
 
@@ -123,3 +124,9 @@ class GameObject:
    def put( self, child ):
       self.childObjects.append( child )
 
+class GamePassage:
+   def __init__( self, room1, room2, direction1, direction2 ):
+      self.room1 = room1
+      self.room2 = room2
+      self.direction1 = direction1
+      self.direction2 = direction2

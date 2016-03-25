@@ -3,10 +3,13 @@ import unittest
 from GameObject import Game
 from GameObject import GameObject
 from GameObject import GameObjectAction
+from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game = Game( [ GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ) ],
+      self.game = Game( [ GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
+                          GameObject( 'bathroom','bathroom', [ GameObject( 'mirror' ) ] ) ],
+                        [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ) ],
                         [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room') ) ] );
@@ -60,6 +63,11 @@ class ThrillerTest(unittest.TestCase):
       object1 = self.game.use( 'candle', 'match' )
       assert ( not object1 is None )
       assert ( self.game.look() == 'light room' )
+
+   def test_moving_between_rooms(self):
+      assert ( self.directions != ['N'] );
+      self.game.move('N')
+      self.game.look() == 'other room'
 
 if __name__ == '__main__' :
    unittest.main()
