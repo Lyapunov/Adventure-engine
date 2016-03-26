@@ -2,34 +2,46 @@ import unittest
 
 from GameObject import Game
 from GameObject import GameObject
+from GameObject import GameObjectAttribute
 from GameObject import GameObjectAction
 from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game1 = Game( [ GameObject( 'dark room','dark room', [ GameObject( 'candle' ), GameObject('match'), GameObject('bird'), GameObject('stone') ] ),
-                           GameObject( 'bathroom', 'bathroom' , [ GameObject( 'mirror' ) ] ) ],
+      self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table', '', [GameObjectAttribute.IMMOBILE] ), 
+                                                                      GameObject( 'candle' ),
+                                                                      GameObject( 'match' ),
+                                                                      GameObject( 'bird' ),
+                                                                      GameObject( 'stone' ) ] ),
+                           GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ) ],
                          [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ) ],
                          [ GameObjectAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
-                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ) ],
-                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room', [ GameObject( 'picture' ) ] ) ) ] );
+                           GameObjectAction( 'bird', 'stone', 'hitting bird', GameObject('injured bird') ),
+                           GameObjectAction( 'picture', '', 'revealing a new passage', GamePassage( 'dark room', 'secret room', 'W', 'E' ) ) ],
+                         [ GameObjectAction( 'dark room', 'burning candle', '', GameObject('light room', 'light room', [], [ GameObject( 'picture' ) ] ) ) ] );
 
    def test_take_and_drop_existing_object(self):
-      name_of_existing_object = 'candle'
-      object = self.game1.take( name_of_existing_object )
-      assert ( not object is None )
+      name_of_existing_subject = 'candle'
+      subject = self.game1.take( name_of_existing_subject )
+      assert ( not subject is None )
       assert ( not self.game1.has( 'candle' ) is None )
       assert ( self.game1.is_in_room( 'candle' ) is None )
-      object = self.game1.drop( name_of_existing_object )
-      assert ( not object is None )
+      subject = self.game1.drop( name_of_existing_subject )
+      assert ( not subject is None )
       assert ( self.game1.has( 'candle' ) is None )
       assert ( not self.game1.is_in_room( 'candle' ) is None )
 
    def test_trying_take_not_existing_object(self):
-      name_of_not_existing_object = 'banana'
-      object = self.game1.take( name_of_not_existing_object )
-      assert ( object is None )
-      assert ( self.game1.has( name_of_not_existing_object ) is None )
+      name_of_not_existing_subject = 'banana'
+      subject = self.game1.take( name_of_not_existing_subject )
+      assert ( subject is None )
+      assert ( self.game1.has( name_of_not_existing_subject ) is None )
+
+   def test_trying_take_immobile_object(self):
+      name_of_immobile_subject = 'table'
+      subject = self.game1.take( name_of_immobile_subject )
+      assert ( subject is None )
+      assert ( self.game1.has( name_of_immobile_subject ) is None )
 
    def test_action_hit_the_bird_with_the_stone(self):
       self.game1.take( 'stone' )

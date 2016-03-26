@@ -119,10 +119,15 @@ class GameObjectAction:
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
+class GameObjectAttribute:
+   IMMOBILE = 'immobile'
+
 class GameObject:
-   def __init__( self, name = '', description = '', childObjects = []):
+
+   def __init__( self, name = '', description = '', attributes = [], childObjects = []):
       self.name = name
-      self.description = description
+      self.description  = description
+      self.attributes   = attributes
       self.childObjects = childObjects
 
    def makeEqualTo( self, other ):
