@@ -147,7 +147,7 @@ class GameObject:
 
    def take( self, name ):
       for child in self.childObjects:
-         if child.name == name:
+         if child.name == name and not GameObjectAttribute.IMMOBILE in child.attributes :
             self.childObjects.remove( child )
             return child
       return None 
