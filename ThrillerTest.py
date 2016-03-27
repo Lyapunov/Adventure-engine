@@ -128,7 +128,7 @@ class ThrillerTest(unittest.TestCase):
       assert( not self.game1.is_in_room( 'picture' ) is None )
       self.game1.use('picture')
       print self.game1.directions()
-      assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room'] )
+      assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
 if __name__ == '__main__' :
    unittest.main()
