@@ -47,7 +47,7 @@ class Game:
       else:
          return None
 
-   def use_one_direction( self, name_of_tool, name_of_subject ):
+   def use_internal( self, name_of_tool, name_of_subject ):
       tool = self.inventory.find( name_of_tool )
       if ( tool is None ):
          return None
@@ -56,9 +56,11 @@ class Game:
          return None
       for action in self.use_actions:
          if action.tool == tool.name and action.subject == subject.name:
+            action.doIt( self )
             self.use_actions.remove( action )
-            self.destroy( name_of_tool )
-            entity.take( name_of_subject )
+            self.destroy( action.tool )
+            subject, entity = self.find( subject.name )
+            entity.take( action.subject )
             retval = self.change_subject_according_to_prototype( subject, action.prototype )
             entity.put( retval )
             return retval
@@ -86,10 +88,10 @@ class Game:
       return self.find_in_entities( name, [ self.inventory, self.room ] )
 
    def use( self, name_of_tool, name_of_subject ):
-      retval = self.use_one_direction( name_of_tool, name_of_subject )
+      retval = self.use_internal( name_of_tool, name_of_subject )
       if ( not retval is None ):
          return retval
-      return self.use_one_direction( name_of_subject, name_of_tool )
+      return self.use_internal( name_of_subject, name_of_tool )
 
    def directions( self ):
       retval = []
@@ -118,6 +120,8 @@ class GameObjectAction:
       self.tool              = tool
       self.actionDescription = actionDescription
       self.prototype         = prototype
+   def doIt( self, game ):
+      pass
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
