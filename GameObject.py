@@ -1,13 +1,15 @@
 import copy
 
 class Game:
-   def __init__( self, rooms, passages, use_actions, views ):
+   def __init__( self, rooms, passages, use_actions, views, final_room ):
       self.rooms       = rooms
       self.room        = rooms[0]
       self.passages    = passages
       self.inventory   = GameObject( 'inventory', '', [], [] )
       self.use_actions = use_actions
-      self.views = views
+      self.views       = views
+      self.won_        = 0
+      self.final_room  = final_room
 
    def move_between_entities( self, name, from_entity, to_entity ):
       subject = from_entity.take( name )
@@ -106,7 +108,7 @@ class Game:
       return subject
 
    def won( self ):
-      return 0
+      return self.won_
 
 class GameObjectUseAction:
    def __init__( self, subjectname, toolname, actionDescription, prototype ):
