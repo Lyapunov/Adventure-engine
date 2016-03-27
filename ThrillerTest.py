@@ -3,7 +3,7 @@ import unittest
 from GameObject import Game
 from GameObject import GameObject
 from GameObject import GameObjectAttribute
-from GameObject import GameObjectAction
+from GameObject import GameObjectUseAction
 from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
@@ -16,10 +16,10 @@ class ThrillerTest(unittest.TestCase):
                            GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ) ],
                          [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ),
                            GamePassage( 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
-                         [ GameObjectAction( 'candle',    'match',          'lighting candle',     GameObject('burning candle') ),
-                           GameObjectAction( 'bird',      'stone',          'hitting bird',        GameObject('injured bird') ),
-                           GameObjectAction( 'picture',   '',               'finding new passage', GameObject('FOUND_PASSAGE') ) ],
-                         [ GameObjectAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture' ) ] ) ) ] );
+                         [ GameObjectUseAction( 'candle',    'match',          'lighting candle',     GameObject('burning candle') ),
+                           GameObjectUseAction( 'bird',      'stone',          'hitting bird',        GameObject('injured bird') ),
+                           GameObjectUseAction( 'picture',   '',               'finding new passage', GameObject('FOUND_PASSAGE') ) ],
+                         [ GameObjectUseAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture' ) ] ) ) ] );
 
    def test_take_and_drop_existing_object(self):
       name_of_existing_subject = 'candle'

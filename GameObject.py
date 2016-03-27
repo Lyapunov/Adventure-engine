@@ -100,7 +100,7 @@ class Game:
       subject = self.room.find( name )
       return subject
 
-class GameObjectAction:
+class GameObjectUseAction:
    def __init__( self, subjectname, toolname, actionDescription, prototype ):
       self.subjectname       = subjectname
       self.toolname          = toolname
