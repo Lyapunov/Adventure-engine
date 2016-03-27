@@ -25,9 +25,11 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
       assert ( self.game1.has( 'match' )  is None )
+      assert ( self.game1.is_in_room( 'picture' ) is None )
       assert ( not self.game1.is_in_room( 'candle' ) is None )
       assert ( not self.game1.is_in_room( 'match' ) is None )
       assert ( not self.game1.is_in_room( 'table' ) is None )
+      assert ( self.game1.directions() == [['N', 'bathroom']] )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
@@ -56,6 +58,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.is_in_room( 'bird' ) is None )
       assert ( self.game1.has( 'stone' ) is None )
       assert ( not self.game1.is_in_room( 'injured bird' ) is None )
+
       object2 = self.game1.use( 'stone', 'bird' )
       assert ( object2 is None )
 
@@ -73,8 +76,10 @@ class ThrillerTest(unittest.TestCase):
    def test_room_goes_light_from_dark_if_we_burn_the_candle_first(self):
       self.game1.take( 'match' )
       assert ( not self.game1.has( 'match' )  is None )
+
       object1 = self.game1.use( 'candle', 'match' )
-      assert ( self.game1.has( 'match' )  is None )
+      assert ( self.game1.has( 'match' ) is None )
+
       self.game1.take('burning candle')
       assert ( not self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.look() == 'light room' )
@@ -84,32 +89,34 @@ class ThrillerTest(unittest.TestCase):
       self.game1.take( 'match' )
       assert ( not self.game1.has( 'candle' ) is None )
       assert ( not self.game1.has( 'match' )  is None )
+
       object1 = self.game1.use( 'candle', 'match' )
       assert ( not object1 is None )
       assert ( not self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.look() == 'light room' )
 
-   def test_moving_between_rooms_and_carrying_object(self):
-      assert ( self.game1.directions() == [['N', 'bathroom']] )
-      assert( not self.game1.take('candle') is None )
+   def test_moving_between_rooms(self):
       self.game1.move('N')
       assert( self.game1.look() == 'bathroom' )
-      assert( self.game1.take('candle') is None )
-      self.game1.drop('candle')
       assert ( self.game1.directions() == [['S', 'dark room']] )
+
       self.game1.move('S')
       assert( self.game1.look() == 'dark room' )
-      assert( self.game1.take('candle') is None )
+
+   def test_moving_between_rooms_and_carrying_object(self):
+      subject = self.game1.take('candle')
       self.game1.move('N')
-      assert( not self.game1.take('candle') is None )
+      self.game1.drop('candle')
+      self.game1.move('S')
+      assert( self.game1.look() == 'dark room' )
+      assert( self.game1.is_in_room('candle') is None )
 
    def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
-      assert( self.game1.is_in_room( 'picture' ) is None )
-      assert( self.game1.look() == 'dark room' )
       self.game1.take( 'match' )
       object1 = self.game1.use( 'candle', 'match' )
       self.game1.take('burning candle')
       assert( self.game1.look() == 'light room' )
+
       self.game1.move('N')
       self.game1.drop('burning candle')
       self.game1.move('S')
