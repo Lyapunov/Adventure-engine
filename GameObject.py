@@ -62,6 +62,8 @@ class Game:
          return None
 
    def take( self, name ):
+      # If we try to take it, it can trigger actions, it is like using on itself. Think about trying to take a mine.
+      self.use( name )
       return self.move_between_entities( name, self.room, self.inventory )
 
    def drop( self, name ):

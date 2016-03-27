@@ -126,7 +126,7 @@ class ThrillerTest(unittest.TestCase):
    def test_finding_a_new_passage(self):
       self.test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent()
       assert( not self.game1.is_in_room( 'picture' ) is None )
-      self.game1.use('picture')
+      self.game1.take('picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
 if __name__ == '__main__' :
