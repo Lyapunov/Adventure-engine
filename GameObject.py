@@ -5,7 +5,7 @@ class Game:
       self.rooms       = rooms
       self.room        = rooms[0]
       self.passages    = passages
-      self.inventory   = GameObject( 'inventory', 'my inventory', [] )
+      self.inventory   = GameObject( 'inventory', '', [], [] )
       self.use_actions = use_actions
       self.views = views
 
@@ -106,6 +106,7 @@ class GameObjectUseAction:
       self.toolname          = toolname
       self.actionDescription = actionDescription
       self.prototype         = prototype
+
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
@@ -125,17 +126,34 @@ class GameObjectUseAction:
       entity.put( retval )
       return retval
 
+class GameObjectPassageAction:
+   def __init__( self, subjectname, toolname, actionDescription, roomname, direction ):
+      self.subjectname       = subjectname
+      self.toolname          = toolname
+      self.actionDescription = actionDescription
+      self.roomname          = roomname
+      self.direction         = direction
+
+   def applicable( self, subjectname, toolname ):
+      return self.subjectname == subjectname and self.toolname == toolname
+
+   def view_through_prototype( self, subject ):
+      raise Exception('Cannot use passage action as a view, it modifies the world')
+ 
+   def doIt( self, game ):
+      return retval
+
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
    INVISIBLE = 'invisible'
 
 class GameObject:
 
-   def __init__( self, name = '', description = '', attributes = [], childObjects = []):
+   def __init__( self, name = '', description = '', attributes = [], cobs = []):
       self.name = name
       self.description  = description
       self.attributes   = attributes
-      self.childObjects = childObjects
+      self.childObjects = cobs
 
    def makeEqualTo( self, other ):
       self.name         = other.name
