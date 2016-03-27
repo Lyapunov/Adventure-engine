@@ -26,10 +26,10 @@ class Game:
    def see_subject_through_views( self, subject ):
       for action in self.views:
          for tool in self.inventory.childObjects:
-            if action.tool == tool.name and action.subject == subject.name:
+            if action.applicable( subject.name, tool.name ):
                return self.change_subject_according_to_prototype( subject, action.prototype )
          for tool in self.room.childObjects:
-            if action.tool == tool.name and action.subject == subject.name:
+            if action.applicable( subject.name, tool.name ):
                return self.change_subject_according_to_prototype( subject, action.prototype )
       return subject
 
@@ -55,15 +55,8 @@ class Game:
       if ( subject is None ):
          return None
       for action in self.use_actions:
-         if action.tool == tool.name and action.subject == subject.name:
-            action.doIt( self )
-            self.use_actions.remove( action )
-            self.destroy( action.tool )
-            subject, entity = self.find( subject.name )
-            entity.take( action.subject )
-            retval = self.change_subject_according_to_prototype( subject, action.prototype )
-            entity.put( retval )
-            return retval
+         if action.applicable( subject.name, tool.name ):
+            return action.doIt( self )
       return None
 
    def take( self, name ):
@@ -115,13 +108,21 @@ class Game:
       return subject
 
 class GameObjectAction:
-   def __init__( self, subject, tool, actionDescription, prototype ):
-      self.subject           = subject
-      self.tool              = tool
+   def __init__( self, subjectname, toolname, actionDescription, prototype ):
+      self.subjectname       = subjectname
+      self.toolname          = toolname
       self.actionDescription = actionDescription
       self.prototype         = prototype
+   def applicable( self, subjectname, toolname ):
+      return self.subjectname == subjectname and self.toolname == toolname
    def doIt( self, game ):
-      pass
+      game.use_actions.remove( self )
+      game.destroy( self.toolname )
+      subject, entity = game.find( self.subjectname )
+      entity.take( subject.name )
+      retval = game.change_subject_according_to_prototype( subject, self.prototype )
+      entity.put( retval )
+      return retval
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
