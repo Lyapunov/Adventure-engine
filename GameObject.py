@@ -133,7 +133,7 @@ class GameObjectUseAction:
       entity.put( retval )
       return retval
 
-class GameObjectPassageAction:
+class GamePassageRevealAction:
    def __init__( self, subjectname, toolname, actionDescription, roomname, direction ):
       self.subjectname       = subjectname
       self.toolname          = toolname

@@ -4,7 +4,7 @@ from GameObject import Game
 from GameObject import GameObject
 from GameObject import GameObjectAttribute
 from GameObject import GameObjectUseAction
-from GameObject import GameObjectPassageAction
+from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
@@ -19,7 +19,7 @@ class ThrillerTest(unittest.TestCase):
                            GamePassage( 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
                          [ GameObjectUseAction( 'candle',    'match',          'lighting candle',     GameObject('burning candle') ),
                            GameObjectUseAction( 'bird',      'stone',          'hitting bird',        GameObject('injured bird') ),
-                           GameObjectPassageAction( 'picture', '', 'finding new passage', 'dark room', 'W' ) ],
+                           GamePassageRevealAction( 'picture', '', 'finding new passage', 'dark room', 'W' ) ],
                          [ GameObjectUseAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ) ] ) ) ] );
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
