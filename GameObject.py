@@ -40,11 +40,11 @@ class Game:
       else:
          return None
 
-   def use_internal( self, name_of_tool, name_of_subject ):
-      tool = self.inventory.find( name_of_tool )
+   def use_internal( self, subjectname, toolname ):
+      tool = self.inventory.find( toolname )
       if ( tool is None ):
          return None
-      subject, entity = self.find( name_of_subject )
+      subject, entity = self.find( subjectname )
       if ( subject is None ):
          return None
       for action in self.use_actions:
@@ -73,11 +73,11 @@ class Game:
    def find( self, name ):
       return self.find_in_entities( name, [ self.inventory, self.room ] )
 
-   def use( self, name_of_tool, name_of_subject ):
-      retval = self.use_internal( name_of_tool, name_of_subject )
+   def use( self, name_of_subject, name_of_tool ):
+      retval = self.use_internal( name_of_subject, name_of_tool )
       if ( not retval is None ):
          return retval
-      return self.use_internal( name_of_subject, name_of_tool )
+      return self.use_internal( name_of_tool, name_of_subject )
 
    def directions( self ):
       retval = []
