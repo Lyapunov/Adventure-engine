@@ -90,10 +90,9 @@ class Game:
    def directions( self ):
       retval = []
       for passage in self.passages:
-         if passage.room_name1 == self.room.name and not GameObjectAttribute.INVISIBLE in passage.attributes:
-            retval.append( [ passage.direction1, passage.room_name2 ] )
-         if passage.room_name2 == self.room.name and not GameObjectAttribute.INVISIBLE in passage.attributes:
-            retval.append( [ passage.direction2, passage.room_name1 ] )
+         tmp = passage.get_out_passage_from_room( self.room.name ) 
+         if not tmp is None:
+            retval.append( tmp )
       return retval
 
    def move( self, direction ):
@@ -149,7 +148,9 @@ class GameObjectPassageAction:
       raise Exception('Cannot use passage action as a view, it modifies the world')
  
    def doIt( self, game ):
-      return retval
+      pass
+#      for game.passages
+      #return retval
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
@@ -195,3 +196,13 @@ class GamePassage:
       self.direction1 = direction1
       self.direction2 = direction2
       self.attributes = attributes
+
+   def get_out_passage_from_room( self, roomname ):
+      if ( GameObjectAttribute.INVISIBLE in self.attributes ):
+         return None
+      else:
+         if self.room_name1 == roomname:
+            return [ self.direction1, self.room_name2 ]
+         if self.room_name2 == roomname:
+            return [ self.direction2, self.room_name1 ]
+
