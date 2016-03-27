@@ -30,6 +30,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( not self.game1.is_in_room( 'match' ) is None )
       assert ( not self.game1.is_in_room( 'table' ) is None )
       assert ( self.game1.directions() == [['N', 'bathroom']] )
+      assert ( self.game1.won() == 0 )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
@@ -126,6 +127,7 @@ class ThrillerTest(unittest.TestCase):
    def test_finding_a_new_passage(self):
       self.test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent()
       assert( not self.game1.is_in_room( 'picture' ) is None )
+
       self.game1.take('picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
