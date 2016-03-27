@@ -11,6 +11,11 @@ class Game:
       self.won_        = 0
       self.final_room  = final_room
 
+   def setting_current_room( self, room_name ):
+      self.room = self.find_room( room_name )
+      if ( room_name == self.final_room ):
+         self.winning()
+
    def move_between_entities( self, name, from_entity, to_entity ):
       subject = from_entity.take( name )
       if ( not subject is None ):
@@ -99,13 +104,16 @@ class Game:
       topology = self.directions()
       for [room_direction, room_name] in topology:
          if room_direction == direction:
-            self.room = self.find_room( room_name )
+            self.setting_current_room( room_name )
             return self.room
       return None  
 
    def is_in_room( self, name ):
       subject = self.room.find( name )
       return subject
+
+   def winning( self ):
+      self.won_ = 1
 
    def won( self ):
       return self.won_
