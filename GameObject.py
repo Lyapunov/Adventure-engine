@@ -31,7 +31,7 @@ class Game:
          subject = entity.find( name ) 
          if ( not subject is None ):
             return self.see_subject_through_views( subject ), entity
-      return None
+      return None, None
 
    def find_room( self, name ):
       for room in self.rooms:
@@ -41,16 +41,24 @@ class Game:
          return None
 
    def use_internal( self, subjectname, toolname ):
-      tool = self.inventory.find( toolname )
-      if ( tool is None ):
+      if ( subjectname == '' ):
          return None
       subject, entity = self.find( subjectname )
       if ( subject is None ):
          return None
-      for action in self.use_actions:
-         if action.applicable( subject.name, tool.name ):
-            return action.doIt( self )
-      return None
+      if ( toolname == '' ):
+         for action in self.use_actions:
+            if action.applicable( subject.name, '' ):
+               return action.doIt( self )
+         return None
+      else:
+         tool = self.inventory.find( toolname )
+         if ( tool is None ):
+            return None
+         for action in self.use_actions:
+            if action.applicable( subject.name, tool.name ):
+               return action.doIt( self )
+         return None
 
    def take( self, name ):
       return self.move_between_entities( name, self.room, self.inventory )
