@@ -148,9 +148,12 @@ class GameObjectPassageAction:
       raise Exception('Cannot use passage action as a view, it modifies the world')
  
    def doIt( self, game ):
-      pass
-#      for game.passages
-      #return retval
+      for passage in game.passages:
+         tmp = passage.get_out_passage_from_room( self.roomname, 0 ) 
+         if not tmp is None:
+            outdirection, outroomname = tmp 
+            if outdirection == self.direction:
+               passage.make_visible()
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
@@ -164,7 +167,7 @@ class GameObject:
       self.attributes   = attributes
       self.childObjects = cobs
 
-   def makeEqualTo( self, other ):
+   def make_equal_to( self, other ):
       self.name         = other.name
       self.description  = other.description
       self.childObjects = other.childObjects
@@ -197,8 +200,11 @@ class GamePassage:
       self.direction2 = direction2
       self.attributes = attributes
 
-   def get_out_passage_from_room( self, roomname ):
-      if ( GameObjectAttribute.INVISIBLE in self.attributes ):
+   def make_visible( self ):
+      self.attributes.remove( GameObjectAttribute.INVISIBLE )
+
+   def get_out_passage_from_room( self, roomname, visibility = 1 ):
+      if ( visibility and GameObjectAttribute.INVISIBLE in self.attributes ):
          return None
       else:
          if self.room_name1 == roomname:
