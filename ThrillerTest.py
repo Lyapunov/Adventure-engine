@@ -132,6 +132,11 @@ class ThrillerTest(unittest.TestCase):
       self.game1.take('picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
+   def test_winning_the_game(self):
+      self.test_finding_a_new_passage()     
+      self.game1.move('W')
+      assert ( self.game1.won() == 1 )
+
 if __name__ == '__main__' :
    unittest.main()
 
