@@ -94,9 +94,9 @@ class Game:
    def directions( self ):
       retval = []
       for passage in self.passages:
-         if passage.room_name1 == self.room.name:
+         if passage.room_name1 == self.room.name and not GameObjectAttribute.INVISIBLE in passage.attributes:
             retval.append( [ passage.direction1, passage.room_name2 ] )
-         if passage.room_name2 == self.room.name:
+         if passage.room_name2 == self.room.name and not GameObjectAttribute.INVISIBLE in passage.attributes:
             retval.append( [ passage.direction2, passage.room_name1 ] )
       return retval
 
@@ -120,7 +120,8 @@ class GameObjectAction:
       self.prototype         = prototype
 
 class GameObjectAttribute:
-   IMMOBILE = 'immobile'
+   IMMOBILE  = 'immobile'
+   INVISIBLE = 'invisible'
 
 class GameObject:
 
@@ -156,8 +157,9 @@ class GameObject:
       self.childObjects.append( child )
 
 class GamePassage:
-   def __init__( self, room_name1, room_name2, direction1, direction2 ):
+   def __init__( self, room_name1, room_name2, direction1, direction2, attributes = [] ):
       self.room_name1 = room_name1
       self.room_name2 = room_name2
       self.direction1 = direction1
       self.direction2 = direction2
+      self.attributes = attributes
