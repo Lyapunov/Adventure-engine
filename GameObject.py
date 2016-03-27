@@ -16,21 +16,14 @@ class Game:
          return subject
       return None
 
-   def change_subject_according_to_prototype( self, subject, prototype ):
-      subject.childObjects = subject.childObjects + prototype.childObjects
-      prototype.childObjects = []
-      retval = copy.copy(prototype)
-      retval.childObjects = subject.childObjects
-      return retval
-
    def see_subject_through_views( self, subject ):
       for action in self.views:
          for tool in self.inventory.childObjects:
             if action.applicable( subject.name, tool.name ):
-               return self.change_subject_according_to_prototype( subject, action.prototype )
+               return action.view_through_prototype( subject )
          for tool in self.room.childObjects:
             if action.applicable( subject.name, tool.name ):
-               return self.change_subject_according_to_prototype( subject, action.prototype )
+               return action.view_through_prototype( subject )
       return subject
 
    def find_in_entities( self, name, entities ):
@@ -115,12 +108,20 @@ class GameObjectAction:
       self.prototype         = prototype
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
+
+   def view_through_prototype( self, subject ):
+      subject.childObjects = subject.childObjects + self.prototype.childObjects
+      self.prototype.childObjects = []
+      retval = copy.copy(self.prototype)
+      retval.childObjects = subject.childObjects
+      return retval
+
    def doIt( self, game ):
       game.use_actions.remove( self )
       game.destroy( self.toolname )
       subject, entity = game.find( self.subjectname )
       entity.take( subject.name )
-      retval = game.change_subject_according_to_prototype( subject, self.prototype )
+      retval = self.view_through_prototype( subject )
       entity.put( retval )
       return retval
 
