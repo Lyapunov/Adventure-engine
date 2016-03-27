@@ -9,7 +9,7 @@ from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
-      self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ), 
+      self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table', '', [GameObjectAttribute.IMMOBILE], [] ), 
                                                                       GameObject( 'candle' ),
                                                                       GameObject( 'match' ),
                                                                       GameObject( 'bird' ),
@@ -20,33 +20,34 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObjectUseAction( 'candle',    'match',          'lighting candle',     GameObject('burning candle') ),
                            GameObjectUseAction( 'bird',      'stone',          'hitting bird',        GameObject('injured bird') ),
                            GameObjectPassageAction( 'picture', '', 'finding new passage', 'dark room', 'W' ) ],
-                         [ GameObjectUseAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture' ) ] ) ) ] );
+                         [ GameObjectUseAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ) ] ) ) ] );
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
       assert ( self.game1.has( 'match' )  is None )
+      assert ( not self.game1.is_in_room( 'candle' ) is None )
+      assert ( not self.game1.is_in_room( 'match' ) is None )
+      assert ( not self.game1.is_in_room( 'table' ) is None )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
       assert ( not subject is None )
       assert ( not self.game1.has( 'candle' ) is None )
       assert ( self.game1.is_in_room( 'candle' ) is None )
+
       subject = self.game1.drop( 'candle' )
       assert ( not subject is None )
       assert ( self.game1.has( 'candle' ) is None )
-      assert ( not self.game1.is_in_room( 'candle' ) is None )
 
    def test_trying_take_not_existing_object(self):
-      name_of_not_existing_subject = 'banana'
-      subject = self.game1.take( name_of_not_existing_subject )
+      subject = self.game1.take( 'banana' )
       assert ( subject is None )
-      assert ( self.game1.has( name_of_not_existing_subject ) is None )
+      assert ( self.game1.has( 'banana' ) is None )
 
    def test_trying_take_immobile_object(self):
-      name_of_immobile_subject = 'table'
-      subject = self.game1.take( name_of_immobile_subject )
+      subject = self.game1.take( 'table' )
       assert ( subject is None )
-      assert ( self.game1.has( name_of_immobile_subject ) is None )
+      assert ( self.game1.has( 'table' ) is None )
 
    def test_action_hit_the_bird_with_the_stone(self):
       self.game1.take( 'stone' )
@@ -103,7 +104,7 @@ class ThrillerTest(unittest.TestCase):
       assert( not self.game1.take('candle') is None )
 
    def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
-      assert( self.game1.take( 'picture' ) is None )
+      assert( self.game1.is_in_room( 'picture' ) is None )
       assert( self.game1.look() == 'dark room' )
       self.game1.take( 'match' )
       object1 = self.game1.use( 'candle', 'match' )
@@ -113,7 +114,7 @@ class ThrillerTest(unittest.TestCase):
       self.game1.drop('burning candle')
       self.game1.move('S')
       assert( self.game1.look() == 'dark room' )
-      assert( not self.game1.take( 'picture' ) is None )
+      assert( not self.game1.is_in_room( 'picture' ) is None )
 
    def test_finding_a_new_passage(self):
       pass
