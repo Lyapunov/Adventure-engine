@@ -12,7 +12,8 @@ class Game:
    def move_between_entities( self, name, from_entity, to_entity ):
       subject = from_entity.take( name )
       if ( not subject is None ):
-         to_entity.put( subject )
+         if ( not to_entity is None ):
+            to_entity.put( subject )
          return subject
       return None
 
@@ -65,11 +66,6 @@ class Game:
 
    def drop( self, name ):
       return self.move_between_entities( name, self.inventory, self.room )
-
-   def destroy( self, name ):
-      self.room.take( name )
-      self.inventory.take( name )
-      return None 
 
    def has( self, name ):
       subject = self.inventory.find( name )
@@ -126,7 +122,7 @@ class GameObjectUseAction:
 
    def doIt( self, game ):
       game.use_actions.remove( self )
-      game.destroy( self.toolname )
+      game.move_between_entities( self.toolname, game.inventory, None )
       subject, entity = game.find( self.subjectname )
       entity.take( subject.name )
       retval = self.view_through_prototype( subject )
