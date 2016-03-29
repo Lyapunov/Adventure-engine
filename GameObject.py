@@ -23,10 +23,7 @@ class Game:
 
    # === Manipulating the game board ===
 
-   def use( self, subjectname ):
-      return self.game_internal.use( subjectname )
-
-   def use( self, subjectname, toolname ):
+   def use( self, subjectname, toolname = '' ):
       return self.game_internal.use( subjectname, toolname )
 
    def drop( self, name ):

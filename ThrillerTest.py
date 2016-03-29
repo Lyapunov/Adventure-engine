@@ -130,7 +130,7 @@ class ThrillerTest(unittest.TestCase):
       self.test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent()
       assert( 'picture' in self.game1.stuffs() )
 
-      self.game1.take('picture')
+      self.game1.use('picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
    def test_winning_the_game(self):
