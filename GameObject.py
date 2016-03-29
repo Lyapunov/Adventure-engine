@@ -1,6 +1,44 @@
 import copy
 
 class Game:
+   def __init__(  self, rooms, passages, use_actions, views, final_room ):
+      self.game_internal = GameInternal( rooms, passages, use_actions, views, final_room )
+
+   # === Reading the status of the game board ===
+
+   def has( self, name ):
+      return self.game_internal.has( name )
+
+   def look( self ):
+      return self.game_internal.look()
+
+   def directions( self ):
+      return self.game_internal.directions()
+
+   def won( self ):
+      return self.game_internal.won()
+
+   def stuffs( self ):
+      return self.game_internal.stuffs()
+
+   # === Manipulating the game board ===
+
+   def use( self, subjectname ):
+      return self.game_internal.use( subjectname )
+
+   def use( self, subjectname, toolname ):
+      return self.game_internal.use( subjectname, toolname )
+
+   def drop( self, name ):
+      return self.game_internal.drop( name )
+
+   def take( self, name ):
+      return self.game_internal.take( name )
+
+   def move( self, direction ):
+      return self.game_internal.move( direction )
+
+class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
       self.rooms       = rooms
       self.room        = rooms[0]
@@ -108,9 +146,14 @@ class Game:
             return self.room
       return None  
 
-   def is_in_room( self, name ):
-      subject = self.room.find( name )
-      return subject
+   def stuffs( self ):
+      retval = []
+
+      for subject in self.room.children():
+         appearance = self.room.find( subject.name ) 
+         if ( not appearance is None ):
+            retval.append( appearance.name )
+      return retval
 
    def winning( self ):
       self.won_ = 1
@@ -192,6 +235,9 @@ class GameObject:
          if child.name == name:
             return child
       return None 
+
+   def children( self ):
+      return self.childObjects
 
    def take( self, name ):
       for child in self.childObjects:

@@ -28,10 +28,9 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
       assert ( self.game1.has( 'match' )  is None )
-      assert ( self.game1.is_in_room( 'picture' ) is None )
-      assert ( not self.game1.is_in_room( 'candle' ) is None )
-      assert ( not self.game1.is_in_room( 'match' ) is None )
-      assert ( not self.game1.is_in_room( 'table' ) is None )
+      assert ( 'candle' in self.game1.stuffs() )
+      assert ( 'match' in self.game1.stuffs() )
+      assert ( 'table' in self.game1.stuffs() )
       assert ( self.game1.directions() == [['N', 'bathroom']] )
       assert ( self.game1.won() == 0 )
 
@@ -39,7 +38,7 @@ class ThrillerTest(unittest.TestCase):
       subject = self.game1.take( 'candle' )
       assert ( not subject is None )
       assert ( not self.game1.has( 'candle' ) is None )
-      assert ( self.game1.is_in_room( 'candle' ) is None )
+      assert ( not 'candle' in self.game1.stuffs() )
 
       subject = self.game1.drop( 'candle' )
       assert ( not subject is None )
@@ -59,9 +58,9 @@ class ThrillerTest(unittest.TestCase):
       self.game1.take( 'stone' )
       object1 = self.game1.use( 'stone', 'bird' )
       assert ( not object1 is None )
-      assert ( self.game1.is_in_room( 'bird' ) is None )
+      assert ( not 'bird' in self.game1.stuffs() )
       assert ( self.game1.has( 'stone' ) is None )
-      assert ( not self.game1.is_in_room( 'injured bird' ) is None )
+      assert ( 'injured bird' in self.game1.stuffs() )
 
       object2 = self.game1.use( 'stone', 'bird' )
       assert ( object2 is None )
@@ -75,7 +74,7 @@ class ThrillerTest(unittest.TestCase):
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
       self.game1.take( 'stone' )
       object1 = self.game1.use( 'bird', 'stone' )
-      assert ( not self.game1.is_in_room( 'injured bird' ) is None )
+      assert ( 'injured bird' in self.game1.stuffs() )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_first(self):
       self.game1.take( 'match' )
@@ -113,7 +112,7 @@ class ThrillerTest(unittest.TestCase):
       self.game1.drop('candle')
       self.game1.move('S')
       assert( self.game1.look() == 'dark room' )
-      assert( self.game1.is_in_room('candle') is None )
+      assert( not 'candle' in self.game1.stuffs() )
 
    def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
       self.game1.take( 'match' )
@@ -125,11 +124,11 @@ class ThrillerTest(unittest.TestCase):
       self.game1.drop('burning candle')
       self.game1.move('S')
       assert( self.game1.look() == 'dark room' )
-      assert( not self.game1.is_in_room( 'picture' ) is None )
+      assert( 'picture' in self.game1.stuffs() )
 
    def test_finding_a_new_passage(self):
       self.test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent()
-      assert( not self.game1.is_in_room( 'picture' ) is None )
+      assert( 'picture' in self.game1.stuffs() )
 
       self.game1.take('picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
