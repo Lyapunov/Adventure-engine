@@ -6,20 +6,20 @@ class Game:
 
    # === Reading the status of the game board ===
 
-   def has( self, name ):
-      return self.game_internal.has( name )
-
    def look( self ):
       return self.game_internal.look()
 
    def directions( self ):
       return self.game_internal.directions()
 
-   def won( self ):
-      return self.game_internal.won()
+   def has( self, name ):
+      return self.game_internal.has( name )
 
    def stuffs( self ):
       return self.game_internal.stuffs()
+
+   def won( self ):
+      return self.game_internal.won()
 
    # === Manipulating the game board ===
 
