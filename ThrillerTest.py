@@ -9,6 +9,7 @@ from GameObject import GamePassage
 
 class ThrillerTest(unittest.TestCase):
    def setUp( self ):
+    
       self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table', '', [GameObjectAttribute.IMMOBILE], [] ), 
                                                                       GameObject( 'candle' ),
                                                                       GameObject( 'match' ),
@@ -17,8 +18,8 @@ class ThrillerTest(unittest.TestCase):
                            GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ) ],
                          [ GamePassage( 'dark room', 'bathroom', 'N', 'S' ),
                            GamePassage( 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
-                         [ GameObjectUseAction( 'candle',    'match',          'lighting candle',     GameObject('burning candle') ),
-                           GameObjectUseAction( 'bird',      'stone',          'hitting bird',        GameObject('injured bird') ),
+                         [ GameObjectUseAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
+                           GameObjectUseAction( 'bird',   'stone', 'hitting bird',    GameObject('injured bird') ),
                            GamePassageRevealAction( 'picture', '', 'finding new passage', 'dark room', 'W' ) ],
                          [ GameObjectUseAction( 'dark room', 'burning candle', '',                    GameObject('light room', 'light room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ) ] ) ) ],
                          'secret room' );
