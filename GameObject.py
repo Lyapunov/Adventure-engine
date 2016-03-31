@@ -183,12 +183,11 @@ class GameObjectUseAction:
       return retval
 
 class GamePassageRevealAction:
-   def __init__( self, subjectname, toolname, actionDescription, roomname, direction ):
+   def __init__( self, subjectname, toolname, actionDescription, identifier ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.actionDescription = actionDescription
-      self.roomname          = roomname
-      self.direction         = direction
+      self.identifier        = identifier
 
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
@@ -198,11 +197,8 @@ class GamePassageRevealAction:
  
    def doIt( self, game ):
       for passage in game.passages:
-         tmp = passage.get_out_passage_from_room( self.roomname, 0 ) 
-         if not tmp is None:
-            outdirection, outroomname = tmp 
-            if outdirection == self.direction:
-               passage.make_visible()
+         if passage.identifier == self.identifier:
+            passage.make_visible()
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
