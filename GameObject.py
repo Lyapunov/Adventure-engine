@@ -15,6 +15,11 @@ class GameSyntaxChecker:
          return True
       return False
 
+   def check_final_room_is_reachable( self, game ):
+      if ( len( game.game_internal.passages ) != 0 ):
+         return True
+      return False
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -24,6 +29,9 @@ class GameSyntaxChecker:
 
       if not self.check_final_room_exists( game ):
          return 'final room does not exist'
+
+      if not self.check_final_room_is_reachable( game ):
+         return 'final room is not reachable' 
 
       return ''
 
