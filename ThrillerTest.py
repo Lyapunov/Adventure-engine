@@ -64,14 +64,18 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_5(self):
-      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ), GameObject( 'roomD' ) ],
-                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ), GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                              GameObject( 'roomC' ), GameObject( 'roomD' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
                             [], [], 'roomD' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_6(self):
-      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ), GameObject( 'roomD' ) ],
-                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ), GamePassage(12, 'roomB', 'roomC', 'N', 'S' ) ],
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                              GameObject( 'roomC' ), GameObject( 'roomD' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomB', 'roomC', 'N', 'S' ) ],
                             [], [], 'roomD' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
