@@ -54,6 +54,12 @@ class ThrillerTest(unittest.TestCase):
       game_internal = Game( [ GameObject( 'room1', 'room1', [], []) ], [], [], [], 'room1' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'cannot start in the ending room' )
 
+   def test_syntax_checker_wrong_game_3(self):
+      # starting in the ending room
+      game_internal = Game( [ GameObject( 'room1', 'room1', [], []) ], [], [], [], 'final room' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'final room does not exist' )
+
+
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
       assert ( not subject is None )

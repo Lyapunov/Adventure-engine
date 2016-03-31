@@ -10,12 +10,20 @@ class GameSyntaxChecker:
              return False
       return True
       
+   def check_final_room_exists( self, game ):
+      if ( not game.game_internal.find_room( game.game_internal.final_room ) is None ):
+         return True
+      return False
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
 
       if not self.check_final_room_differs_from_starting_room( game ):
          return "cannot start in the ending room"
+
+      if not self.check_final_room_exists( game ):
+         return 'final room does not exist'
 
 
 class Game:
