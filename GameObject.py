@@ -25,6 +25,8 @@ class GameSyntaxChecker:
       if not self.check_final_room_exists( game ):
          return 'final room does not exist'
 
+      return ''
+
 
 class Game:
    def __init__(  self, rooms, passages, use_actions, views, final_room ):
