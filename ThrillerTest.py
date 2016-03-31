@@ -18,8 +18,8 @@ class ThrillerTest(unittest.TestCase):
                                                                       GameObject( 'stone' ) ] ),
                            GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
                            GameObject( 'secret room' ) ],
-                         [ GamePassage( 'dark room', 'bathroom'   , 'N', 'S' ),
-                           GamePassage( 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
+                         [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
+                           GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
                          [ GameObjectUseAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                            GameObjectUseAction( 'bird',   'stone', 'hitting bird',    GameObject('injured bird') ),
                            GamePassageRevealAction( 'picture', '', 'finding new passage', 'dark room', 'W' ) ],
@@ -41,7 +41,7 @@ class ThrillerTest(unittest.TestCase):
 
       # Minimal game: there is a closed door, if you open, you can go through it and you win .. it should be a valid game
       self.game_minimal = Game( [ GameObject( 'starting room', 'starting room', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ) ],
-                                [ GamePassage( 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                                [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                                 [ GamePassageRevealAction( 'door', '', 'opening door', 'ending room', 'N' ) ],
                                 [],
                                 'ending room')

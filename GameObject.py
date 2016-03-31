@@ -245,7 +245,8 @@ class GameObject:
       self.childObjects.append( child )
 
 class GamePassage:
-   def __init__( self, room_name1, room_name2, direction1, direction2, attributes = [] ):
+   def __init__( self, identifier, room_name1, room_name2, direction1, direction2, attributes = [] ):
+      self.identifier = identifier
       self.room_name1 = room_name1
       self.room_name2 = room_name2
       self.direction1 = direction1
