@@ -45,6 +45,17 @@ class GameSyntaxChecker:
             self.ordered_edges.append( edge )
       return True
 
+   def check_are_passage_identifiers_unique( self, game ):
+      self.ids = []
+      for passage in game.game_internal.passages:
+         identifier = passage.identifier
+         if identifier in self.ids:
+            return False
+         else:
+            self.ids.append( identifier )
+      return True
+     
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -60,6 +71,9 @@ class GameSyntaxChecker:
 
       if not self.check_no_multiple_passages_between_rooms( game ):
          return 'multiple passages between the same rooms'
+
+      if not self.check_are_passage_identifiers_unique( game ):
+         return 'passage identifiers are not unique'
 
       return ''
 
