@@ -35,6 +35,16 @@ class GameSyntaxChecker:
       # true if final room is visited
       return game.game_internal.final_room in self.visited_room_names
 
+   def check_no_multiple_passages_between_rooms( self, game ):
+      self.ordered_edges = []
+      for passage in game.game_internal.passages:
+         edge = passage.get_ordered_name()
+         if edge in self.ordered_edges:
+            return False
+         else:
+            self.ordered_edges.append( edge )
+      return True
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -47,6 +57,9 @@ class GameSyntaxChecker:
 
       if not self.check_final_room_is_reachable( game ):
          return 'final room is not reachable' 
+
+      if not self.check_no_multiple_passages_between_rooms( game ):
+         return 'multiple passages between the same rooms'
 
       return ''
 
@@ -305,6 +318,12 @@ class GamePassage:
       self.direction1 = direction1
       self.direction2 = direction2
       self.attributes = attributes
+
+   def get_ordered_name( self ):
+      if ( self.room_name1 < self.room_name2 ):
+         return [self.room_name1, self.room_name2]
+      else:
+         return [self.room_name2, self.room_name1]
 
    def make_visible( self ):
       self.attributes.remove( GameObjectAttribute.INVISIBLE )
