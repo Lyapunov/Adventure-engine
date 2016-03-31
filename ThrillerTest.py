@@ -60,20 +60,50 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room does not exist' )
 
    def test_syntax_checker_wrong_game_4(self):
-      # Final room should be accessible
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ], [], [], [], 'final room' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_5(self):
-      # Final room should be accessible
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ), GameObject( 'roomD' ) ],
-                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ), GamePassage(11, 'roomC', 'roomD', 'N', 'S' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ), GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
                             [], [], 'roomD' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
+
+   def test_syntax_checker_wrong_game_6(self):
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ), GameObject( 'roomD' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ), GamePassage(12, 'roomB', 'roomC', 'N', 'S' ) ],
+                            [], [], 'roomD' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
+
+   def test_syntax_checker_wrong_game_7(self):
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                              GameObject( 'roomC' ), GameObject( 'roomD' ),
+                              GameObject( 'roomE' ), GameObject( 'roomF' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomA', 'roomE', 'E', 'W' ),
+                              GamePassage(13, 'roomE', 'roomB', 'N', 'E' ),
+                              GamePassage(14, 'roomD', 'roomE', 'N', 'S' ),
+                              GamePassage(15, 'roomC', 'roomF', 'E', 'W' ) ],
+                            [], [], 'roomF' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ], [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
+      assert ( GameSyntaxChecker().check( game_internal )  == '' )
+
+   def test_syntax_checker_good_game_2(self):
+      # testing whether final room is accessible
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                              GameObject( 'roomC' ), GameObject( 'roomD' ),
+                              GameObject( 'roomE' ), GameObject( 'roomF' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomA', 'roomE', 'E', 'W' ),
+                              GamePassage(13, 'roomD', 'roomC', 'E', 'W' ),
+                              GamePassage(14, 'roomE', 'roomB', 'N', 'E' ),
+                              GamePassage(15, 'roomD', 'roomE', 'N', 'S' ),
+                              GamePassage(16, 'roomC', 'roomF', 'E', 'W' ) ],
+                            [], [], 'roomF' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
 
    def test_take_and_drop_existing_object(self):
