@@ -91,9 +91,16 @@ class ThrillerTest(unittest.TestCase):
                             [], [], 'roomF' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
+   def test_syntax_checker_wrong_game_8(self):
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(11, 'roomB', 'roomA', 'W', 'S' ) ], [], [], 'roomB' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
-      game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ], [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
+      game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
+                            [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
 
    def test_syntax_checker_good_game_2(self):
