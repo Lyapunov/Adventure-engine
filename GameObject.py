@@ -1,5 +1,23 @@
 import copy
 
+class GameSyntaxChecker:
+   def check_must_have_at_least_one_room( self, game ):
+      return len( game.game_internal.rooms ) > 0
+
+   def check_final_room_differs_from_starting_room( self, game ):
+      if ( len( game.game_internal.rooms ) > 0 ):
+         if ( game.game_internal.final_room == game.game_internal.rooms[0].name ):
+             return False
+      return True
+      
+   def check( self, game ):
+      if not self.check_must_have_at_least_one_room( game ):
+         return "must have at least one room"
+
+      if not self.check_final_room_differs_from_starting_room( game ):
+         return "cannot start in the ending room"
+
+
 class Game:
    def __init__(  self, rooms, passages, use_actions, views, final_room ):
       self.game_internal = GameInternal( rooms, passages, use_actions, views, final_room )
@@ -38,7 +56,10 @@ class Game:
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
       self.rooms       = rooms
-      self.room        = rooms[0]
+      if ( len(rooms) > 0 ):
+         self.room        = rooms[0] 
+      else:
+         self.room        = None
       self.passages    = passages
       self.inventory   = GameObject( 'inventory', '', [], [] )
       self.use_actions = use_actions

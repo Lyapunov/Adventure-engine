@@ -6,6 +6,7 @@ from GameObject import GameObjectAttribute
 from GameObject import GameObjectUseAction
 from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
+from GameObject import GameSyntaxChecker
 
 class ThrillerTest(unittest.TestCase):
 
@@ -36,17 +37,22 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.directions() == [['N', 'bathroom']] )
       assert ( self.game1.won() == 0 )
 
-      # Wrong game1: there is no
-      self.game_wrong1 = Game( [ GameObject( 'room1', 'room1', [], []) ], [], [], [], 'room1' )
+      # Minimal game 2: there is a closed door, if you open, you can go through it and you win .. it should be a valid game
+      self.game_minimal_2 = Game( [ GameObject( 'starting room', 'starting room', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ) ],
+                                  [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                                  [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                                  [],
+                                  'ending room')
+ 
+   def test_syntax_checker_wrong_game_1(self):
+      # there is no room
+      game_internal = Game( [], [], [], [], '' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'must have at least one room' )
 
-      # Minimal game: there is a closed door, if you open, you can go through it and you win .. it should be a valid game
-      self.game_minimal = Game( [ GameObject( 'starting room', 'starting room', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ) ],
-                                [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                                [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
-                                [],
-                                'ending room')
-
-                          
+   def test_syntax_checker_wrong_game_2(self):
+      # starting in the ending room
+      game_internal = Game( [ GameObject( 'room1', 'room1', [], []) ], [], [], [], 'room1' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'cannot start in the ending room' )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
