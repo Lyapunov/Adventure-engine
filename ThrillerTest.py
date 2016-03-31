@@ -10,12 +10,14 @@ from GameObject import GamePassage
 class ThrillerTest(unittest.TestCase):
 
    def setUp( self ):
+      # Test game1, just to start with something
       self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table', '', [GameObjectAttribute.IMMOBILE], [] ), 
                                                                       GameObject( 'candle' ),
                                                                       GameObject( 'match' ),
                                                                       GameObject( 'bird' ),
                                                                       GameObject( 'stone' ) ] ),
-                           GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ) ],
+                           GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
+                           GameObject( 'secret room' ) ],
                          [ GamePassage( 'dark room', 'bathroom'   , 'N', 'S' ),
                            GamePassage( 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
                          [ GameObjectUseAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
@@ -33,6 +35,18 @@ class ThrillerTest(unittest.TestCase):
       assert ( 'table' in self.game1.stuffs() )
       assert ( self.game1.directions() == [['N', 'bathroom']] )
       assert ( self.game1.won() == 0 )
+
+      # Wrong game1: there is no
+      self.game_wrong1 = Game( [ GameObject( 'room1', 'room1', [], []) ], [], [], [], 'room1' )
+
+      # Minimal game: there is a closed door, if you open, you can go through it and you win .. it should be a valid game
+      self.game_minimal = Game( [ GameObject( 'starting room', 'starting room', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ) ],
+                                [ GamePassage( 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                                [ GamePassageRevealAction( 'door', '', 'opening door', 'ending room', 'N' ) ],
+                                [],
+                                'ending room')
+
+                          
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.take( 'candle' )
