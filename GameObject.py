@@ -16,9 +16,24 @@ class GameSyntaxChecker:
       return False
 
    def check_final_room_is_reachable( self, game ):
-      if ( len( game.game_internal.passages ) != 0 ):
-         return True
-      return False
+      # Preparations
+      if ( len( game.game_internal.rooms ) == 0 ):
+         return False
+      first_room = game.game_internal.rooms[0].name
+      self.visited_room_names = []
+      self.candidate_list = []
+      self.candidate_list.append( first_room )
+
+      # visiting rooms
+      while len( self.candidate_list ) > 0:
+         candidate = self.candidate_list.pop()
+         if not candidate in self.visited_room_names:
+            self.visited_room_names.append( candidate )
+            for [i,j] in game.game_internal.directionsInternal( candidate, 0 ):
+               self.candidate_list.append( j )
+
+      # true if final room is visited
+      return game.game_internal.final_room in self.visited_room_names
 
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
@@ -164,13 +179,16 @@ class GameInternal:
          return retval
       return self.use_internal( toolname, subjectname )
 
-   def directions( self ):
+   def directionsInternal( self, room_name, visibility = 1 ):
       retval = []
       for passage in self.passages:
-         tmp = passage.get_out_passage_from_room( self.room.name ) 
+         tmp = passage.get_out_passage_from_room(room_name, visibility)
          if not tmp is None:
             retval.append( tmp )
       return retval
+
+   def directions( self ):
+      return self.directionsInternal( self.room.name )
 
    def move( self, direction ):
       topology = self.directions()
