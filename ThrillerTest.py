@@ -94,7 +94,7 @@ class ThrillerTest(unittest.TestCase):
    def test_syntax_checker_wrong_game_8(self):
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ) ],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
-                              GamePassage(11, 'roomB', 'roomA', 'W', 'S' ) ], [], [], 'roomB' )
+                              GamePassage(12, 'roomB', 'roomA', 'W', 'S' ) ], [], [], 'roomB' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
 
    def test_syntax_checker_good_game1(self):
