@@ -27,6 +27,8 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObjectUseAction( 'dark room', 'burning candle', '',
                                 GameObject('light room', 'light room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ) ] ) ) ],
                          'secret room' );
+      verdict = GameSyntaxChecker().check( self.game1 )
+      #assert ( verdict  == '' )
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
