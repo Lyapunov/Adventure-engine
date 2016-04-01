@@ -280,7 +280,7 @@ class ThrillerTest(unittest.TestCase):
       self.game1.take( 'match' )
       object1 = self.game1.use( 'candle', 'match' )
 
-      # Note: the look triggers the appearance of the revealed object!
+      # Note: the look triggers the appearance of the revealed object! TODO: making it automatic after use
       assert ( self.game1.look() == 'light room' )
       assert( 'picture' in self.game1.stuffs() )
 
