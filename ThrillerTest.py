@@ -36,13 +36,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( 'table' in self.game1.stuffs() )
       assert ( self.game1.directions() == [['N', 'bathroom']] )
       assert ( self.game1.won() == 0 )
-
-      # Minimal game 2: there is a closed door, if you open, you can go through it and you win .. it should be a valid game
-      self.game_minimal_2 = Game( [ GameObject( 'starting room', 'starting room', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ) ],
-                                  [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                                  [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
-                                  [],
-                                  'ending room')
  
    def test_syntax_checker_wrong_game_1(self):
       # there is no room
@@ -131,6 +124,18 @@ class ThrillerTest(unittest.TestCase):
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
                             [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
+
+   def test_syntax_checker_good_game2(self):
+      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == '' )
+
 
    def test_syntax_checker_good_game_2(self):
       # testing whether final room is accessible
