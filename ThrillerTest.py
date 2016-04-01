@@ -190,7 +190,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
                             [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ),
-                              GamePassageRevealAction( '', 'button1', 'hacking door', 11 ) ],
+                              GameObjectUseAction( '', 'button1', 'breaking button', GameObject( 'broken button' ) ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
