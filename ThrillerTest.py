@@ -119,6 +119,18 @@ class ThrillerTest(unittest.TestCase):
                             'roomB' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action' )
 
+   def test_syntax_checker_wrong_game_13(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'button2', '', [GameObjectAttribute.IMMOBILE], [] ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'button', '', 'opening door', 11 ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      print verdict
+      assert ( verdict  == '' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
