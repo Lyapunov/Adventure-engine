@@ -47,23 +47,23 @@ class GameSyntaxChecker:
       return True
 
    def check_no_multiple_passages_between_rooms( self, game ):
-      self.ordered_edges = []
+      ordered_edges = []
       for passage in game.game_internal.passages:
          edge = passage.get_ordered_name()
-         if edge in self.ordered_edges:
+         if edge in ordered_edges:
             return False
          else:
-            self.ordered_edges.append( edge )
+            ordered_edges.append( edge )
       return True
 
    def check_are_passage_identifiers_unique( self, game ):
-      self.ids = []
+      ids = []
       for passage in game.game_internal.passages:
          identifier = passage.identifier
-         if identifier in self.ids:
+         if identifier in ids:
             return False
          else:
-            self.ids.append( identifier )
+            ids.append( identifier )
       return True
 
    def check( self, game ):
