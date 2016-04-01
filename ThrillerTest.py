@@ -4,6 +4,7 @@ from GameObject import Game
 from GameObject import GameObject
 from GameObject import GameObjectAttribute
 from GameObject import GameObjectUseAction
+from GameObject import GameObjectRevealAction
 from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
 from GameObject import GameSyntaxChecker
@@ -16,7 +17,8 @@ class ThrillerTest(unittest.TestCase):
                                                                       GameObject( 'candle' ),
                                                                       GameObject( 'match' ),
                                                                       GameObject( 'bird' ),
-                                                                      GameObject( 'stone' ) ] ),
+                                                                      GameObject( 'stone' ),
+                                                                      GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ) ] ),
                            GameObject( 'bathroom', 'bathroom' , [], [ GameObject( 'cabinet', '', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
                            GameObject( 'secret room' ) ],
                          [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
@@ -24,8 +26,7 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObjectUseAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                            GameObjectUseAction( 'bird',   'stone', 'hitting bird',    GameObject('injured bird') ),
                            GamePassageRevealAction( 'picture', '', 'finding new passage', 12 ) ],
-                         [ GameObjectUseAction( 'dark room', 'burning candle', '',
-                                GameObject('light room', 'light room', [], [ GameObject( 'picture', '', [GameObjectAttribute.IMMOBILE] ) ] ) ) ],
+                         [ GameObjectRevealAction( 'dark room', 'burning candle', 'light room', 'picture' ) ],
                          'secret room' );
       verdict = GameSyntaxChecker().check( self.game1 )
       #assert ( verdict  == '' )

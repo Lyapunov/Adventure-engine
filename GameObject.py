@@ -401,6 +401,37 @@ class GamePassageRevealAction:
          if passage.identifier == self.identifier:
             passage.make_visible()
 
+class GameObjectRevealAction:
+   def __init__( self, subjectname, toolname, actionDescription, resultname ):
+      self.subjectname       = subjectname
+      self.toolname          = toolname
+      self.actionDescription = actionDescription
+      self.resultname        = resultname
+
+   def get_actor_names( self ):
+      if self.subjectname < self.toolname:
+         return [ self.subjectname, self.toolname ]
+      else:
+         return [ self.toolname, self.subjectname ]
+
+   def get_passage_identifier( self ):
+      return self.identifier
+
+   def applicable( self, subjectname, toolname ):
+      return self.subjectname == subjectname and self.toolname == toolname
+
+   def view_through_prototype( self, subject ):
+      retval = copy.copy(subject)
+      retval.description = self.actionDescription
+      return retval
+ 
+   def doIt( self, game ):
+      game.move_between_entities( self.toolname, game.inventory, None )
+      subject, entity = game.find( self.subjectname )
+      entity.take( subject.name )
+      result, entity2 = game.find( self.resultname )
+      result.make_visible()
+
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
    INVISIBLE = 'invisible'
