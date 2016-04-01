@@ -139,7 +139,16 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found two actors with the same name' )
+      assert ( verdict  == 'found two objects with the same name' )
+
+   def test_syntax_checker_wrong_game_15(self):
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomC' ),
+                              GameObject( 'roomB' ), GameObject( 'roomC' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomB', 'roomC', 'N', 'S' ) ],
+                            [], [], 'roomC' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
