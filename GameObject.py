@@ -15,25 +15,36 @@ class GameSyntaxChecker:
          return True
       return False
 
-   def check_final_room_is_reachable( self, game ):
+   def get_list_of_accessible_rooms( self, game ):
       # Preparations
       if ( len( game.game_internal.rooms ) == 0 ):
          return False
       first_room = game.game_internal.rooms[0].name
-      self.visited_room_names = []
-      self.candidate_list = []
-      self.candidate_list.append( first_room )
+      visited_room_names = []
+      candidate_list = []
+      candidate_list.append( first_room )
 
       # visiting rooms
-      while len( self.candidate_list ) > 0:
-         candidate = self.candidate_list.pop()
-         if not candidate in self.visited_room_names:
-            self.visited_room_names.append( candidate )
+      while len( candidate_list ) > 0:
+         candidate = candidate_list.pop()
+         if not candidate in visited_room_names:
+            visited_room_names.append( candidate )
             for [i,j] in game.game_internal.directionsInternal( candidate, 0 ):
-               self.candidate_list.append( j )
+               candidate_list.append( j )
 
-      # true if final room is visited
-      return game.game_internal.final_room in self.visited_room_names
+      # retval
+      return visited_room_names
+
+   def check_final_room_is_reachable( self, game ):
+      accessible_rooms = self.get_list_of_accessible_rooms( game )
+      return game.game_internal.final_room in accessible_rooms
+
+   def check_all_room_is_reachable( self, game ):
+      accessible_rooms = self.get_list_of_accessible_rooms( game )
+      for room in game.game_internal.rooms:
+         if not room.name in accessible_rooms:
+            return False
+      return True
 
    def check_no_multiple_passages_between_rooms( self, game ):
       self.ordered_edges = []
@@ -54,7 +65,6 @@ class GameSyntaxChecker:
          else:
             self.ids.append( identifier )
       return True
-     
 
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
@@ -74,6 +84,9 @@ class GameSyntaxChecker:
 
       if not self.check_are_passage_identifiers_unique( game ):
          return 'passage identifiers are not unique'
+
+      if not self.check_all_room_is_reachable( game ):
+         return 'not all rooms are accessible'
 
       return ''
 
