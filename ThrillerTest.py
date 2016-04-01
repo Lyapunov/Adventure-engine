@@ -130,6 +130,17 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found invalid object in an action' )
 
+   def test_syntax_checker_wrong_game_14(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == '' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
