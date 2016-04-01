@@ -113,6 +113,17 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
+   def check_no_actions_with_same_actor_twice( self, game ):
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      for action in allactions:
+         try:
+            actors = action.get_actor_names()
+            if actors[0] == actors[1]:
+               return False
+         except TypeError:
+            sys.exc_clear()
+      return True
+
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
       for stuff in self.get_list_of_all_stuffs( game ):
@@ -155,6 +166,9 @@ class GameSyntaxChecker:
 
       if not self.check_no_actions_without_actors( game ):
          return 'found an action without actors'
+
+      if not self.check_no_actions_with_same_actor_twice( game ):
+         return 'found invalid action with the same actor twice'
 
       return ''
 
