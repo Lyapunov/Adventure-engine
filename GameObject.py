@@ -1,4 +1,5 @@
 import copy
+import sys
 
 class GameSyntaxChecker:
    def check_must_have_at_least_one_room( self, game ):
@@ -83,7 +84,7 @@ class GameSyntaxChecker:
          try:
             if not passage.get_passage_identifier() in ids:
                return False
-         except TypeError:
+         except Exception:
             sys.exc_clear()
       return True
 
@@ -93,50 +94,38 @@ class GameSyntaxChecker:
          stuffs.append( stuff.name )
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
-         try:
-            for actor in action.get_actor_names():
-               if not actor == '' and not actor in stuffs:
-                  return False
-         except TypeError:
-            sys.exc_clear()
+         for actor in action.get_actor_names():
+            if not actor == '' and not actor in stuffs:
+               return False
       return True
 
    def check_no_actions_without_actors( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
-         try:
-            for actor in action.get_actor_names():
-               if not actor == '':
-                  break
-            else:
-               return False
-         except TypeError:
-            sys.exc_clear()
+         for actor in action.get_actor_names():
+            if not actor == '':
+               break
+         else:
+            return False
       return True
 
    def check_no_actions_with_same_actor_twice( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
-         try:
-            actors = action.get_actor_names()
-            if actors[0] == actors[1]:
-               return False
-         except TypeError:
-            sys.exc_clear()
+         actors = action.get_actor_names()
+         if actors[0] == actors[1]:
+            return False
       return True
 
    def check_no_multiple_actions( self, game ):
       actor_pairs = []
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
-         try:
-            actors = action.get_actor_names()
-            if actors in actor_pairs:
-               return False
-            else:
-               actor_pairs.append( actors )
-         except TypeError:
-            sys.exc_clear()
+         actors = action.get_actor_names()
+         if actors in actor_pairs:
+            return False
+         else:
+            actor_pairs.append( actors )
       return True
 
    def check_no_two_actors_with_the_same_name( self, game ):
