@@ -88,11 +88,10 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
-   def check_actors_are_valid_in_actions( self, game ):
+   def check_actors_are_valid_in_actions( self, game, allactions, include_rooms ):
       stuffs = []
-      for stuff in self.get_list_of_all_stuffs( game ):
+      for stuff in self.get_list_of_all_stuffs( game, include_rooms ):
          stuffs.append( stuff.name )
-      allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
          for actor in action.get_actor_names():
             if not actor == '' and not actor in stuffs:
@@ -162,7 +161,7 @@ class GameSyntaxChecker:
       if not self.check_passage_identifiers_are_valid_in_actions( game ):
          return 'invalid passage identifiers in an action'
 
-      if not self.check_actors_are_valid_in_actions( game ):
+      if not self.check_actors_are_valid_in_actions( game, game.game_internal.use_actions, 0 ) or not self.check_actors_are_valid_in_actions( game, game.game_internal.views, 1 ):
          return 'found invalid object in an action'
 
       if not self.check_no_two_actors_with_the_same_name( game ):
