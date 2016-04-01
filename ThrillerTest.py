@@ -128,8 +128,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
-      print verdict
-      assert ( verdict  == '' )
+      assert ( verdict  == 'found invalid object in an action' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
@@ -149,7 +148,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == '' )
 
 
-   def test_syntax_checker_good_game_2(self):
+   def test_syntax_checker_good_game_3(self):
       # testing whether final room is accessible
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ),

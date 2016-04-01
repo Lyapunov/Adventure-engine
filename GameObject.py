@@ -15,6 +15,12 @@ class GameSyntaxChecker:
          return True
       return False
 
+   def get_list_of_all_stuffs( self, game ):
+      retval = []
+      for room in game.game_internal.rooms:
+         retval += room.descendants()
+      return retval
+
    def get_list_of_accessible_rooms( self, game ):
       # Preparations
       if ( len( game.game_internal.rooms ) == 0 ):
@@ -79,6 +85,20 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
+   def check_actors_are_valid_in_actions( self, game ):
+      stuffs = []
+      for stuff in self.get_list_of_all_stuffs( game ):
+         stuffs.append( stuff.name )
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      for action in allactions:
+         try:
+            for actor in action.get_actor_names():
+               if not actor == '' and not actor in stuffs:
+                  return False
+         except TypeError:
+            sys.exc_clear()
+      return True
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -103,6 +123,9 @@ class GameSyntaxChecker:
 
       if not self.check_passage_identifiers_are_valid_in_actions( game ):
          return 'invalid passage identifiers in an action'
+
+      if not self.check_actors_are_valid_in_actions( game ):
+         return 'found invalid object in an action'
 
       return ''
 
@@ -276,6 +299,9 @@ class GameObjectUseAction:
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
+   def get_actor_names( self ):
+      return [ self.subjectname, self.toolname ]
+
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
@@ -301,6 +327,9 @@ class GamePassageRevealAction:
       self.toolname          = toolname
       self.actionDescription = actionDescription
       self.identifier        = identifier
+
+   def get_actor_names( self ):
+      return [ self.subjectname, self.toolname ]
 
    def get_passage_identifier( self ):
       return self.identifier
@@ -345,6 +374,12 @@ class GameObject:
 
    def children( self ):
       return self.childObjects
+
+   def descendants( self ):
+      retval = self.children()
+      for child in self.children():
+         retval += child.children()
+      return retval
 
    def take( self, name ):
       for child in self.childObjects:
