@@ -125,6 +125,20 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
+   def check_no_multiple_actions( self, game ):
+      actor_pairs = []
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      for action in allactions:
+         try:
+            actors = action.get_actor_names()
+            if actors in actor_pairs:
+               return False
+            else:
+               actor_pairs.append( actors )
+         except TypeError:
+            sys.exc_clear()
+      return True
+
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
       for stuff in self.get_list_of_all_stuffs( game, 1 ):
@@ -170,6 +184,10 @@ class GameSyntaxChecker:
 
       if not self.check_no_actions_with_same_actor_twice( game ):
          return 'found invalid action with the same actor twice'
+
+      if not self.check_no_multiple_actions( game ):
+         return 'found multiple actions on the same two actors'
+
 
       return ''
 
@@ -344,7 +362,10 @@ class GameObjectUseAction:
       self.prototype         = prototype
 
    def get_actor_names( self ):
-      return [ self.subjectname, self.toolname ]
+      if self.subjectname < self.toolname:
+         return [ self.subjectname, self.toolname ]
+      else:
+         return [ self.toolname, self.subjectname ]
 
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
@@ -373,7 +394,10 @@ class GamePassageRevealAction:
       self.identifier        = identifier
 
    def get_actor_names( self ):
-      return [ self.subjectname, self.toolname ]
+      if self.subjectname < self.toolname:
+         return [ self.subjectname, self.toolname ]
+      else:
+         return [ self.toolname, self.subjectname ]
 
    def get_passage_identifier( self ):
       return self.identifier

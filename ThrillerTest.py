@@ -172,6 +172,30 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found invalid action with the same actor twice' )
 
+   def test_syntax_checker_wrong_game_18(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'button2', '', [GameObjectAttribute.IMMOBILE], [] ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ),
+                              GamePassageRevealAction( 'button1', '', 'opening door', 11 ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found multiple actions on the same two actors' )
+
+   def test_syntax_checker_wrong_game_19(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'button2', '', [GameObjectAttribute.IMMOBILE], [] ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ),
+                              GamePassageRevealAction( '', 'button1', 'hacking door', 11 ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found multiple actions on the same two actors' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
