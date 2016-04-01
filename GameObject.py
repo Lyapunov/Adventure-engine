@@ -15,10 +15,11 @@ class GameSyntaxChecker:
          return True
       return False
 
-   def get_list_of_all_stuffs( self, game ):
+   def get_list_of_all_stuffs( self, game, addrooms = 0 ):
       retval = []
       for room in game.game_internal.rooms:
-         retval += [ room ]
+         if addrooms == 1:
+            retval += [ room ]
          retval += room.descendants()
       return retval
 
@@ -126,7 +127,7 @@ class GameSyntaxChecker:
 
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
-      for stuff in self.get_list_of_all_stuffs( game ):
+      for stuff in self.get_list_of_all_stuffs( game, 1 ):
          if stuff.name in stuffs:
             return False
          else:
