@@ -150,6 +150,17 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found two objects with the same name' )
 
+   def test_syntax_checker_wrong_game16(self):
+      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( '', '', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found an action without actors' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],

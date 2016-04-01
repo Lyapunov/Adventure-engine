@@ -18,6 +18,7 @@ class GameSyntaxChecker:
    def get_list_of_all_stuffs( self, game ):
       retval = []
       for room in game.game_internal.rooms:
+         retval += [ room ]
          retval += room.descendants()
       return retval
 
@@ -99,6 +100,19 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
+   def check_no_actions_without_actors( self, game ):
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      for action in allactions:
+         try:
+            for actor in action.get_actor_names():
+               if not actor == '':
+                  break
+            else:
+               return False
+         except TypeError:
+            sys.exc_clear()
+      return True
+
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
       for stuff in self.get_list_of_all_stuffs( game ):
@@ -137,7 +151,10 @@ class GameSyntaxChecker:
          return 'found invalid object in an action'
 
       if not self.check_no_two_actors_with_the_same_name( game ):
-         return 'found two actors with the same name'
+         return 'found two objects with the same name'
+
+      if not self.check_no_actions_without_actors( game ):
+         return 'found an action without actors'
 
       return ''
 
