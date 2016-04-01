@@ -56,7 +56,7 @@ class GameSyntaxChecker:
             ordered_edges.append( edge )
       return True
 
-   def check_are_passage_identifiers_unique( self, game ):
+   def check_all_passage_identifiers_are_unique( self, game ):
       ids = []
       for passage in game.game_internal.passages:
          identifier = passage.identifier
@@ -64,6 +64,19 @@ class GameSyntaxChecker:
             return False
          else:
             ids.append( identifier )
+      return True
+
+   def check_passage_identifiers_are_valid_in_actions( self, game ):
+      ids = []
+      for passage in game.game_internal.passages:
+         ids.append( passage.identifier )
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      for passage in allactions:
+         try:
+            if not passage.get_passage_identifier() in ids:
+               return False
+         except TypeError:
+            sys.exc_clear()
       return True
 
    def check( self, game ):
@@ -82,11 +95,14 @@ class GameSyntaxChecker:
       if not self.check_no_multiple_passages_between_rooms( game ):
          return 'multiple passages between the same rooms'
 
-      if not self.check_are_passage_identifiers_unique( game ):
+      if not self.check_all_passage_identifiers_are_unique( game ):
          return 'passage identifiers are not unique'
 
       if not self.check_all_room_is_reachable( game ):
          return 'not all rooms are accessible'
+
+      if not self.check_passage_identifiers_are_valid_in_actions( game ):
+         return 'invalid passage identifiers in an action'
 
       return ''
 
@@ -285,6 +301,9 @@ class GamePassageRevealAction:
       self.toolname          = toolname
       self.actionDescription = actionDescription
       self.identifier        = identifier
+
+   def get_passage_identifier( self ):
+      return self.identifier
 
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname

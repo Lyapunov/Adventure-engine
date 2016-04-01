@@ -116,6 +116,15 @@ class ThrillerTest(unittest.TestCase):
                               GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
                             [], [], 'roomB' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'not all rooms are accessible' )
+ 
+   def test_syntax_checker_wrong_game_12(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button', '', [GameObjectAttribute.IMMOBILE], [] ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'button', '', 'opening door', 13 ) ],
+                            [],
+                            'roomB' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
@@ -134,7 +143,9 @@ class ThrillerTest(unittest.TestCase):
                               GamePassage(14, 'roomE', 'roomB', 'N', 'E' ),
                               GamePassage(15, 'roomD', 'roomE', 'N', 'S' ),
                               GamePassage(16, 'roomC', 'roomF', 'E', 'W' ) ],
-                            [], [], 'roomF' )
+                            [],
+                            [],
+                            'roomF' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
 
    def test_take_and_drop_existing_object(self):
