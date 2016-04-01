@@ -37,6 +37,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( 'candle' in self.game1.stuffs() )
       assert ( 'match' in self.game1.stuffs() )
       assert ( 'table' in self.game1.stuffs() )
+      assert ( not 'picture' in self.game1.stuffs() )
       assert ( self.game1.directions() == [['N', 'bathroom']] )
       assert ( self.game1.won() == 0 )
  

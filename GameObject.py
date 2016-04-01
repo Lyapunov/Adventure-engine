@@ -246,10 +246,10 @@ class GameInternal:
       for action in self.views:
          for tool in self.inventory.childObjects:
             if action.applicable( subject.name, tool.name ):
-               return action.view_through_prototype( subject )
+               return action.view_through_prototype( subject, self )
          for tool in self.room.childObjects:
             if action.applicable( subject.name, tool.name ):
-               return action.view_through_prototype( subject )
+               return action.view_through_prototype( subject, self )
       return subject
 
    def find_in_entities( self, name, entities ):
@@ -331,9 +331,10 @@ class GameInternal:
       retval = []
 
       for subject in self.room.children():
-         appearance = self.room.find( subject.name ) 
-         if ( not appearance is None ):
-            retval.append( appearance.name )
+         if not GameObjectAttribute.INVISIBLE in subject.attributes:
+            appearance = self.room.find( subject.name ) 
+            if ( not appearance is None ):
+               retval.append( appearance.name )
       return retval
 
    def winning( self ):
@@ -358,7 +359,7 @@ class GameObjectUseAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject ):
+   def view_through_prototype( self, subject, game ):
       subject.childObjects = subject.childObjects + self.prototype.childObjects
       self.prototype.childObjects = []
       retval = copy.copy(self.prototype)
@@ -370,7 +371,7 @@ class GameObjectUseAction:
       game.move_between_entities( self.toolname, game.inventory, None )
       subject, entity = game.find( self.subjectname )
       entity.take( subject.name )
-      retval = self.view_through_prototype( subject )
+      retval = self.view_through_prototype( subject, game )
       entity.put( retval )
       return retval
 
@@ -393,7 +394,7 @@ class GamePassageRevealAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject ):
+   def view_through_prototype( self, subject, game ):
       raise Exception('Cannot use passage action as a view, it modifies the world')
  
    def doIt( self, game ):
@@ -420,17 +421,15 @@ class GameObjectRevealAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject ):
+   def view_through_prototype( self, subject, game ):
       retval = copy.copy(subject)
       retval.description = self.actionDescription
+      result, entity2 = game.find( self.resultname )
+      result.make_visible()
       return retval
  
    def doIt( self, game ):
-      game.move_between_entities( self.toolname, game.inventory, None )
-      subject, entity = game.find( self.subjectname )
-      entity.take( subject.name )
-      result, entity2 = game.find( self.resultname )
-      result.make_visible()
+      raise Exception('Cannot use game object reveal action with use.')
 
 class GameObjectAttribute:
    IMMOBILE  = 'immobile'
@@ -448,6 +447,9 @@ class GameObject:
       self.name         = other.name
       self.description  = other.description
       self.childObjects = other.childObjects
+
+   def make_visible( self ):
+      self.attributes.remove( GameObjectAttribute.INVISIBLE )
 
    def look( self ):
       return self.description
