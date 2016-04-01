@@ -278,6 +278,14 @@ class ThrillerTest(unittest.TestCase):
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_first(self):
       self.game1.take( 'match' )
+      object1 = self.game1.use( 'candle', 'match' )
+
+      # Note: the look triggers the appearance of the revealed object!
+      assert ( self.game1.look() == 'light room' )
+      assert( 'picture' in self.game1.stuffs() )
+
+   def test_room_goes_light_from_dark_if_we_burn_the_candle_first_and_we_take_it(self):
+      self.game1.take( 'match' )
       assert ( not self.game1.has( 'match' )  is None )
 
       object1 = self.game1.use( 'candle', 'match' )
