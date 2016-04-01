@@ -99,6 +99,15 @@ class GameSyntaxChecker:
             sys.exc_clear()
       return True
 
+   def check_no_two_actors_with_the_same_name( self, game ):
+      stuffs = []
+      for stuff in self.get_list_of_all_stuffs( game ):
+         if stuff.name in stuffs:
+            return False
+         else:
+            stuffs.append( stuff.name )
+      return True
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -126,6 +135,9 @@ class GameSyntaxChecker:
 
       if not self.check_actors_are_valid_in_actions( game ):
          return 'found invalid object in an action'
+
+      if not self.check_no_two_actors_with_the_same_name( game ):
+         return 'found two actors with the same name'
 
       return ''
 

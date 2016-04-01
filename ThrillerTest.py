@@ -139,7 +139,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == '' )
+      assert ( verdict  == 'found two actors with the same name' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
