@@ -109,6 +109,14 @@ class ThrillerTest(unittest.TestCase):
                               GamePassage(11, 'roomB', 'roomC', 'W', 'S' ) ], [], [], 'roomC' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'passage identifiers are not unique' )
 
+   def test_syntax_checker_wrong_game_11(self):
+      game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                              GameObject( 'roomC' ), GameObject( 'roomD' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                              GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
+                            [], [], 'roomB' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'not all rooms are accessible' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
