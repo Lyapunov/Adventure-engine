@@ -299,108 +299,108 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == '' )
 
    def test_take_and_drop_existing_object(self):
-      subject = self.game1.take( 'candle' )
+      subject = self.game1.do_it( 'take',  'candle' )
       assert ( not subject is None )
       assert ( not self.game1.has( 'candle' ) is None )
       assert ( not 'candle' in self.game1.stuffs() )
 
-      subject = self.game1.drop( 'candle' )
+      subject = self.game1.do_it( 'drop',  'candle' )
       assert ( not subject is None )
       assert ( self.game1.has( 'candle' ) is None )
 
    def test_trying_take_not_existing_object(self):
-      subject = self.game1.take( 'banana' )
+      subject = self.game1.do_it( 'take',  'banana' )
       assert ( subject is None )
       assert ( self.game1.has( 'banana' ) is None )
 
    def test_trying_take_immobile_object(self):
-      subject = self.game1.take( 'table' )
+      subject = self.game1.do_it( 'take',  'table' )
       assert ( subject is None )
       assert ( self.game1.has( 'table' ) is None )
 
    def test_action_hit_the_bird_with_the_stone(self):
-      self.game1.take( 'stone' )
-      object1 = self.game1.use( 'stone', 'bird' )
+      self.game1.do_it( 'take',  'stone' )
+      object1 = self.game1.do_it( 'use', 'stone', 'bird' )
       assert ( not object1 is None )
       assert ( not 'bird' in self.game1.stuffs() )
       assert ( self.game1.has( 'stone' ) is None )
       assert ( 'injured bird' in self.game1.stuffs() )
 
-      object2 = self.game1.use( 'stone', 'bird' )
+      object2 = self.game1.do_it( 'use', 'stone', 'bird' )
       assert ( object2 is None )
 
    def test_action_hit_the_bird_with_the_stone_but_both_are_in_inventory(self):
-      self.game1.take( 'stone' )
-      self.game1.take( 'bird' )
-      object1 = self.game1.use( 'stone', 'bird' )
+      self.game1.do_it( 'take',  'stone' )
+      self.game1.do_it( 'take',  'bird' )
+      object1 = self.game1.do_it( 'use', 'stone', 'bird' )
       assert ( not self.game1.has( 'injured bird' ) is None )
 
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
-      self.game1.take( 'stone' )
-      object1 = self.game1.use( 'bird', 'stone' )
+      self.game1.do_it( 'take',  'stone' )
+      object1 = self.game1.do_it( 'use', 'bird', 'stone' )
       assert ( 'injured bird' in self.game1.stuffs() )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_first(self):
-      self.game1.take( 'match' )
-      object1 = self.game1.use( 'candle', 'match' )
+      self.game1.do_it( 'take',  'match' )
+      object1 = self.game1.do_it( 'use', 'candle', 'match' )
 
       # Note: the look triggers the appearance of the revealed object! TODO: making it automatic after use
       assert ( self.game1.look() == 'light room' )
       assert( 'picture' in self.game1.stuffs() )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_first_and_we_take_it(self):
-      self.game1.take( 'match' )
+      self.game1.do_it( 'take',  'match' )
       assert ( not self.game1.has( 'match' )  is None )
 
-      object1 = self.game1.use( 'candle', 'match' )
+      object1 = self.game1.do_it( 'use', 'candle', 'match' )
       assert ( self.game1.has( 'match' ) is None )
 
-      self.game1.take('burning candle')
+      self.game1.do_it( 'take', 'burning candle')
       assert ( not self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.look() == 'light room' )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_second(self):
-      self.game1.take( 'candle' )
-      self.game1.take( 'match' )
+      self.game1.do_it( 'take',  'candle' )
+      self.game1.do_it( 'take',  'match' )
       assert ( not self.game1.has( 'candle' ) is None )
       assert ( not self.game1.has( 'match' )  is None )
 
-      object1 = self.game1.use( 'candle', 'match' )
+      object1 = self.game1.do_it( 'use', 'candle', 'match' )
       assert ( not object1 is None )
       assert ( not self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.look() == 'light room' )
 
    def test_moving_between_rooms(self):
-      self.game1.move('N')
+      self.game1.do_it( 'move', 'N')
       assert( self.game1.look() == 'bathroom' )
       assert ( self.game1.directions() == [['S', 'dark room']] )
 
-      self.game1.move('S')
+      self.game1.do_it( 'move', 'S')
       assert( self.game1.look() == 'dark room' )
 
    def test_opening_objects(self):
-      self.game1.move('N')
+      self.game1.do_it( 'move', 'N')
       assert( not 'knife' in self.game1.stuffs() )
-      assert ( self.game1.open( 'cabinet' ) )
+      assert ( self.game1.do_it( 'open',  'cabinet' ) )
       assert( 'knife' in self.game1.stuffs() )
 
    def test_moving_between_rooms_and_carrying_object(self):
-      subject = self.game1.take('candle')
-      self.game1.move('N')
-      self.game1.drop('candle')
-      self.game1.move('S')
+      subject = self.game1.do_it( 'take', 'candle')
+      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'drop', 'candle')
+      self.game1.do_it( 'move', 'S')
       assert( self.game1.look() == 'dark room' )
       assert( not 'candle' in self.game1.stuffs() )
 
    def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
-      self.game1.take( 'match' )
-      object1 = self.game1.use( 'candle', 'match' )
-      self.game1.take('burning candle')
+      self.game1.do_it( 'take',  'match' )
+      object1 = self.game1.do_it( 'use', 'candle', 'match' )
+      self.game1.do_it( 'take', 'burning candle')
       assert( self.game1.look() == 'light room' )
 
-      self.game1.move('N')
-      self.game1.drop('burning candle')
-      self.game1.move('S')
+      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'drop', 'burning candle')
+      self.game1.do_it( 'move', 'S')
       assert( self.game1.look() == 'dark room' )
       assert( 'picture' in self.game1.stuffs() )
 
@@ -408,12 +408,12 @@ class ThrillerTest(unittest.TestCase):
       self.test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent()
       assert( 'picture' in self.game1.stuffs() )
 
-      self.game1.use('picture')
+      self.game1.do_it( 'use','picture')
       assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
 
    def test_winning_the_game(self):
       self.test_finding_a_new_passage()     
-      self.game1.move('W')
+      self.game1.do_it( 'move', 'W')
       assert ( self.game1.won() == 1 )
 
 if __name__ == '__main__' :

@@ -218,20 +218,19 @@ class Game:
 
    # === Manipulating the game board ===
 
-   def use( self, subjectname, toolname = '' ):
-      return self.game_internal.use( subjectname, toolname )
-
-   def drop( self, name ):
-      return self.game_internal.drop( name )
-
-   def take( self, name ):
-      return self.game_internal.take( name )
-
-   def move( self, direction ):
-      return self.game_internal.move( direction )
-
-   def open( self, name ):
-      return self.game_internal.open( name )
+   def do_it( self, command, arg1, arg2 = '' ):
+      if command == 'use':
+         return self.game_internal.use( arg1, arg2 )
+      elif command == 'drop':
+         return self.game_internal.drop( arg1 )
+      elif command == 'take':
+         return self.game_internal.take( arg1 )
+      elif command == 'move':
+         return self.game_internal.move( arg1 )
+      elif command == 'open':
+         return self.game_internal.open( arg1 )
+      else:
+         raise Exception('Invalid command')
 
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
