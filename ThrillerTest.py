@@ -213,7 +213,7 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found multiple actions for the same actor' )
 
-   def test_syntax_checker_wrong_game_15(self):
+   def test_syntax_checker_wrong_game_21(self):
       game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'handle1', '', [GameObjectAttribute.IMMOBILE], [] ),
                                                                  GameObject( 'handle2', '', [GameObjectAttribute.IMMOBILE], [] ),
                                                                  GameObject( 'crowbar' ) ] ),
