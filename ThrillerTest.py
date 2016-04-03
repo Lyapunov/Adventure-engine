@@ -186,7 +186,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found multiple actions on the same two actors' )
+      assert ( verdict  == 'found multiple actions for the same actor' )
 
    def test_syntax_checker_wrong_game_19(self):
       game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'button1', '', [GameObjectAttribute.IMMOBILE], [] ),
@@ -198,7 +198,20 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found multiple actions on the same two actors' )
+      assert ( verdict  == 'found multiple actions for the same actor' )
+
+   def test_syntax_checker_wrong_game_20(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'handle1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'handle2', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'crowbar' ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'handle1', 'crowbar', 'opening door', 11 ),
+                              GameObjectUseAction( 'handle2', 'crowbar', 'breaking handle', GameObject( 'broken handle' ) ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found multiple actions for the same actor' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
