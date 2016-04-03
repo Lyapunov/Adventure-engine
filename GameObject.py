@@ -16,20 +16,20 @@ class GameSyntaxChecker:
          return True
       return False
 
-   def get_all_stuffs( self, game, addrooms = 0 ):
+   def get_all_stuffs( self, game, addrooms = 0, add_top_children = 1 ):
       retval = []
       for room in game.game_internal.rooms:
          if addrooms == 1:
             retval += [ room ]
-         retval += room.descendants()
+         retval += room.descendants( add_top_children )
       allactions = game.game_internal.use_actions
       for action in allactions:
          retval += action.get_prototype()
       return retval
 
-   def get_all_stuff_names( self, game, addrooms = 0 ):
+   def get_all_stuff_names( self, game, addrooms = 0, add_top_children = 1 ):
       retval = []
-      for stuff in self.get_all_stuffs( game, addrooms ):
+      for stuff in self.get_all_stuffs( game, addrooms, add_top_children ):
          retval.append( stuff.name )
       return retval
 
@@ -143,6 +143,12 @@ class GameSyntaxChecker:
             stuffs.append( stuffname )
       return True
 
+   def check_not_top_level_stuffs_cannot_have_attributes( self, game ):
+      for stuff in self.get_all_stuffs( game, 0, 0 ):
+         if len( stuff.get_attributes() ) > 0:
+            return False
+      return True
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -183,6 +189,8 @@ class GameSyntaxChecker:
       if not self.check_no_multiple_actions( game ):
          return 'found multiple actions for the same actor'
 
+      if not self.check_not_top_level_stuffs_cannot_have_attributes( game ):
+         return 'not top level stuffs cannot have attributes'
 
       return ''
 
@@ -480,6 +488,9 @@ class GameObject:
    def look( self ):
       return self.description
 
+   def get_attributes( self ):
+      return self.attributes
+
    # todo: refactor with take if you will be more experienced
    def find( self, name ):
       for child in self.childObjects:
@@ -490,8 +501,10 @@ class GameObject:
    def children( self ):
       return self.childObjects
 
-   def descendants( self ):
-      retval = [] + self.children()
+   def descendants( self, add_top_children = 1 ):
+      retval = []
+      if add_top_children:
+         retval += self.children()
       for child in self.children():
          retval += child.children()
       return retval

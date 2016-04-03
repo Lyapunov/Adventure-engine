@@ -237,7 +237,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == '' )
+      assert ( verdict  == 'not top level stuffs cannot have attributes' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
