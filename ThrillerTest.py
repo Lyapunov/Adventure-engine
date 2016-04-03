@@ -229,7 +229,7 @@ class ThrillerTest(unittest.TestCase):
    def test_syntax_checker_wrong_game22(self):
       # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
-                                                                     GameObject( 'box', '', [GameObjectAttribute.IMMOBILE], 
+                                                                     GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], 
                                                                         [GameObject( 'key', '', [GameObjectAttribute.IMMOBILE] ) ] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
