@@ -233,7 +233,21 @@ class ThrillerTest(unittest.TestCase):
                                                                         [GameObject( 'key', '', [GameObjectAttribute.IMMOBILE] ) ] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'not top level stuffs cannot have attributes' )
+
+   def test_syntax_checker_wrong_game23(self):
+      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
+                                                                     GameObject( 'keypart1' ),
+                                                                     GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'keypart2' ) ] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ),
+                              GameObjectUseAction( 'keypart1', 'keypart2', '', GameObject( 'key', '', [GameObjectAttribute.INVISIBLE] ) ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -278,7 +292,7 @@ class ThrillerTest(unittest.TestCase):
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
