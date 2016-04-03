@@ -213,6 +213,19 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found multiple actions for the same actor' )
 
+   def test_syntax_checker_wrong_game_15(self):
+      game_internal = Game( [ GameObject( 'roomA','roomA', [], [ GameObject( 'handle1', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'handle2', '', [GameObjectAttribute.IMMOBILE], [] ),
+                                                                 GameObject( 'crowbar' ) ] ),
+                              GameObject( 'roomB' ) ],
+                            [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'handle1', 'crowbar', 'opening door', 11 ),
+                              GameObjectUseAction( 'handle2', 'crowbar', 'breaking handle', GameObject( 'handle1' ) ) ],
+                            [],
+                            'roomB' )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'found two objects with the same name' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],

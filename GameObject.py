@@ -16,12 +16,21 @@ class GameSyntaxChecker:
          return True
       return False
 
-   def get_list_of_all_stuffs( self, game, addrooms = 0 ):
+   def get_all_stuffs( self, game, addrooms = 0 ):
       retval = []
       for room in game.game_internal.rooms:
          if addrooms == 1:
             retval += [ room ]
          retval += room.descendants()
+      allactions = game.game_internal.use_actions
+      for action in allactions:
+         retval += action.get_prototype()
+      return retval
+
+   def get_all_stuff_names( self, game, addrooms = 0 ):
+      retval = []
+      for stuff in self.get_all_stuffs( game, addrooms ):
+         retval.append( stuff.name )
       return retval
 
    def get_list_of_accessible_rooms( self, game ):
@@ -89,9 +98,7 @@ class GameSyntaxChecker:
       return True
 
    def check_actors_are_valid_in_actions( self, game, allactions, include_rooms ):
-      stuffs = []
-      for stuff in self.get_list_of_all_stuffs( game, include_rooms ):
-         stuffs.append( stuff.name )
+      stuffs = self.get_all_stuff_names( game, include_rooms )
       for action in allactions:
          for actor in action.get_actor_names():
             if not actor == '' and not actor in stuffs:
@@ -129,11 +136,11 @@ class GameSyntaxChecker:
 
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
-      for stuff in self.get_list_of_all_stuffs( game, 1 ):
-         if stuff.name in stuffs:
+      for stuffname in self.get_all_stuff_names( game, 1 ):
+         if stuffname in stuffs:
             return False
          else:
-            stuffs.append( stuff.name )
+            stuffs.append( stuffname )
       return True
 
    def check( self, game ):
@@ -350,6 +357,9 @@ class GameObjectUseAction:
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
+   def get_prototype( self ):
+      return [ copy.deepcopy( self.prototype ) ]
+
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
          return [ self.subjectname, self.toolname ]
@@ -382,6 +392,9 @@ class GamePassageRevealAction:
       self.actionDescription = actionDescription
       self.identifier        = identifier
 
+   def get_prototype( self ):
+      return []
+
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
          return [ self.subjectname, self.toolname ]
@@ -408,6 +421,9 @@ class GameObjectRevealAction:
       self.toolname          = toolname
       self.actionDescription = actionDescription
       self.resultname        = resultname
+
+   def get_prototype( self ):
+      return []
 
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
