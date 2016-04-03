@@ -281,7 +281,7 @@ class GameInternal:
       if ( subject is None ):
          return False
       for child in subject.children(): 
-         entity.put( entity.take( child.name ) )
+         entity.put(subject.take( child.name ) )
       return True
          
    def use_internal( self, subjectname, toolname ):
@@ -347,7 +347,6 @@ class GameInternal:
 
    def stuffs( self ):
       retval = []
-
       for subject in self.room.children():
          if not GameObjectAttribute.INVISIBLE in subject.attributes:
             appearance = self.room.find( subject.name ) 
@@ -492,7 +491,7 @@ class GameObject:
       return self.childObjects
 
    def descendants( self ):
-      retval = self.children()
+      retval = [] + self.children()
       for child in self.children():
          retval += child.children()
       return retval
