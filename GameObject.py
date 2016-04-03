@@ -222,6 +222,9 @@ class Game:
    def move( self, direction ):
       return self.game_internal.move( direction )
 
+   def open( self, name ):
+      return self.game_internal.open( name )
+
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
       self.rooms       = rooms
@@ -273,6 +276,14 @@ class GameInternal:
       else:
          return None
 
+   def open( self, name ):
+      subject, entity = self.find( name )
+      if ( subject is None ):
+         return False
+      for child in subject.children(): 
+         entity.put( entity.take( child.name ) )
+      return True
+         
    def use_internal( self, subjectname, toolname ):
       if ( subjectname == '' ):
          return None
@@ -494,7 +505,8 @@ class GameObject:
       return None 
 
    def put( self, child ):
-      self.childObjects.append( child )
+      if not child is None:
+         self.childObjects.append( child )
 
 class GamePassage:
    def __init__( self, identifier, room_name1, room_name2, direction1, direction2, attributes = [] ):

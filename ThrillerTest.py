@@ -340,6 +340,14 @@ class ThrillerTest(unittest.TestCase):
       self.game1.move('S')
       assert( self.game1.look() == 'dark room' )
 
+   def test_opening_objects(self):
+      self.game1.move('N')
+      assert ( self.game1.open( 'cabinet' ) )
+
+      self.game1.move('S')
+      assert( self.game1.look() == 'dark room' )
+
+
    def test_moving_between_rooms_and_carrying_object(self):
       subject = self.game1.take('candle')
       self.game1.move('N')
