@@ -15,8 +15,8 @@ class GameSolver:
          return self.solveInternal( game, solution )
       return False
       
-   def solve( self, game ):
-      if not GameSyntaxChecker().check( game ) == '':
+   def solve( self, game, use_checker = True ):
+      if use_checker and not GameSyntaxChecker().check( game ) == '':
          return None
       my_solution = []
       my_game = copy.deepcopy( game )
