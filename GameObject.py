@@ -11,8 +11,8 @@ class GameSolver:
          self.go_on_path( game, solution, pathToWin )
          return self.solveInternal( game, solution )
       uses = game.game_internal.applicable_uses()
-      if not uses is []:
-         self.use_all( game, solution, uses ) 
+      if not uses == []:
+         self.use_all( game, solution, uses )
          return self.solveInternal( game, solution )
 
 #     pathToTake = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.find_room( x ).mobile_child_names(), game.game_internal.room.name, [], [] )
@@ -410,7 +410,8 @@ class GameInternal:
       # toolname == ''
       subjectnames = []
       for child in self.room.children():
-         subjectnames.append( child ) 
+         if not GameObjectAttribute.INVISIBLE in child.attributes:
+            subjectnames.append( child ) 
       uses = []
       for subject in subjectnames:
          for action in self.use_actions:
