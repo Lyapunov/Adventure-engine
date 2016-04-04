@@ -29,8 +29,6 @@ class ThrillerTest(unittest.TestCase):
                            GamePassageRevealAction( 'picture', '', 'finding new passage', 12 ) ],
                          [ GameObjectRevealAction( 'dark room', 'burning candle', 'light room', 'picture' ) ],
                          'secret room' );
-      verdict = GameSyntaxChecker().check( self.game1 )
-      assert ( verdict  == '' )
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
@@ -453,6 +451,8 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.won() == 1 )
 
    def test_solver_on_full_game(self):
+      verdict = GameSyntaxChecker().check( self.game1 )
+      assert ( verdict  == '' )
       solution = GameSolver().solve( self.game1 )
       assert ( solution == [['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'], ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
