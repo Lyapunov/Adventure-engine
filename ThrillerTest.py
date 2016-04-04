@@ -289,7 +289,7 @@ class ThrillerTest(unittest.TestCase):
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
-      assert ( GameSolver().solve( game_internal ) == [['use', 'door', ''], ['go', 'N']] )
+      assert ( GameSolver().solve( game_internal ) == [['use', '', 'door'], ['go', 'N']] )
 
    def test_syntax_checker_good_game4(self):
       # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
@@ -451,6 +451,10 @@ class ThrillerTest(unittest.TestCase):
       self.test_finding_a_new_passage()     
       self.game1.do_it( 'go', 'W')
       assert ( self.game1.won() == 1 )
+
+#  def test_solver_on_full_game(self):
+#     solution = GameSolver().solve( self.game1 )
+#     print solution
 
 if __name__ == '__main__' :
    unittest.main()

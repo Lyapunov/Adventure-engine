@@ -26,7 +26,7 @@ class GameSolver:
       if not pathToCanAnythingToDo is None:
          self.do_for_all( game, solution, 'go', pathToCanAnythingToDo )
          return self.solveInternal( game, solution )
-      return False
+      return True
 
    def do_for_all( self, game, solution, command, stuffs ):
       for stuff in stuffs:
@@ -421,19 +421,31 @@ class GameInternal:
       for child in self.room.children():
          if not GameObjectAttribute.INVISIBLE in child.attributes:
             subjectnames.append( child ) 
+      for child in self.inventory.children():
+         subjectnames.append( child )
+
       uses = []
       for subject in subjectnames:
          for action in self.use_actions:
             if action.applicable( subject.name, '' ):
-               uses.append( [ subject.name, '' ] ) 
+               pair = action.get_actor_names()
+               if not pair in uses:
+                  uses.append( pair ) 
             if action.applicable( '', subject.name ):
-               uses.append( [ subject.name, '' ] ) 
+               pair = action.get_actor_names()
+               if not pair in uses:
+                  uses.append( pair ) 
          for tool in self.inventory.children():
             for action in self.use_actions:
                if action.applicable( subject.name, tool.name ):
-                  uses.append( [ subject.name, tool.name ] ) 
+                  pair = action.get_actor_names()
+                  if not pair in uses:
+                     uses.append( pair ) 
                if action.applicable( tool.name, subject.name ):
-                  uses.append( [ subject.name, tool.name ] ) 
+                  pair = action.get_actor_names()
+                  if not pair in uses:
+                     uses.append( pair ) 
+
       return uses
 
    def directions( self ):
