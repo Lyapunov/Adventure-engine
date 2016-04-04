@@ -2,8 +2,17 @@ import copy
 import sys
 
 class GameSolver:
+   def solve( self, game, solution ):
+      my_game = copy.deepcopy( game )
+      if my_game.won():
+         return
+       
+
    def solve( self, game ):
-      pass
+      my_solution = []
+      my_game = copy.deepcopy( game )
+      self.solve( my_game, my_solution )
+      return my_solution
 
 class GameSyntaxChecker:
    def check_must_have_at_least_one_room( self, game ):
@@ -38,24 +47,8 @@ class GameSyntaxChecker:
       return retval
 
    def get_list_of_accessible_rooms( self, game ):
-      # Preparations
-      if ( len( game.game_internal.rooms ) == 0 ):
-         return False
       first_room = game.game_internal.rooms[0].name
-      visited_room_names = []
-      candidate_list = []
-      candidate_list.append( first_room )
-
-      # visiting rooms
-      while len( candidate_list ) > 0:
-         candidate = candidate_list.pop()
-         if not candidate in visited_room_names:
-            visited_room_names.append( candidate )
-            for [i,j] in game.game_internal.directionsInternal( candidate, 0 ):
-               candidate_list.append( j )
-
-      # retval
-      return visited_room_names
+      return game.game_internal.accessible_room_names( first_room )
 
    def check_final_room_is_reachable( self, game ):
       accessible_rooms = self.get_list_of_accessible_rooms( game )
@@ -344,6 +337,26 @@ class GameInternal:
          if not tmp is None:
             retval.append( tmp )
       return retval
+
+   def accessible_room_names( self, first_room ):
+      # Preparations
+      if ( len( self.rooms ) == 0 ):
+         return []
+      visited_room_names = []
+      candidate_list = []
+      candidate_list.append( first_room )
+
+      # visiting rooms
+      while len( candidate_list ) > 0:
+         candidate = candidate_list.pop()
+         if not candidate in visited_room_names:
+            visited_room_names.append( candidate )
+            for [i,j] in self.directionsInternal( candidate, 0 ):
+               candidate_list.append( j )
+
+      # retval
+      return visited_room_names
+
 
    def directions( self ):
       return self.directionsInternal( self.room.name )
