@@ -15,7 +15,7 @@ class GameSolver:
          self.use_all( game, solution, uses )
          return self.solveInternal( game, solution )
       takes = game.game_internal.room.mobile_child_names()
-      if not takes is []:
+      if not takes == []:
          self.take_all( game, solution, takes )
          return self.solveInternal( game, solution )
         
