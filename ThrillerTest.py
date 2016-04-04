@@ -371,24 +371,24 @@ class ThrillerTest(unittest.TestCase):
       assert ( self.game1.look() == 'light room' )
 
    def test_moving_between_rooms(self):
-      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'go', 'N')
       assert( self.game1.look() == 'bathroom' )
       assert ( self.game1.directions() == [['S', 'dark room']] )
 
-      self.game1.do_it( 'move', 'S')
+      self.game1.do_it( 'go', 'S')
       assert( self.game1.look() == 'dark room' )
 
    def test_opening_objects(self):
-      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'go', 'N')
       assert( not 'knife' in self.game1.stuffs() )
       assert ( self.game1.do_it( 'open',  'cabinet' ) )
       assert( 'knife' in self.game1.stuffs() )
 
    def test_moving_between_rooms_and_carrying_object(self):
       subject = self.game1.do_it( 'take', 'candle')
-      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'go', 'N')
       self.game1.do_it( 'drop', 'candle')
-      self.game1.do_it( 'move', 'S')
+      self.game1.do_it( 'go', 'S')
       assert( self.game1.look() == 'dark room' )
       assert( not 'candle' in self.game1.stuffs() )
 
@@ -398,9 +398,9 @@ class ThrillerTest(unittest.TestCase):
       self.game1.do_it( 'take', 'burning candle')
       assert( self.game1.look() == 'light room' )
 
-      self.game1.do_it( 'move', 'N')
+      self.game1.do_it( 'go', 'N')
       self.game1.do_it( 'drop', 'burning candle')
-      self.game1.do_it( 'move', 'S')
+      self.game1.do_it( 'go', 'S')
       assert( self.game1.look() == 'dark room' )
       assert( 'picture' in self.game1.stuffs() )
 
@@ -413,7 +413,7 @@ class ThrillerTest(unittest.TestCase):
 
    def test_winning_the_game(self):
       self.test_finding_a_new_passage()     
-      self.game1.do_it( 'move', 'W')
+      self.game1.do_it( 'go', 'W')
       assert ( self.game1.won() == 1 )
 
 if __name__ == '__main__' :

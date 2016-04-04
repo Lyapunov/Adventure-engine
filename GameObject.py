@@ -225,8 +225,8 @@ class Game:
          return self.game_internal.drop( arg1 )
       elif command == 'take':
          return self.game_internal.take( arg1 )
-      elif command == 'move':
-         return self.game_internal.move( arg1 )
+      elif command == 'go':
+         return self.game_internal.go( arg1 )
       elif command == 'open':
          return self.game_internal.open( arg1 )
       else:
@@ -344,7 +344,7 @@ class GameInternal:
    def directions( self ):
       return self.directionsInternal( self.room.name )
 
-   def move( self, direction ):
+   def go( self, direction ):
       topology = self.directions()
       for [room_direction, room_name] in topology:
          if room_direction == direction:
