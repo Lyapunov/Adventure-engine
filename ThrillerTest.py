@@ -30,7 +30,7 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObjectRevealAction( 'dark room', 'burning candle', 'light room', 'picture' ) ],
                          'secret room' );
       verdict = GameSyntaxChecker().check( self.game1 )
-      #assert ( verdict  == '' )
+      assert ( verdict  == '' )
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
