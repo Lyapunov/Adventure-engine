@@ -251,7 +251,9 @@ class Game:
 
    def do_it( self, command, arg1, arg2 = '' ):
       if command == 'use':
-         return self.game_internal.use( arg1, arg2 )
+         retval = self.game_internal.use( arg1, arg2 )
+         self.game_internal.view_refresh()
+         return retval
       elif command == 'drop':
          return self.game_internal.drop( arg1 )
       elif command == 'take':
@@ -262,7 +264,6 @@ class Game:
          return self.game_internal.open( arg1 )
       else:
          raise Exception('Invalid command')
-      self.game_internal.view_refresh()
 
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
@@ -593,7 +594,8 @@ class GameObject:
       self.childObjects = other.childObjects
 
    def make_visible( self ):
-      self.attributes.remove( GameObjectAttribute.INVISIBLE )
+      if GameObjectAttribute.INVISIBLE in self.attributes:
+         self.attributes.remove( GameObjectAttribute.INVISIBLE )
 
    def look( self ):
       return self.description

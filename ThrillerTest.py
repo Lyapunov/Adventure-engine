@@ -454,7 +454,7 @@ class ThrillerTest(unittest.TestCase):
 
    def test_solver_on_full_game(self):
       solution = GameSolver().solve( self.game1 )
-      print solution
+      assert ( solution == [['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'], ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
 if __name__ == '__main__' :
    unittest.main()
