@@ -325,14 +325,13 @@ class ThrillerTest(unittest.TestCase):
                                                                    GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'middle room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
-                              GamePassage( 12, 'starting room', 'middle room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              GamePassage( 12, 'starting room', 'middle room' , 'N', 'S',  ) ],
                             [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
-      print solution
       assert ( solution == [['go', 'N'],['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_take_and_drop_existing_object(self):

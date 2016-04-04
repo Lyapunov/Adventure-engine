@@ -22,7 +22,10 @@ class GameSolver:
       if not opens == []:
          self.do_for_all( game, solution, 'open', opens )
          return self.solveInternal( game, solution )
-        
+      pathToCanAnythingToDo = game.game_internal.find_path_between_rooms( lambda x : game.game_internal.can_anything_to_do( x ), game.game_internal.room.name, [], [] )
+      if not pathToCanAnythingToDo is None:
+         self.do_for_all( game, solution, 'go', pathToCanAnythingToDo )
+         return self.solveInternal( game, solution )
       return False
 
    def do_for_all( self, game, solution, command, stuffs ):
@@ -403,7 +406,16 @@ class GameInternal:
       # retval
       return visited_room_names
 
-   def applicable_uses( self ):
+   def can_anything_to_do( self, roomname ):
+      myroom = self.find_room( roomname )
+      return not self.applicable_uses( roomname ) == [] or not myroom.mobile_child_names() == [] or not myroom.openable_child_names() == []
+
+   def applicable_uses( self, roomname = '' ):
+      if roomname == '':
+         myroom = self.room
+      else:
+         myroom = self.find_room( roomname )
+         
       # toolname == ''
       subjectnames = []
       for child in self.room.children():
