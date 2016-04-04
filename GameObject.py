@@ -8,7 +8,7 @@ class GameSolver:
          return True
       pathToWin = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.final_room, game.game_internal.room.name, [], [] )
       if not pathToWin is None:
-         self.go_on_path( game, solution, pathToWin )
+         self.do_for_all( game, solution, 'go', pathToWin )
          return self.solveInternal( game, solution )
       uses = game.game_internal.applicable_uses()
       if not uses == []:
@@ -16,29 +16,19 @@ class GameSolver:
          return self.solveInternal( game, solution )
       takes = game.game_internal.room.mobile_child_names()
       if not takes == []:
-         self.take_all( game, solution, takes )
+         self.do_for_all( game, solution, 'take', takes )
          return self.solveInternal( game, solution )
       opens = game.game_internal.room.openable_child_names()
       if not opens == []:
-         self.open_all( game, solution, opens )
+         self.do_for_all( game, solution, 'open', opens )
          return self.solveInternal( game, solution )
         
       return False
 
-   def go_on_path( self, game, solution, path ):
-      for dir in path:
-         game.do_it( 'go', dir )
-         solution.append( ['go', dir ] ) 
-
-   def take_all( self, game, solution, stuffs ):
+   def do_for_all( self, game, solution, command, stuffs ):
       for stuff in stuffs:
-         game.do_it( 'take', stuff )
-         solution.append( ['take', stuff ] ) 
-
-   def open_all( self, game, solution, takes ):
-      for stuff in takes:
-         game.do_it( 'open', stuff )
-         solution.append( ['open', stuff ] ) 
+         game.do_it( command, stuff )
+         solution.append( [command, stuff ] ) 
 
    def use_all( self, game, solution, uses ):
       for [first, second] in uses:
