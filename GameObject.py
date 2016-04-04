@@ -9,11 +9,14 @@ class GameSolver:
          return True
       pathToWin = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.final_room, game.game_internal.room.name, [], [] )
       if not pathToWin is None:
-         for dir in pathToWin:
-            game.do_it( 'go', dir )
-            solution.append( ['go', dir ] ) 
+         self.go_on_path( game, solution, pathToWin )
          return self.solveInternal( game, solution )
       return False
+
+   def go_on_path( self, game, solution, path ):
+      for dir in path:
+         game.do_it( 'go', dir )
+         solution.append( ['go', dir ] ) 
       
    def solve( self, game, use_checker = True ):
       if use_checker and not GameSyntaxChecker().check( game ) == '':
