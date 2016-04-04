@@ -7,7 +7,7 @@ class GameSolver:
       my_game = copy.deepcopy( game )
       if my_game.won():
          return True
-      pathToWin = game.game_internal.find_path_between_rooms( game.game_internal.final_room, game.game_internal.room.name, [], [] )
+      pathToWin = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.final_room, game.game_internal.room.name, [], [] )
       if not pathToWin is None:
          for dir in pathToWin:
             game.do_it( 'go', dir )
@@ -349,14 +349,14 @@ class GameInternal:
             retval.append( tmp )
       return retval
 
-   def find_path_between_rooms( self, target_room, current_room = '', way = [], rooms = [] ):
+   def find_path_between_rooms( self, endfunc, current_room = '', way = [], rooms = [] ):
       if current_room == '':
-         return self.find_path_between_rooms( target_room, self.room.name, way, rooms )
-      if ( current_room == target_room ):
+         return self.find_path_between_rooms( endfunc, self.room.name, way, rooms )
+      if endfunc( current_room ):
          return way
       for [ direction, room_name ] in self.directionsInternal( current_room, 1 ):
          if not room_name in rooms:
-            whatIfPath = self.find_path_between_rooms( target_room, room_name, way + [ direction ], rooms + [ current_room ] )
+            whatIfPath = self.find_path_between_rooms( endfunc, room_name, way + [ direction ], rooms + [ current_room ] )
             if not whatIfPath is None:
                return whatIfPath
       return None
