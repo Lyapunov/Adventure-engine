@@ -352,7 +352,7 @@ class GameInternal:
          return self.find_path_between_rooms( target_room, self.room.name, way, rooms )
       if ( current_room == target_room ):
          return way
-      for [ direction, room_name ] in self.directionsInternal( current_room, 0 ):
+      for [ direction, room_name ] in self.directionsInternal( current_room, 1 ):
          if not room_name in rooms:
             whatIfPath = self.find_path_between_rooms( target_room, room_name, way + [ direction ], rooms + [ current_room ] )
             if not whatIfPath is None:
