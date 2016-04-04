@@ -262,18 +262,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ] ] )
 
 
-   def test_syntax_checker_good_game2(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
-      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
-                              GameObject( 'ending room' ) ],
-                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
-                            [],
-                            'ending room')
-      verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == '' )
-
-   def test_syntax_checker_good_game_3(self):
+   def test_syntax_checker_good_game_2(self):
       # testing whether final room is accessible
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ),
@@ -288,6 +277,18 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'roomF' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
+      assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ], [ 'go', 'E' ], [ 'go', 'S' ], [ 'go', 'E' ], [ 'go', 'E' ] ] )
+
+   def test_syntax_checker_good_game3(self):
+      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == '' )
 
    def test_syntax_checker_good_game4(self):
       # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
