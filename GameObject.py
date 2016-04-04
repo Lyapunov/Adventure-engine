@@ -4,12 +4,16 @@ import sys
 class GameSolver:
 
    def solveInternal( self, game, solution ):
-      my_game = copy.deepcopy( game )
-      if my_game.won():
+      if game.won():
          return True
       pathToWin = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.final_room, game.game_internal.room.name, [], [] )
       if not pathToWin is None:
          self.go_on_path( game, solution, pathToWin )
+         return self.solveInternal( game, solution )
+      pathToTake = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.find_room( x ).mobile_child_names(), game.game_internal.room.name, [], [] )
+      if not pathToTake is None:
+         self.go_on_path( game, solution, pathToWin )
+         self.take_all( game, solution,  game.game_internal.room.mobile_child_names )
          return self.solveInternal( game, solution )
       return False
 
@@ -17,6 +21,11 @@ class GameSolver:
       for dir in path:
          game.do_it( 'go', dir )
          solution.append( ['go', dir ] ) 
+
+   def take_all( self, game, solution, stuffs ):
+      for stuff in stuffs:
+         game.do_it( 'take', stuff )
+         solution.append( ['take', stuff ] ) 
       
    def solve( self, game, use_checker = True ):
       if use_checker and not GameSyntaxChecker().check( game ) == '':
@@ -544,6 +553,13 @@ class GameObject:
 
    def children( self ):
       return self.childObjects
+
+   def mobile_child_names( self ):
+      retval = []
+      for child in self.childObjects:
+         if not GameObjectAttribute.IMMOBILE in child.attributes:
+            retval.append( child.name )
+      return retval
 
    def descendants( self, add_top_children = 1 ):
       retval = []
