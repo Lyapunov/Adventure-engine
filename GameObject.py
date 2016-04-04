@@ -14,13 +14,11 @@ class GameSolver:
       if not uses == []:
          self.use_all( game, solution, uses )
          return self.solveInternal( game, solution )
-
-#     pathToTake = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.find_room( x ).mobile_child_names(), game.game_internal.room.name, [], [] )
-#     print pathToTake
-#     if not pathToTake is None:
-#        self.go_on_path( game, solution, pathToWin )
-#        self.take_all( game, solution,  game.game_internal.room.mobile_child_names )
-#        return self.solveInternal( game, solution )
+      takes = game.game_internal.room.mobile_child_names()
+      if not takes is []:
+         self.take_all( game, solution, takes )
+         return self.solveInternal( game, solution )
+        
       return False
 
    def go_on_path( self, game, solution, path ):

@@ -302,7 +302,7 @@ class ThrillerTest(unittest.TestCase):
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
-      print GameSolver().solve( game_internal )
+      assert ( GameSolver().solve( game_internal ) == [['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game5(self):
       # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
