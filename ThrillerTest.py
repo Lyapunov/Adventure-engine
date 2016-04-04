@@ -452,9 +452,9 @@ class ThrillerTest(unittest.TestCase):
       self.game1.do_it( 'go', 'W')
       assert ( self.game1.won() == 1 )
 
-#  def test_solver_on_full_game(self):
-#     solution = GameSolver().solve( self.game1 )
-#     print solution
+   def test_solver_on_full_game(self):
+      solution = GameSolver().solve( self.game1 )
+      print solution
 
 if __name__ == '__main__' :
    unittest.main()

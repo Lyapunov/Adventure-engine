@@ -262,6 +262,7 @@ class Game:
          return self.game_internal.open( arg1 )
       else:
          raise Exception('Invalid command')
+      self.game_internal.view_refresh()
 
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
@@ -289,6 +290,9 @@ class GameInternal:
             to_entity.put( subject )
          return subject
       return None
+
+   def view_refresh( self ):
+      self.see_subject_through_views( self.room )
 
    def see_subject_through_views( self, subject ):
       for action in self.views:
