@@ -280,7 +280,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ], [ 'go', 'E' ], [ 'go', 'S' ], [ 'go', 'E' ], [ 'go', 'E' ] ] )
 
    def test_syntax_checker_good_game3(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
@@ -291,7 +291,7 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == '' )
 
    def test_syntax_checker_good_game4(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
                               GameObject( 'ending room' ) ],
