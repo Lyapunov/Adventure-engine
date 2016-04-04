@@ -10,11 +10,17 @@ class GameSolver:
       if not pathToWin is None:
          self.go_on_path( game, solution, pathToWin )
          return self.solveInternal( game, solution )
-      pathToTake = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.find_room( x ).mobile_child_names(), game.game_internal.room.name, [], [] )
-      if not pathToTake is None:
-         self.go_on_path( game, solution, pathToWin )
-         self.take_all( game, solution,  game.game_internal.room.mobile_child_names )
+      uses = game.game_internal.applicable_uses()
+      if not uses is []:
+         self.use_all( game, solution, uses ) 
          return self.solveInternal( game, solution )
+
+#     pathToTake = game.game_internal.find_path_between_rooms( lambda x : x == game.game_internal.find_room( x ).mobile_child_names(), game.game_internal.room.name, [], [] )
+#     print pathToTake
+#     if not pathToTake is None:
+#        self.go_on_path( game, solution, pathToWin )
+#        self.take_all( game, solution,  game.game_internal.room.mobile_child_names )
+#        return self.solveInternal( game, solution )
       return False
 
    def go_on_path( self, game, solution, path ):
@@ -26,6 +32,11 @@ class GameSolver:
       for stuff in stuffs:
          game.do_it( 'take', stuff )
          solution.append( ['take', stuff ] ) 
+
+   def use_all( self, game, solution, uses ):
+      for [first, second] in uses:
+         game.do_it( 'use', first, second )
+         solution.append( ['use', first, second ] ) 
       
    def solve( self, game, use_checker = True ):
       if use_checker and not GameSyntaxChecker().check( game ) == '':
@@ -394,6 +405,26 @@ class GameInternal:
 
       # retval
       return visited_room_names
+
+   def applicable_uses( self ):
+      # toolname == ''
+      subjectnames = []
+      for child in self.room.children():
+         subjectnames.append( child ) 
+      uses = []
+      for subject in subjectnames:
+         for action in self.use_actions:
+            if action.applicable( subject.name, '' ):
+               uses.append( [ subject.name, '' ] ) 
+            if action.applicable( '', subject.name ):
+               uses.append( [ subject.name, '' ] ) 
+         for tool in self.inventory.children():
+            for action in self.use_actions:
+               if action.applicable( subject.name, tool.name ):
+                  uses.append( [ subject.name, tool.name ] ) 
+               if action.applicable( tool.name, subject.name ):
+                  uses.append( [ subject.name, tool.name ] ) 
+      return uses
 
    def directions( self ):
       return self.directionsInternal( self.room.name )

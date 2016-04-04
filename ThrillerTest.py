@@ -289,9 +289,21 @@ class ThrillerTest(unittest.TestCase):
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
-      print GameSolver().solve( game_internal )
+      assert ( GameSolver().solve( game_internal ) == [['use', 'door', ''], ['go', 'N']] )
 
    def test_syntax_checker_good_game4(self):
+      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
+                                                                     GameObject( 'key' ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == '' )
+
+   def test_syntax_checker_good_game5(self):
       # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
