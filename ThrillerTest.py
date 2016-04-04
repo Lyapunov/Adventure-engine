@@ -315,7 +315,8 @@ class ThrillerTest(unittest.TestCase):
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
-      assert ( GameSolver().solve( game_internal ) == [['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
+      solution = GameSolver().solve( game_internal )
+      assert ( solution == [['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.do_it( 'take',  'candle' )

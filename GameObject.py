@@ -18,6 +18,10 @@ class GameSolver:
       if not takes == []:
          self.take_all( game, solution, takes )
          return self.solveInternal( game, solution )
+      opens = game.game_internal.room.openable_child_names()
+      if not opens == []:
+         self.open_all( game, solution, opens )
+         return self.solveInternal( game, solution )
         
       return False
 
@@ -30,6 +34,11 @@ class GameSolver:
       for stuff in stuffs:
          game.do_it( 'take', stuff )
          solution.append( ['take', stuff ] ) 
+
+   def open_all( self, game, solution, takes ):
+      for stuff in takes:
+         game.do_it( 'open', stuff )
+         solution.append( ['open', stuff ] ) 
 
    def use_all( self, game, solution, uses ):
       for [first, second] in uses:
@@ -588,6 +597,13 @@ class GameObject:
       retval = []
       for child in self.childObjects:
          if not GameObjectAttribute.IMMOBILE in child.attributes:
+            retval.append( child.name )
+      return retval
+
+   def openable_child_names( self ):
+      retval = []
+      for child in self.childObjects:
+         if not child.childObjects == []:
             retval.append( child.name )
       return retval
 
