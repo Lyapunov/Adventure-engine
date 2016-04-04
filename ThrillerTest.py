@@ -8,6 +8,7 @@ from GameObject import GameObjectRevealAction
 from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
 from GameObject import GameSyntaxChecker
+from GameObject import GameSolver
 
 class ThrillerTest(unittest.TestCase):
 
@@ -258,6 +259,8 @@ class ThrillerTest(unittest.TestCase):
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
                             [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
+      assert ( GameSolver().solve( game_internal )  == [ 'go', 'N' ] )
+
 
    def test_syntax_checker_good_game2(self):
       # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 

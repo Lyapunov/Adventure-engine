@@ -1,6 +1,10 @@
 import copy
 import sys
 
+class GameSolver:
+   def solve( self, game ):
+      pass
+
 class GameSyntaxChecker:
    def check_must_have_at_least_one_room( self, game ):
       return len( game.game_internal.rooms ) > 0
