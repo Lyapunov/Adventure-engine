@@ -259,7 +259,7 @@ class ThrillerTest(unittest.TestCase):
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
                             [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room' )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
-      assert ( GameSolver().solve( game_internal )  == [ 'go', 'N' ] )
+      assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ] ] )
 
 
    def test_syntax_checker_good_game2(self):

@@ -2,17 +2,26 @@ import copy
 import sys
 
 class GameSolver:
-   def solve( self, game, solution ):
+
+   def solveInternal( self, game, solution ):
       my_game = copy.deepcopy( game )
       if my_game.won():
-         return
-       
-
+         return True
+      pathToWin = game.game_internal.find_path_between_rooms( game.game_internal.final_room, game.game_internal.room.name, [], [] )
+      if not pathToWin is None:
+         for dir in pathToWin:
+            game.do_it( 'go', dir )
+            solution.append( ['go', dir ] ) 
+         return self.solveInternal( game, solution )
+      return False
+      
    def solve( self, game ):
       my_solution = []
       my_game = copy.deepcopy( game )
-      self.solve( my_game, my_solution )
-      return my_solution
+      won = self.solveInternal( my_game, my_solution )
+      if won:
+         return my_solution
+      return None
 
 class GameSyntaxChecker:
    def check_must_have_at_least_one_room( self, game ):
@@ -338,13 +347,28 @@ class GameInternal:
             retval.append( tmp )
       return retval
 
-   def accessible_room_names( self, first_room ):
+   def find_path_between_rooms( self, target_room, current_room = '', way = [], rooms = [] ):
+      if current_room == '':
+         return self.find_path_between_rooms( target_room, self.room.name, way, rooms )
+      if ( current_room == target_room ):
+         return way
+      for [ direction, room_name ] in self.directionsInternal( current_room, 0 ):
+         if not room_name in rooms:
+            whatIfPath = self.find_path_between_rooms( target_room, room_name, way + [ direction ], rooms + [ current_room ] )
+            if not whatIfPath is None:
+               return whatIfPath
+      return None
+
+   def accessible_room_names( self, first_room = '' ):
       # Preparations
       if ( len( self.rooms ) == 0 ):
          return []
       visited_room_names = []
       candidate_list = []
-      candidate_list.append( first_room )
+      if first_room == '':
+         candidate_list.apped( self.room.name )
+      else:
+         candidate_list.append( first_room )
 
       # visiting rooms
       while len( candidate_list ) > 0:
@@ -356,7 +380,6 @@ class GameInternal:
 
       # retval
       return visited_room_names
-
 
    def directions( self ):
       return self.directionsInternal( self.room.name )
