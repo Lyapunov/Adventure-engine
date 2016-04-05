@@ -454,7 +454,8 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( self.game1 )
       assert ( verdict  == '' )
       solution = GameSolver().solve( self.game1 )
-      assert ( solution == [['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'], ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
+      assert ( solution == [ ['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'],
+                             ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
 if __name__ == '__main__' :
    unittest.main()
