@@ -322,7 +322,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'middle room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
                               GameObject( 'ending room' ) ],
-                            [ GamePassage( 11, 'middle room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
+                            [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
                               GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
                             [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
                             [],
