@@ -594,7 +594,7 @@ class GameObjectRevealAction:
       game.views.remove( self ) # optimization
       tool,    entity = game.find( self.toolname )
       subject, entity = game.find( self.subjectname )
-      if not subject.is_visible():
+      if not tool is None and not subject is None and not subject.is_visible():
          subject.make_visible()
          return subject
       return None
@@ -621,8 +621,8 @@ class GameObject:
 
    def is_visible( self ):
       if GameObjectAttribute.INVISIBLE in self.attributes:
-         return True
-      return False
+         return False
+      return True
 
    def make_visible( self ):
       if GameObjectAttribute.INVISIBLE in self.attributes:
