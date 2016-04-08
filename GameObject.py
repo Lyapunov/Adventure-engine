@@ -156,6 +156,8 @@ class GameSyntaxChecker:
 
    def check_no_multiple_actions( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
+
+      # First pass: if two actions have exactly the same actors, it is always bad
       actor_pairs = []
       for action in allactions:
          pair = action.get_actor_names()
@@ -164,6 +166,7 @@ class GameSyntaxChecker:
          else:
             actor_pairs.append( pair )
 
+      # Second + third pass: if two actions have exactly one common actors, it is bad only if one of the actions remove the actor
       actors = []
       for action in allactions:
          if action.is_brutal():

@@ -17,7 +17,7 @@ class ThrillerTest(unittest.TestCase):
 
    def setUp( self ):
       # Test game1, just to start with something
-      self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table', '', [GameObjectAttribute.IMMOBILE], [] ), 
+      self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table',   '', [GameObjectAttribute.IMMOBILE], [] ), 
                                                                       GameObject( 'candle' ),
                                                                       GameObject( 'match' ),
                                                                       GameObject( 'bird' ),
