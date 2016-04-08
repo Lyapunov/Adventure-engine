@@ -434,35 +434,22 @@ class GameInternal:
       else:
          myroom = self.find_room( roomname )
          
-      # toolname == ''
       subjectnames = []
+      toolnames = ['']
       for child in self.room.children():
          if not GameObjectAttribute.INVISIBLE in child.attributes:
-            subjectnames.append( child ) 
+            subjectnames.append( child.name ) 
       for child in self.inventory.children():
-         subjectnames.append( child )
+         subjectnames.append( child.name )
+         toolnames.append( child.name )
 
       uses = []
-      for subject in subjectnames:
-         for action in self.use_actions:
-            if action.applicable( subject.name, '' ):
-               pair = action.get_actor_names()
-               if not pair in uses:
-                  uses.append( pair ) 
-            if action.applicable( '', subject.name ):
-               pair = action.get_actor_names()
-               if not pair in uses:
-                  uses.append( pair ) 
-         for tool in self.inventory.children():
-            for action in self.use_actions:
-               if action.applicable( subject.name, tool.name ):
-                  pair = action.get_actor_names()
-                  if not pair in uses:
-                     uses.append( pair ) 
-               if action.applicable( tool.name, subject.name ):
-                  pair = action.get_actor_names()
-                  if not pair in uses:
-                     uses.append( pair ) 
+      for action in self.use_actions:
+         pair = action.get_actor_names()
+         if action.subjectname in subjectnames and action.toolname in toolnames and action.applicable( action.subjectname, action.toolname ):
+            uses.append( pair ) 
+         elif action.toolname in subjectnames and action.subjectname in toolnames and action.applicable( action.toolname, action.subjectname ):
+            uses.append( pair ) 
 
       return uses
 
