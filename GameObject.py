@@ -545,11 +545,11 @@ class GamePassageRevealAction:
             passage.make_visible()
 
 class GameObjectRevealAction:
-   def __init__( self, subjectname, toolname, actionDescription, resultname ):
+   def __init__( self, subjectname, toolname, actionDescription, target ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.actionDescription = actionDescription
-      self.resultname        = resultname
+      self.target            = target
 
    def get_prototype( self ):
       return []
@@ -569,8 +569,9 @@ class GameObjectRevealAction:
    def view_through_prototype( self, subject, game ):
       retval = copy.copy(subject)
       retval.description = self.actionDescription
-      result, entity2 = game.find( self.resultname )
-      result.make_visible()
+      result, entity2 = game.find( self.target )
+      if not result is None:
+         result.make_visible()
       return retval
  
    def doIt( self, game ):

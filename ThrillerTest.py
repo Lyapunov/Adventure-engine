@@ -30,7 +30,7 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObjectUseAction( 'candle', 'match', 'lighting candle', GameObject('burning candle') ),
                            GameObjectUseAction( 'bird',   'stone', 'hitting bird',    GameObject('injured bird') ),
                            GamePassageRevealAction( 'picture', '', 'finding new passage', 12 ) ],
-                         [ GameObjectRevealAction( 'dark room', 'burning candle', 'light room', 'picture' ) ],
+                         [ GameObjectRevealAction( '', 'burning candle', 'the light reveals the picture', 'picture' ) ],
                          'secret room' );
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
@@ -444,6 +444,8 @@ class ThrillerTest(unittest.TestCase):
       solution = GameSolver().solve( self.game1 )
       assert ( solution == [ ['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'],
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
+
+   # TODO: GameObjectRevealAction, mobile, immobile, possible at all?
 
 if __name__ == '__main__' :
    unittest.main()
