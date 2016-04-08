@@ -426,9 +426,9 @@ class GameInternal:
 
    def can_anything_to_do( self, roomname ):
       myroom = self.find_room( roomname )
-      return not self.applicable_uses( roomname ) == [] or not myroom.takable_child_names() == [] or not myroom.openable_child_names() == []
+      return not self.applicable_views( roomname ) == [] or not self.applicable_uses( roomname ) == [] or not myroom.takable_child_names() == [] or not myroom.openable_child_names() == []
 
-   def applicable_uses( self, roomname = '' ):
+   def get_subject_names_and_tool_names( self, roomname = '', visibility_matters = True ):
       if roomname == '':
          myroom = self.room
       else:
@@ -436,12 +436,17 @@ class GameInternal:
          
       subjectnames = []
       toolnames = ['']
-      for child in self.room.children():
-         if not GameObjectAttribute.INVISIBLE in child.attributes:
+      for child in myroom.children():
+         if not ( visibility_matters and GameObjectAttribute.INVISIBLE in child.attributes ):
             subjectnames.append( child.name ) 
       for child in self.inventory.children():
          subjectnames.append( child.name )
          toolnames.append( child.name )
+
+      return subjectnames, toolnames
+
+   def applicable_uses( self, roomname = '' ):
+      subjectnames, toolnames = self.get_subject_names_and_tool_names( roomname )
 
       uses = []
       for action in self.use_actions:
@@ -452,6 +457,17 @@ class GameInternal:
             uses.append( pair ) 
 
       return uses
+
+   def applicable_views( self, roomname = '' ):
+      subjectnames, toolnames = self.get_subject_names_and_tool_names( roomname, False )
+
+      views = []
+      for action in self.views:
+         pair = action.get_actor_names()
+         if action.subjectname in subjectnames and action.toolname in toolnames:
+            views.append( pair ) 
+
+      return views
 
    def directions( self ):
       return self.directionsInternal( self.room.name )
