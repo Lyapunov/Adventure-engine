@@ -155,14 +155,28 @@ class GameSyntaxChecker:
       return True
 
    def check_no_multiple_actions( self, game ):
-      actors = []
       allactions = game.game_internal.use_actions + game.game_internal.views
+      actor_pairs = []
       for action in allactions:
-         for actor in action.get_actor_names():
-             if actor in actors:
-                return False
-             else:
-                actors.append( actor )
+         pair = action.get_actor_names()
+         if pair in actor_pairs:
+            return False
+         else:
+            actor_pairs.append( pair )
+
+      actors = []
+      for action in allactions:
+         if action.is_brutal():
+            for actor in action.get_actor_names():
+               if actor in actors:
+                  return False
+               else:
+                  actors.append( actor )
+      for action in allactions:
+         if not action.is_brutal():
+            for actor in action.get_actor_names():
+               if actor in actors:
+                  return False
       return True
 
    def check_no_two_actors_with_the_same_name( self, game ):
@@ -252,18 +266,18 @@ class Game:
    def do_it( self, command, arg1, arg2 = '' ):
       if command == 'use':
          retval = self.game_internal.use( arg1, arg2 )
-         self.game_internal.view_refresh()
-         return retval
       elif command == 'drop':
-         return self.game_internal.drop( arg1 )
+         retval = self.game_internal.drop( arg1 )
       elif command == 'take':
-         return self.game_internal.take( arg1 )
+         retval = self.game_internal.take( arg1 )
       elif command == 'go':
-         return self.game_internal.go( arg1 )
+         retval = self.game_internal.go( arg1 )
       elif command == 'open':
-         return self.game_internal.open( arg1 )
+         retval = self.game_internal.open( arg1 )
       else:
          raise Exception('Invalid command')
+      self.game_internal.view_refresh()
+      return retval
 
 class GameInternal:
    def __init__( self, rooms, passages, use_actions, views, final_room ):
@@ -293,23 +307,19 @@ class GameInternal:
       return None
 
    def view_refresh( self ):
-      self.see_subject_through_views( self.room )
-
-   def see_subject_through_views( self, subject ):
+      sorrounding_objects = [] + self.inventory.childObjects + self.room.childObjects
       for action in self.views:
-         for tool in self.inventory.childObjects:
-            if action.applicable( subject.name, tool.name ):
-               return action.view_through_prototype( subject, self )
-         for tool in self.room.childObjects:
-            if action.applicable( subject.name, tool.name ):
-               return action.view_through_prototype( subject, self )
-      return subject
+         # cheating to make it faster
+         subject, entity = self.find( action.subjectname )
+         tool,    entity = self.find( action.toolname )
+         if not subject is None and not tool is None and action.applicable( subject.name, tool.name ):
+            action.showIt( self )
 
    def find_in_entities( self, name, entities ):
       for entity in entities:
-         subject = entity.find( name ) 
-         if ( not subject is None ):
-            return self.see_subject_through_views( subject ), entity
+         attempt = entity.find( name ) 
+         if not attempt is None:
+            return attempt, entity
       return None, None
 
    def find_room( self, name ):
@@ -321,19 +331,19 @@ class GameInternal:
 
    def open( self, name ):
       subject, entity = self.find( name )
-      if ( subject is None ):
+      if subject is None:
          return False
       for child in subject.children(): 
          entity.put(subject.take( child.name ) )
       return True
          
    def use_internal( self, subjectname, toolname ):
-      if ( subjectname == '' ):
+      if subjectname == '':
          return None
       subject, entity = self.find( subjectname )
-      if ( subject is None ):
+      if subject is None:
          return None
-      if ( toolname == '' ):
+      if toolname == '':
          for action in self.use_actions:
             if action.applicable( subject.name, '' ):
                return action.doIt( self )
@@ -358,7 +368,7 @@ class GameInternal:
       return subject
 
    def look( self ):
-      return self.see_subject_through_views( self.room ).description
+      return self.room.description
 
    def find( self, name ):
       return self.find_in_entities( name, [ self.inventory, self.room ] )
@@ -486,6 +496,9 @@ class GameObjectUseAction:
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
+   def is_brutal( self ):
+      return True
+
    def get_prototype( self ):
       return [ copy.deepcopy( self.prototype ) ]
 
@@ -498,21 +511,27 @@ class GameObjectUseAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject, game ):
-      subject.childObjects = subject.childObjects + self.prototype.childObjects
-      self.prototype.childObjects = []
-      retval = copy.copy(self.prototype)
-      retval.childObjects = subject.childObjects
-      return retval
+   def showIt( self, game ):
+      game.views.remove( self )
+      game.move_between_entities( self.toolname, game.inventory, None )
+      subject, entity = game.find( self.subjectname )
+      if not subject is None:
+         entity.take( subject.name )
+         retval = copy.deepcopy( self.prototype )
+         entity.put( retval )
+         return retval
+      return None
 
    def doIt( self, game ):
       game.use_actions.remove( self )
       game.move_between_entities( self.toolname, game.inventory, None )
       subject, entity = game.find( self.subjectname )
-      entity.take( subject.name )
-      retval = self.view_through_prototype( subject, game )
-      entity.put( retval )
-      return retval
+      if not subject is None:
+         entity.take( subject.name )
+         retval = copy.deepcopy( self.prototype )
+         entity.put( retval )
+         return retval
+      return None
 
 class GamePassageRevealAction:
    def __init__( self, subjectname, toolname, actionDescription, identifier ):
@@ -521,6 +540,9 @@ class GamePassageRevealAction:
       self.actionDescription = actionDescription
       self.identifier        = identifier
 
+   def is_brutal( self ):
+      return False
+
    def get_prototype( self ):
       return []
 
@@ -536,7 +558,7 @@ class GamePassageRevealAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject, game ):
+   def showIt( self, game ):
       raise Exception('Cannot use passage action as a view, it modifies the world')
  
    def doIt( self, game ):
@@ -545,11 +567,13 @@ class GamePassageRevealAction:
             passage.make_visible()
 
 class GameObjectRevealAction:
-   def __init__( self, subjectname, toolname, actionDescription, target ):
+   def __init__( self, subjectname, toolname, actionDescription ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.actionDescription = actionDescription
-      self.target            = target
+
+   def is_brutal( self ):
+      return False
 
    def get_prototype( self ):
       return []
@@ -566,13 +590,14 @@ class GameObjectRevealAction:
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def view_through_prototype( self, subject, game ):
-      retval = copy.copy(subject)
-      retval.description = self.actionDescription
-      result, entity2 = game.find( self.target )
-      if not result is None:
-         result.make_visible()
-      return retval
+   def showIt( self, game ):
+      game.views.remove( self ) # optimization
+      tool,    entity = game.find( self.toolname )
+      subject, entity = game.find( self.subjectname )
+      if not subject.is_visible():
+         subject.make_visible()
+         return subject
+      return None
  
    def doIt( self, game ):
       raise Exception('Cannot use game object reveal action with use.')
@@ -594,6 +619,11 @@ class GameObject:
       self.description  = other.description
       self.childObjects = other.childObjects
 
+   def is_visible( self ):
+      if GameObjectAttribute.INVISIBLE in self.attributes:
+         return True
+      return False
+
    def make_visible( self ):
       if GameObjectAttribute.INVISIBLE in self.attributes:
          self.attributes.remove( GameObjectAttribute.INVISIBLE )
@@ -609,7 +639,7 @@ class GameObject:
       for child in self.childObjects:
          if child.name == name:
             return child
-      return None 
+      return None
 
    def children( self ):
       return self.childObjects
