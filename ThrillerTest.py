@@ -351,6 +351,8 @@ class ThrillerTest(unittest.TestCase):
       solution = GameSolver().solve( game_internal )
       assert ( solution == [['go', 'N'], ['open', 'box'], ['take', 'burning candle'], ['go', 'S'], ['take', 'key'], ['go', 'N'], ['use', 'door', 'key'], ['go', 'N']]  )
 
+   # TODO: enhance the syntax checker to reject RevealAction( 'burning candle', 'key' )
+
    def test_take_and_drop_existing_object(self):
       subject = self.game1.do_it( 'take',  'candle' )
       assert ( not subject is None )
