@@ -367,45 +367,32 @@ class ThrillerTest(unittest.TestCase):
       assert ( object2 is None )
 
    def test_action_hit_the_bird_with_the_stone_but_both_are_in_inventory(self):
-      self.game1.do_it( 'take',  'stone' )
-      self.game1.do_it( 'take',  'bird' )
+      self.game1.do_it( 'take', 'stone' )
+      self.game1.do_it( 'take', 'bird' )
       object1 = self.game1.do_it( 'use', 'stone', 'bird' )
       assert ( not self.game1.has( 'injured bird' ) is None )
 
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
-      self.game1.do_it( 'take',  'stone' )
-      object1 = self.game1.do_it( 'use', 'bird', 'stone' )
+      self.game1.do_it( 'take', 'stone' )
+      self.game1.do_it( 'use',  'bird', 'stone' )
       assert ( 'injured bird' in self.game1.stuffs() )
 
-   def test_room_goes_light_from_dark_if_we_burn_the_candle_first(self):
-      self.game1.do_it( 'take',  'match' )
-      object1 = self.game1.do_it( 'use', 'candle', 'match' )
+   def test_room_goes_light_from_dark_if_we_burn_the_candle_without_taking_it_first(self):
+      self.game1.do_it( 'take', 'match' )
+      self.game1.do_it( 'use',  'candle', 'match' )
 
       # Note: the look triggers the appearance of the revealed object! TODO: making it automatic after use
-      assert ( self.game1.look() == 'light room' )
+      assert( not 'candle' in self.game1.stuffs() )
+      assert( 'burning candle' in self.game1.stuffs() )
       assert( 'picture' in self.game1.stuffs() )
 
-   def test_room_goes_light_from_dark_if_we_burn_the_candle_first_and_we_take_it(self):
-      self.game1.do_it( 'take',  'match' )
-      assert ( not self.game1.has( 'match' )  is None )
+   def test_room_goes_light_from_dark_if_we_burn_the_candle_with_taking_it_first(self):
+      self.game1.do_it( 'take', 'candle' )
+      self.game1.do_it( 'take', 'match' )
+      self.game1.do_it( 'use',  'candle', 'match' )
 
-      object1 = self.game1.do_it( 'use', 'candle', 'match' )
-      assert ( self.game1.has( 'match' ) is None )
-
-      self.game1.do_it( 'take', 'burning candle')
       assert ( not self.game1.has( 'burning candle' ) is None )
-      assert ( self.game1.look() == 'light room' )
-
-   def test_room_goes_light_from_dark_if_we_burn_the_candle_second(self):
-      self.game1.do_it( 'take',  'candle' )
-      self.game1.do_it( 'take',  'match' )
-      assert ( not self.game1.has( 'candle' ) is None )
-      assert ( not self.game1.has( 'match' )  is None )
-
-      object1 = self.game1.do_it( 'use', 'candle', 'match' )
-      assert ( not object1 is None )
-      assert ( not self.game1.has( 'burning candle' ) is None )
-      assert ( self.game1.look() == 'light room' )
+      assert( 'picture' in self.game1.stuffs() )
 
    def test_moving_between_rooms(self):
       self.game1.do_it( 'go', 'N')
@@ -433,8 +420,6 @@ class ThrillerTest(unittest.TestCase):
       self.game1.do_it( 'take',  'match' )
       object1 = self.game1.do_it( 'use', 'candle', 'match' )
       self.game1.do_it( 'take', 'burning candle')
-      assert( self.game1.look() == 'light room' )
-
       self.game1.do_it( 'go', 'N')
       self.game1.do_it( 'drop', 'burning candle')
       self.game1.do_it( 'go', 'S')
