@@ -14,7 +14,7 @@ class GameSolver:
       if not uses == []:
          self.use_all( game, solution, uses )
          return self.solveInternal( game, solution )
-      takes = game.game_internal.room.mobile_child_names()
+      takes = game.game_internal.room.takable_child_names()
       if not takes == []:
          self.do_for_all( game, solution, 'take', takes )
          return self.solveInternal( game, solution )
@@ -426,7 +426,7 @@ class GameInternal:
 
    def can_anything_to_do( self, roomname ):
       myroom = self.find_room( roomname )
-      return not self.applicable_uses( roomname ) == [] or not myroom.mobile_child_names() == [] or not myroom.openable_child_names() == []
+      return not self.applicable_uses( roomname ) == [] or not myroom.takable_child_names() == [] or not myroom.openable_child_names() == []
 
    def applicable_uses( self, roomname = '' ):
       if roomname == '':
@@ -647,10 +647,10 @@ class GameObject:
    def children( self ):
       return self.childObjects
 
-   def mobile_child_names( self ):
+   def takable_child_names( self ):
       retval = []
       for child in self.childObjects:
-         if not GameObjectAttribute.IMMOBILE in child.attributes:
+         if not GameObjectAttribute.IMMOBILE in child.attributes and not GameObjectAttribute.INVISIBLE in child.attributes:
             retval.append( child.name )
       return retval
 
@@ -671,7 +671,7 @@ class GameObject:
 
    def take( self, name ):
       for child in self.childObjects:
-         if child.name == name and not GameObjectAttribute.IMMOBILE in child.attributes :
+         if child.name == name and not GameObjectAttribute.IMMOBILE in child.attributes and not GameObjectAttribute.INVISIBLE in child.attributes :
             self.childObjects.remove( child )
             return child
       return None 
