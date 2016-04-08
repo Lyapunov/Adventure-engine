@@ -343,8 +343,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
                               GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
-                            [ GameObjectRevealAction( 'key', 'burning candle', 'finding a key') ],
+                            [ GamePassageRevealAction( 'door', 'key',            'opening door', 11 ) ],
+                            [ GameObjectRevealAction(  'key',  'burning candle', 'finding a key') ],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
