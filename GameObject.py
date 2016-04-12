@@ -169,14 +169,14 @@ class GameSyntaxChecker:
       # Second + third pass: if two actions have exactly one common actors, it is bad only if one of the actions remove the actor
       actors = []
       for action in allactions:
-         if action.is_brutal():
+         if not action.subject_to_reveal():
             for actor in action.get_actor_names():
                if actor in actors:
                   return False
                else:
                   actors.append( actor )
       for action in allactions:
-         if not action.is_brutal():
+         if action.subject_to_reveal():
             for actor in action.get_actor_names():
                if actor in actors:
                   return False
@@ -502,8 +502,8 @@ class GameObjectUseAction:
       self.actionDescription = actionDescription
       self.prototype         = prototype
 
-   def is_brutal( self ):
-      return True
+   def subject_to_reveal( self ):
+      return []
 
    def get_prototype( self ):
       return [ copy.deepcopy( self.prototype ) ]
@@ -546,8 +546,8 @@ class GamePassageRevealAction:
       self.actionDescription = actionDescription
       self.identifier        = identifier
 
-   def is_brutal( self ):
-      return False
+   def subject_to_reveal( self ):
+      return [ self.subjectname ]
 
    def get_prototype( self ):
       return []
@@ -578,8 +578,8 @@ class GameObjectRevealAction:
       self.toolname          = toolname
       self.actionDescription = actionDescription
 
-   def is_brutal( self ):
-      return False
+   def subject_to_reveal( self ):
+      return [ self.subjectname ]
 
    def get_prototype( self ):
       return []
