@@ -255,6 +255,19 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'not top level stuffs cannot have attributes' )
 
+   def test_syntax_checker_wrong_game24(self):
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'key', '', [GameObjectAttribute.INVISIBLE] ) ] ),
+                              GameObject( 'middle room'  , '', [], [ GameObject( 'burning candle' ),
+                                                                     GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
+                              GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
+                            [ GamePassageRevealAction( 'door', 'key',           'opening door', 11 ) ],
+                            [ GameObjectRevealAction( 'burning candle', 'key',  'finding a key') ],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
@@ -349,7 +362,6 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
-   # TODO: enhance the syntax checker to reject RevealAction( 'burning candle', 'key' )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.do_it( 'take',  'candle' )
