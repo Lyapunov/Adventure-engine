@@ -137,6 +137,19 @@ class GameSyntaxChecker:
                return False
       return True
 
+   def check_subjects_to_reveal_are_invisible_in_actions( self, game ):
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      objects = self.get_all_stuffs( game )
+      for action in allactions:
+         subjectname_array = action.subject_to_reveal()
+         if subjectname_array:
+            subjectname = subjectname_array[0]
+            for obj in objects:
+              if obj.name == subjectname:
+                 if not GameObjectAttribute.INVISIBLE in obj.get_attributes():
+                    return False
+      return True
+
    def check_no_actions_without_actors( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
@@ -240,6 +253,9 @@ class GameSyntaxChecker:
 
       if not self.check_not_top_level_stuffs_cannot_have_attributes( game ):
          return 'not top level stuffs cannot have attributes'
+
+      if not self.check_subjects_to_reveal_are_invisible_in_actions( game ):
+         return 'subjects of revealing actions must be invisible initially'
 
       return ''
 
@@ -548,7 +564,7 @@ class GamePassageRevealAction:
       self.identifier        = identifier
 
    def subject_to_reveal( self ):
-      return [ self.subjectname ]
+      return [ '@#passage#@' ] # although it looks strange, the real subject is a passage which is not an ordinary object TODO: find a better name, remove this woraround
 
    def get_prototype( self ):
       return []
