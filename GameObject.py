@@ -196,6 +196,24 @@ class GameSyntaxChecker:
                   return False
       return True
 
+   def check_no_actions_with_two_immobile_actors( self, game ):
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      objects = self.get_all_stuffs( game )
+
+      # First pass: if two actions have exactly the same actors, it is always bad
+      for action in allactions:
+         pair = action.get_actor_names()
+         immobiles = 0
+         for one_name in pair:
+            for obj in objects:
+               if obj.name == one_name:
+                  if GameObjectAttribute.IMMOBILE in obj.get_attributes():
+                     immobiles += 1
+         if immobiles == 2:
+            return False
+      return True
+
+
    def check_no_two_actors_with_the_same_name( self, game ):
       stuffs = []
       for stuffname in self.get_all_stuff_names( game, 1 ):
@@ -256,6 +274,9 @@ class GameSyntaxChecker:
 
       if not self.check_subjects_to_reveal_are_invisible_in_actions( game ):
          return 'subjects of revealing actions must be invisible initially'
+
+      if not self.check_no_actions_with_two_immobile_actors( game ):
+         return 'at least one of the actors of an action must be mobile'
 
       return ''
 
