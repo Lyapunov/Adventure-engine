@@ -268,6 +268,18 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
 
+   def test_syntax_checker_wrong_game25(self):
+      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
+                                                                     GameObject( 'key' , '', [GameObjectAttribute.IMMOBILE] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  != '' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
