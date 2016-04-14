@@ -276,7 +276,7 @@ class GameSyntaxChecker:
          return 'subjects of revealing actions must be invisible initially'
 
       if not self.check_no_actions_with_two_immobile_actors( game ):
-         return 'at least one of the actors of an action must be mobile'
+         return "at least one of the action's actors must be mobile"
 
       return ''
 
