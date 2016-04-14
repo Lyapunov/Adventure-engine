@@ -278,7 +278,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  != '' )
+      assert ( verdict  == "at least one of the action's actors must be mobile" )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
