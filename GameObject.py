@@ -150,6 +150,21 @@ class GameSyntaxChecker:
                     return False
       return True
 
+   def check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( self, game ):
+      allactions = game.game_internal.use_actions + game.game_internal.views
+      objects = self.get_all_stuffs( game )
+      for obj in objects:
+         if GameObjectAttribute.INVISIBLE in obj.get_attributes():
+            counter = 0
+            for action in allactions:
+               subjectname_array = action.subject_to_reveal()
+               for subjectname in subjectname_array:
+                  if obj.name == subjectname:
+                     counter += 1
+            if not counter == 1:
+               return False
+      return True
+
    def check_no_actions_without_actors( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
       for action in allactions:
@@ -277,6 +292,9 @@ class GameSyntaxChecker:
 
       if not self.check_no_actions_with_two_immobile_actors( game ):
          return "at least one of the action's actors must be mobile"
+
+      if not self.check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( game ):
+         return 'there must be exactly one action for each invisible object which reveals it'
 
       return ''
 
