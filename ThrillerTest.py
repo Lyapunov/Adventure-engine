@@ -157,7 +157,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game16(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
@@ -168,7 +167,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found an action without actors' )
 
    def test_syntax_checker_wrong_game17(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
@@ -229,7 +227,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game22(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], 
                                                                         [GameObject( 'key', '', [GameObjectAttribute.IMMOBILE] ) ] ) ] ),
@@ -242,7 +239,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'not top level stuffs cannot have attributes' )
 
    def test_syntax_checker_wrong_game23(self):
-      # Minimal game 2: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'keypart1' ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'keypart2' ) ] ) ] ),
@@ -269,7 +265,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
 
    def test_syntax_checker_wrong_game25(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'key' , '', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
@@ -317,7 +312,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ], [ 'go', 'E' ], [ 'go', 'S' ], [ 'go', 'E' ], [ 'go', 'E' ] ] )
 
    def test_syntax_checker_good_game3(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
@@ -329,7 +323,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSolver().solve( game_internal ) == [['use', '', 'door'], ['go', 'N']] )
 
    def test_syntax_checker_good_game4(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'key' ) ] ),
                               GameObject( 'ending room' ) ],
@@ -342,7 +335,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSolver().solve( game_internal ) == [['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game5(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
                               GameObject( 'ending room' ) ],
@@ -356,7 +348,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( solution == [['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game6(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room' ),
                               GameObject( 'middle room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
@@ -384,6 +375,22 @@ class ThrillerTest(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
+      assert ( solution == [['go', 'N'], ['open', 'box'], ['take', 'burning candle'], ['go', 'S'], ['take', 'key'], ['go', 'N'], ['use', 'door', 'key'], ['go', 'N']] )
+
+   def test_syntax_checker_wrong_game23(self):
+      game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
+                                                                     GameObject( 'keypart1' ),
+                                                                     GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'keypart2' ) ] ) ] ),
+                              GameObject( 'ending room' ) ],
+                            [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ),
+                              GameObjectUseAction( 'keypart1', 'keypart2', '', GameObject( 'key', '' ) ) ],
+                            [],
+                            'ending room')
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == '' )
+      solution = GameSolver().solve( game_internal )
+      assert ( solution == [['take', 'keypart1'], ['open', 'box'], ['take', 'keypart2'], ['use', 'keypart1', 'keypart2'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.do_it( 'take',  'candle' )
