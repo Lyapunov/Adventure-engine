@@ -372,7 +372,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( solution == [['go', 'N'],['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game7(self):
-      # Minimal game: there is a closed door, if you touch it, it opens and you can go through the passage and you win .. 
       game_internal = Game( [ GameObject( 'starting room', '', [], [ GameObject( 'key', '', [GameObjectAttribute.INVISIBLE] ) ] ),
                               GameObject( 'middle room'  , '', [], [ GameObject( 'door', '', [GameObjectAttribute.IMMOBILE] ),
                                                                      GameObject( 'box',  '', [GameObjectAttribute.IMMOBILE], [GameObject( 'burning candle' ) ] ) ] ),
