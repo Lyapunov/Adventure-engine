@@ -15,6 +15,9 @@ class ThrillerTest(unittest.TestCase):
    # TODO: (IDEA) descriptions and images, the entire view should be a completely separated layer,
    #       which just portrays the game objects according to their attributes
 
+   # TODO: remove object arguments from Actions. Use a pointer instead of it and put not existing stuff into
+   #       a special room (or array) 'limbo'.
+
    def setUp( self ):
       # Test game1, just to start with something
       self.game1 = Game( [ GameObject( 'dark room','dark room', [], [ GameObject( 'table',   '', [GameObjectAttribute.IMMOBILE], [] ), 
@@ -438,7 +441,6 @@ class ThrillerTest(unittest.TestCase):
       self.game1.do_it( 'take', 'match' )
       self.game1.do_it( 'use',  'candle', 'match' )
 
-      # Note: the look triggers the appearance of the revealed object! TODO: making it automatic after use
       assert( not 'candle' in self.game1.stuffs() )
       assert( 'burning candle' in self.game1.stuffs() )
       assert( 'picture' in self.game1.stuffs() )
@@ -501,8 +503,6 @@ class ThrillerTest(unittest.TestCase):
       solution = GameSolver().solve( self.game1 )
       assert ( solution == [ ['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'],
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
-
-   # TODO: GameObjectRevealAction, mobile, immobile, possible at all?
 
 if __name__ == '__main__' :
    unittest.main()
