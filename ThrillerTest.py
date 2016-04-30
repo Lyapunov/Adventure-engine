@@ -34,7 +34,8 @@ class ThrillerTest(unittest.TestCase):
                            GameObjectUseAction( 'bird',   'stone', 'hitting bird',    GameObject('injured bird') ),
                            GamePassageRevealAction( 'picture', '',               'finding new passage'          , 12 ) ],
                          [ GameObjectRevealAction(  'picture', 'burning candle', 'the light reveals the picture' ) ],
-                         'secret room' );
+                         'secret room',
+                         { 'go#dark room' : 'dark room', 'go#bathroom' : 'bathroom' } );
       assert ( self.game1.look() == 'dark room' )
       assert ( self.game1.has( 'burning candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )

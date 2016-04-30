@@ -300,8 +300,8 @@ class GameSyntaxChecker:
 
 
 class Game:
-   def __init__(  self, rooms, passages, use_actions, views, final_room ):
-      self.game_internal = GameInternal( rooms, passages, use_actions, views, final_room )
+   def __init__(  self, rooms, passages, use_actions, views, final_room, descriptions = {} ):
+      self.game_internal = GameInternal( rooms, passages, use_actions, views, final_room, descriptions )
 
    # === Reading the status of the game board ===
 
@@ -339,18 +339,19 @@ class Game:
       return retval
 
 class GameInternal:
-   def __init__( self, rooms, passages, use_actions, views, final_room ):
+   def __init__( self, rooms, passages, use_actions, views, final_room, descriptions ):
       self.rooms       = rooms
       if ( len(rooms) > 0 ):
          self.room        = rooms[0] 
       else:
          self.room        = None
-      self.passages    = passages
-      self.inventory   = GameObject( 'inventory', '', [], [] )
-      self.use_actions = use_actions
-      self.views       = views
-      self.won_        = 0
-      self.final_room  = final_room
+      self.passages     = passages
+      self.inventory    = GameObject( 'inventory', '', [], [] )
+      self.use_actions  = use_actions
+      self.views        = views
+      self.won_         = 0
+      self.final_room   = final_room
+      self.descriptions = descriptions
 
    def setting_current_room( self, room_name ):
       self.room = self.find_room( room_name )
@@ -427,7 +428,7 @@ class GameInternal:
       return subject
 
    def look( self ):
-      return self.room.description
+      return self.descriptions[self.room.get_hash_name()]
 
    def find( self, name ):
       return self.find_in_entities( name, [ self.inventory, self.room ] )
@@ -672,13 +673,14 @@ class GameObject:
 
    def __init__( self, name = '', description = '', attributes = [], cobs = []):
       self.name = name
-      self.description  = description
       self.attributes   = attributes
       self.childObjects = cobs
 
+   def get_hash_name( self ):
+      return 'go#' + self.name
+
    def make_equal_to( self, other ):
       self.name         = other.name
-      self.description  = other.description
       self.childObjects = other.childObjects
 
    def is_visible( self ):
@@ -689,9 +691,6 @@ class GameObject:
    def make_visible( self ):
       if GameObjectAttribute.INVISIBLE in self.attributes:
          self.attributes.remove( GameObjectAttribute.INVISIBLE )
-
-   def look( self ):
-      return self.description
 
    def get_attributes( self ):
       return self.attributes
