@@ -346,7 +346,7 @@ class GameInternal:
       else:
          self.room        = None
       self.passages     = passages
-      self.inventory    = GameObject( 'inventory', '', [], [] )
+      self.inventory    = GameObject( 'inventory', [], [] )
       self.use_actions  = use_actions
       self.views        = views
       self.won_         = 0
@@ -671,7 +671,7 @@ class GameObjectAttribute:
 
 class GameObject:
 
-   def __init__( self, name = '', description = '', attributes = [], cobs = []):
+   def __init__( self, name = '', attributes = [], cobs = []):
       self.name = name
       self.attributes   = attributes
       self.childObjects = cobs
