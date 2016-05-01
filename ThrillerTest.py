@@ -420,7 +420,6 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
-      print verdict
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
       assert ( solution == [['take', 'keypart1'], ['open', 'box'], ['take', 'keypart2'], ['use', 'keypart1', 'keypart2'], ['use', 'door', 'key'], ['go', 'N']] )
