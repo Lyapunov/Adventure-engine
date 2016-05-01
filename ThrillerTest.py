@@ -28,10 +28,10 @@ class ThrillerTest(unittest.TestCase):
                          [ GameObject( 'burning candle' ),  GameObject( 'injured bird' ) ],
                          [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
                            GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
-                         [ GameObjectUseAction( 'candle', 'match', 'lighting candle', 'burning candle' ),
-                           GameObjectUseAction( 'bird',   'stone', 'hitting bird',    'injured bird' ),
-                           GamePassageRevealAction( 'picture', '',               'finding new passage'          , 12 ) ],
-                         [ GameObjectRevealAction(  'picture', 'burning candle', 'the light reveals the picture' ) ],
+                         [ GameObjectUseAction( 'candle', 'match', 'burning candle' ),
+                           GameObjectUseAction( 'bird',   'stone', 'injured bird' ),
+                           GamePassageRevealAction( 'picture', '', 12 ) ],
+                         [ GameObjectRevealAction(  'picture', 'burning candle' ) ],
                          'secret room',
                          { 'go#dark room' : 'dark room', 'go#bathroom' : 'bathroom' } );
       assert ( self.game1.look() == 'dark room' )
@@ -130,7 +130,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'button', '', 'opening door', 13 ) ],
+                            [ GamePassageRevealAction( 'button', '', 13 ) ],
                             [],
                             'roomB' )
       assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action' )
@@ -141,7 +141,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'button', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'button', '', 11 ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -153,7 +153,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'button1', '', 11 ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -174,7 +174,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( '', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( '', '', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -185,7 +185,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'door', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'door', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -197,8 +197,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ),
-                              GamePassageRevealAction( 'button1', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'button1', '', 11 ),
+                              GamePassageRevealAction( 'button1', '', 11 ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -210,8 +210,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [ GameObject( 'broken button' ) ],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'button1', '', 'opening door', 11 ),
-                              GameObjectUseAction( '', 'button1', 'breaking button',  'broken button' ) ],
+                            [ GamePassageRevealAction( 'button1', '', 11 ),
+                              GameObjectUseAction( '', 'button1', 'broken button' ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -224,8 +224,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [ GameObject( 'broken handle' ) ],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'handle1', 'crowbar', 'opening door', 11 ),
-                              GameObjectUseAction( 'handle2', 'crowbar', 'breaking handle', 'broken handle' ) ],
+                            [ GamePassageRevealAction( 'handle1', 'crowbar', 11 ),
+                              GameObjectUseAction( 'handle2', 'crowbar', 'broken handle' ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -238,8 +238,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'roomB' ) ],
                             [ GameObject( 'handle1' ) ],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S', [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'handle1', 'crowbar', 'opening door', 11 ),
-                              GameObjectUseAction( 'handle2', 'crowbar', 'breaking handle', 'handle1' ) ],
+                            [ GamePassageRevealAction( 'handle1', 'crowbar', 11 ),
+                              GameObjectUseAction( 'handle2', 'crowbar', 'handle1' ) ],
                             [],
                             'roomB' )
       verdict = GameSyntaxChecker().check( game_internal )
@@ -252,7 +252,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -265,8 +265,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [ GameObject( 'key', [GameObjectAttribute.INVISIBLE] ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ),
-                              GameObjectUseAction( 'keypart1', 'keypart2', '', 'key' ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ),
+                              GameObjectUseAction( 'keypart1', 'keypart2', 'key' ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -280,8 +280,8 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
                               GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
-                            [ GamePassageRevealAction( 'door', 'key',           'opening door', 11 ) ],
-                            [ GameObjectRevealAction( 'burning candle', 'key',  'finding a key') ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
+                            [ GameObjectRevealAction( 'burning candle', 'key') ],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
@@ -292,7 +292,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -304,7 +304,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -342,7 +342,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', '', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', '', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -355,7 +355,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -368,7 +368,7 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -384,7 +384,7 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
                               GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
@@ -400,8 +400,8 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
                               GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
-                            [ GamePassageRevealAction( 'door', 'key',            'opening door', 11 ) ],
-                            [ GameObjectRevealAction(  'key',  'burning candle', 'finding a key') ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ) ],
+                            [ GameObjectRevealAction(  'key',  'burning candle') ],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
@@ -415,8 +415,8 @@ class ThrillerTest(unittest.TestCase):
                               GameObject( 'ending room' ) ],
                             [ GameObject( 'key' ) ],
                             [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                            [ GamePassageRevealAction( 'door', 'key', 'opening door', 11 ),
-                              GameObjectUseAction( 'keypart1', 'keypart2', '', 'key' ) ],
+                            [ GamePassageRevealAction( 'door', 'key', 11 ),
+                              GameObjectUseAction( 'keypart1', 'keypart2', 'key' ) ],
                             [],
                             'ending room')
       verdict = GameSyntaxChecker().check( game_internal )

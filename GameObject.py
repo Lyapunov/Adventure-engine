@@ -565,10 +565,9 @@ class GameInternal:
       return self.won_
 
 class GameObjectUseAction:
-   def __init__( self, subjectname, toolname, actionDescription, resultname ):
+   def __init__( self, subjectname, toolname, resultname ):
       self.subjectname       = subjectname
       self.toolname          = toolname
-      self.actionDescription = actionDescription
       self.resultname        = resultname
 
    def subject_to_reveal( self ):
@@ -609,10 +608,9 @@ class GameObjectUseAction:
       return None
 
 class GamePassageRevealAction:
-   def __init__( self, subjectname, toolname, actionDescription, identifier ):
+   def __init__( self, subjectname, toolname, identifier ):
       self.subjectname       = subjectname
       self.toolname          = toolname
-      self.actionDescription = actionDescription
       self.identifier        = identifier
 
    def subject_to_reveal( self ):
@@ -639,10 +637,9 @@ class GamePassageRevealAction:
             passage.make_visible()
 
 class GameObjectRevealAction:
-   def __init__( self, subjectname, toolname, actionDescription ):
+   def __init__( self, subjectname, toolname ):
       self.subjectname       = subjectname
       self.toolname          = toolname
-      self.actionDescription = actionDescription
 
    def subject_to_reveal( self ):
       return [ self.subjectname ]
