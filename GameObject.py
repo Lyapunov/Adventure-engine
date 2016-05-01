@@ -683,7 +683,7 @@ class GameObject:
       return 'go#' + self.name
 
    def serialize( self ):
-      retval = '_go#' + self.name + '#_list'
+      retval = '_object#go#' + self.name + '#_list'
       for attrib in self.attributes:
          retval += '#' + attrib
       retval += '#_endlist'
@@ -691,6 +691,7 @@ class GameObject:
       for child in self.childObjects:
          retval += '#' + child.serialize()
       retval += '#_endlist'
+      retval += '#_endobject'
       return retval
 
    def make_equal_to( self, other ):
