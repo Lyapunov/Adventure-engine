@@ -69,9 +69,9 @@ class GameSyntaxChecker:
          if addrooms == 1:
             retval += [ room ]
          retval += room.descendants( add_top_children )
-      allactions = game.game_internal.use_actions
-      for action in allactions:
-         retval += action.get_prototype()
+      for lobj in game.game_internal.limbo:
+         retval += [ lobj ]
+         retval += lobj.descendants( add_top_children )
       return retval
 
    def get_all_stuff_names( self, game, addrooms = 0, add_top_children = 1 ):
@@ -300,8 +300,8 @@ class GameSyntaxChecker:
 
 
 class Game:
-   def __init__(  self, rooms, passages, use_actions, views, final_room, descriptions = {} ):
-      self.game_internal = GameInternal( rooms, passages, use_actions, views, final_room, descriptions )
+   def __init__(  self, rooms, limbo, passages, use_actions, views, final_room, descriptions = {} ):
+      self.game_internal = GameInternal( rooms, limbo, passages, use_actions, views, final_room, descriptions )
 
    # === Reading the status of the game board ===
 
@@ -339,8 +339,9 @@ class Game:
       return retval
 
 class GameInternal:
-   def __init__( self, rooms, passages, use_actions, views, final_room, descriptions ):
-      self.rooms       = rooms
+   def __init__( self, rooms, limbo, passages, use_actions, views, final_room, descriptions ):
+      self.rooms        = rooms
+      self.limbo        = limbo 
       if ( len(rooms) > 0 ):
          self.room        = rooms[0] 
       else:
@@ -352,6 +353,17 @@ class GameInternal:
       self.won_         = 0
       self.final_room   = final_room
       self.descriptions = descriptions
+
+   def find_in_limbo_and_remove( self, name ):
+      retval = None
+      for lobj in self.limbo:
+         if lobj.name == name:
+            retval = lobj
+            break
+      else:
+         raise Exception('Cannot find the result object of the use action in the game.')
+      self.limbo.remove( retval )
+      return retval
 
    def setting_current_room( self, room_name ):
       self.room = self.find_room( room_name )
@@ -553,17 +565,17 @@ class GameInternal:
       return self.won_
 
 class GameObjectUseAction:
-   def __init__( self, subjectname, toolname, actionDescription, prototype ):
+   def __init__( self, subjectname, toolname, actionDescription, resultname ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.actionDescription = actionDescription
-      self.prototype         = prototype
+      self.resultname        = resultname
 
    def subject_to_reveal( self ):
       return []
 
-   def get_prototype( self ):
-      return [ copy.deepcopy( self.prototype ) ]
+   def get_result_name( self ):
+      return resultname
 
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
@@ -580,7 +592,7 @@ class GameObjectUseAction:
       subject, entity = game.find( self.subjectname )
       if not subject is None:
          entity.take( subject.name )
-         retval = copy.deepcopy( self.prototype )
+         retval = game.find_in_limbo_and_remove( self.resultname )
          entity.put( retval )
          return retval
       return None
@@ -591,7 +603,7 @@ class GameObjectUseAction:
       subject, entity = game.find( self.subjectname )
       if not subject is None:
          entity.take( subject.name )
-         retval = copy.deepcopy( self.prototype )
+         retval = game.find_in_limbo_and_remove( self.resultname )
          entity.put( retval )
          return retval
       return None
@@ -605,9 +617,6 @@ class GamePassageRevealAction:
 
    def subject_to_reveal( self ):
       return [ '@#passage#@' ] # although it looks strange, the real subject is a passage which is not an ordinary object TODO: find a better name, remove this woraround
-
-   def get_prototype( self ):
-      return []
 
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
@@ -637,9 +646,6 @@ class GameObjectRevealAction:
 
    def subject_to_reveal( self ):
       return [ self.subjectname ]
-
-   def get_prototype( self ):
-      return []
 
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
