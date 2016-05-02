@@ -9,6 +9,9 @@ from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
 from GameObject import GameSyntaxChecker
 from GameObject import GameSolver
+from GameObject import SerializableString
+from GameObject import SerializableList
+from GameObject import Deserializer
 
 class ThrillerTest(unittest.TestCase):
 
@@ -537,7 +540,16 @@ class ThrillerTest(unittest.TestCase):
       testobj1 = GameObject( 'box',  [GameObjectAttribute.IMMOBILE], 
                              [GameObject( 'key', [GameObjectAttribute.IMMOBILE] ) ] )
       assert( testobj1.serialize() == '_object#go#box#_list#immobile#_endlist#_list#_object#go#key#_list#immobile#_endlist#_list#_endlist#_endobject#_endlist#_endobject' )
+
                                        
+   def test_serialization_1(self):
+      testobj = SerializableList( [ SerializableString('hello'),  SerializableList( [SerializableString('good day'), SerializableString('boa tarde') ] ) ] )
+      outS = []
+      testobj.serialize( outS )
+      assert( outS == ['_list', '_string', 'hello', '_endstring', '_list', '_string', 'good day', '_endstring', '_string', 'boa tarde', '_endstring', '_endlist', '_endlist'] )
+      container = []
+      Deserializer.deserialize( outS, container )
+      assert( container == [['hello', ['good day', 'boa tarde']]] )
 
 if __name__ == '__main__' :
    unittest.main()
