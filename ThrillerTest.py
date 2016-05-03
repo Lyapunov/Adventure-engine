@@ -30,7 +30,7 @@ class ThrillerTest(unittest.TestCase):
                            GameObject( 'secret room' ) ],
                          [ GameObject( 'burning candle' ),  GameObject( 'injured bird' ) ],
                          [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
-                           GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ),  ],
+                           GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ) ],
                          [ GameObjectUseAction( 'candle', 'match', 'burning candle' ),
                            GameObjectUseAction( 'bird',   'stone', 'injured bird' ),
                            GamePassageRevealAction( 'picture', '', 12 ) ],
