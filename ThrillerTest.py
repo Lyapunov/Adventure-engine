@@ -18,6 +18,9 @@ class ThrillerTest(unittest.TestCase):
    # TODO: (IDEA) descriptions and images, the entire view should be a completely separated layer,
    #       which just portrays the game objects according to their attributes
 
+   # TODO: Write serializer
+   # TODO: Write view layer - first step is an object that returns an empty hash of texts indexed by game names 
+
    def setUp( self ):
       # Test game1, just to start with something
       self.game1 = Game( [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
