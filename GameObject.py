@@ -352,7 +352,9 @@ class GameSyntaxChecker:
 
 
 class Game:
-   def __init__(  self, rooms, limbo, passages, use_actions, views, final_room, descriptions = {} ):
+   def __init__(  self, *args ):
+      rooms, limbo, passages, use_actions, views, final_room, descriptions = args
+
       self.game_internal = GameInternal( rooms, limbo, passages, use_actions, views, final_room, descriptions )
 
    # === Reading the status of the game board ===
