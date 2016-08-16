@@ -557,11 +557,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( solution == [ ['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'],
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
-   def test_serializing_game_object_1(self):
-      testobj1 = GameObject( 'box',  [GameObjectAttribute.IMMOBILE], 
-                             [GameObject( 'key', [GameObjectAttribute.IMMOBILE] ) ] )
-      assert( testobj1.serialize() == '_object#go#box#_list#immobile#_endlist#_list#_object#go#key#_list#immobile#_endlist#_list#_endlist#_endobject#_endlist#_endobject' )
-
 if __name__ == '__main__' :
    unittest.main()
 

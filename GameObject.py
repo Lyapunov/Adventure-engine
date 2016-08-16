@@ -684,18 +684,6 @@ class GameObject:
    def get_hash_name( self ):
       return 'go#' + self.name
 
-   def serialize( self ):
-      retval = '_object#go#' + self.name + '#_list'
-      for attrib in self.attributes:
-         retval += '#' + attrib
-      retval += '#_endlist'
-      retval += '#_list'
-      for child in self.childObjects:
-         retval += '#' + child.serialize()
-      retval += '#_endlist'
-      retval += '#_endobject'
-      return retval
-
    def make_equal_to( self, other ):
       self.name         = other.name
       self.childObjects = other.childObjects
