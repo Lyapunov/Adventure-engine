@@ -1,5 +1,20 @@
 import copy
 import sys
+import json
+
+class GameEncoder(json.JSONEncoder):
+   def default(self, obj):
+      if isinstance( obj, GameObject ):
+         return [ 'GameObject', obj.__dict__]
+      if isinstance( obj, GamePassage ):
+         return [ 'GamePassage', obj.__dict__ ]
+      if isinstance( obj, GameObjectUseAction ):
+         return [ 'GameObjectUseAction', obj.__dict__]
+      if isinstance( obj, GamePassageRevealAction ):
+         return [ 'GamePassageRevealAction', obj.__dict__ ]
+      if isinstance( obj, GameObjectRevealAction ):
+         return [ 'GameObjectRevealAction', obj.__dict__ ]
+      return json.JSONEncoder.default(self, obj);
 
 class GameSolver:
 
@@ -301,6 +316,7 @@ class GameSyntaxChecker:
 
 class Game:
    def __init__(  self, *args ):
+#      print json.dumps( [ args ], cls=GameEncoder );
       rooms, limbo, passages, use_actions, views, final_room, descriptions = args
 
       self.game_internal = GameInternal( rooms, limbo, passages, use_actions, views, final_room, descriptions )
