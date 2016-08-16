@@ -2,6 +2,15 @@ import copy
 import sys
 import json
 
+# http://stackoverflow.com/questions/390250/elegant-ways-to-support-equivalence-equality-in-python-classes
+class CommonEquality(object):
+
+   def __eq__(self, other):
+      return (isinstance(other, self.__class__) and self.__dict__ == other.__dict__)
+
+   def __ne__(self, other):
+      return not self.__eq__(other)
+
 class GameEncoder(json.JSONEncoder):
    def default(self, obj):
       if isinstance( obj, GameObject ):
@@ -610,7 +619,7 @@ class GameInternal:
    def won( self ):
       return self.won_
 
-class GameObjectUseAction:
+class GameObjectUseAction(CommonEquality):
    def __init__( self, subjectname='', toolname='', resultname='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
@@ -653,7 +662,7 @@ class GameObjectUseAction:
          return retval
       return None
 
-class GamePassageRevealAction:
+class GamePassageRevealAction(CommonEquality):
    def __init__( self, subjectname='', toolname='', identifier='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
@@ -682,7 +691,7 @@ class GamePassageRevealAction:
          if passage.identifier == self.identifier:
             passage.make_visible()
 
-class GameObjectRevealAction:
+class GameObjectRevealAction(CommonEquality):
    def __init__( self, subjectname='', toolname='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
@@ -718,12 +727,15 @@ class GameObjectAttribute:
    IMMOBILE  = 'immobile'
    INVISIBLE = 'invisible'
 
-class GameObject:
+class GameObject(CommonEquality):
 
    def __init__( self, name = '', attributes = [], cobs = []):
       self.name = name
       self.attributes   = attributes
       self.childObjects = cobs
+
+   def __str__( self ):
+      return "GameObject( %s, %s, %s )" % ( self.name, self.attributes, self.childObjects );
 
    def get_hash_name( self ):
       return 'go#' + self.name
@@ -787,7 +799,7 @@ class GameObject:
       if not child is None:
          self.childObjects.append( child )
 
-class GamePassage:
+class GamePassage(CommonEquality):
    def __init__( self, identifier='', room_name1='', room_name2='', direction1='', direction2='', attributes = [] ):
       self.identifier = identifier
       self.room_name1 = room_name1
