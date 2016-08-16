@@ -1,4 +1,5 @@
 import unittest
+import json
 
 from GameObject import Game
 from GameObject import GameObject
@@ -9,6 +10,8 @@ from GameObject import GamePassageRevealAction
 from GameObject import GamePassage
 from GameObject import GameSyntaxChecker
 from GameObject import GameSolver
+from GameObject import GameEncoder
+from GameObject import GameDecoder
 
 class ThrillerTest(unittest.TestCase):
 
@@ -577,6 +580,30 @@ class ThrillerTest(unittest.TestCase):
       solution = GameSolver().solve( self.game1 )
       assert ( solution == [ ['take', 'candle'], ['take', 'match'], ['take', 'bird'], ['take', 'stone'], ['use', 'candle', 'match'],
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
+
+   def test_json_serializer_deserializer(self):
+      array_game_description = [ [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
+                                                                  GameObject( 'candle' ),
+                                                                  GameObject( 'match' ),
+                                                                  GameObject( 'bird' ),
+                                                                  GameObject( 'stone' ),
+                                                                  GameObject( 'picture', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ) ] ),
+                                   GameObject( 'bathroom',  [], [ GameObject( 'cabinet', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
+                                   GameObject( 'secret room' ) ],
+                                 [ GameObject( 'burning candle' ),  GameObject( 'injured bird' ) ],
+                                 [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
+                                   GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ) ],
+                                 [ GameObjectUseAction( 'candle', 'match', 'burning candle' ),
+                                   GameObjectUseAction( 'bird',   'stone', 'injured bird' ),
+                                   GamePassageRevealAction( 'picture', '', 12 ) ],
+                                 [ GameObjectRevealAction(  'picture', 'burning candle' ) ],
+                                 'secret room',
+                                 { 'go#dark room' : 'dark room', 'go#bathroom' : 'bathroom' } ];
+      text_game_description = json.dumps( array_game_description, cls=GameEncoder );
+      array_game_description_reconstructed = GameDecoder().decode( text_game_description );
+#      assert( array_game_description is array_game_description_reconstructed )
+#      print array_game_description_reconstructed
+
 
 if __name__ == '__main__' :
    unittest.main()

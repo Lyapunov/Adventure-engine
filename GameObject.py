@@ -5,16 +5,44 @@ import json
 class GameEncoder(json.JSONEncoder):
    def default(self, obj):
       if isinstance( obj, GameObject ):
-         return [ 'GameObject', obj.__dict__]
+         return { 'obj_name': 'GameObject', 'obj_content': obj.__dict__}
       if isinstance( obj, GamePassage ):
-         return [ 'GamePassage', obj.__dict__ ]
+         return { 'obj_name': 'GamePassage', 'obj_content': obj.__dict__ }
       if isinstance( obj, GameObjectUseAction ):
-         return [ 'GameObjectUseAction', obj.__dict__]
+         return { 'obj_name': 'GameObjectUseAction', 'obj_content': obj.__dict__}
       if isinstance( obj, GamePassageRevealAction ):
-         return [ 'GamePassageRevealAction', obj.__dict__ ]
+         return { 'obj_name': 'GamePassageRevealAction', 'obj_content': obj.__dict__ }
       if isinstance( obj, GameObjectRevealAction ):
-         return [ 'GameObjectRevealAction', obj.__dict__ ]
+         return { 'obj_name': 'GameObjectRevealAction', 'obj_content': obj.__dict__ }
       return json.JSONEncoder.default(self, obj);
+
+class GameDecoder(json.JSONDecoder):
+   def __init__(self):
+      json.JSONDecoder.__init__(self, object_hook=self.parsing)
+
+   def parsing(self, d):
+      if isinstance(d, dict) and len( d ) == 2 and 'obj_name' in d:
+         if d['obj_name'] == 'GameObject': 
+            retval = GameObject()
+            retval.__dict__ = d['obj_content']
+            return retval
+         if d['obj_name'] == 'GamePassage': 
+            retval = GamePassage()
+            retval.__dict__ = d['obj_content']
+            return retval
+         if d['obj_name'] == 'GameObjectUseAction':
+            retval = GameObjectUseAction()
+            retval.__dict__ = d['obj_content']
+            return retval
+         if d['obj_name'] == 'GamePassageRevealAction':
+            retval = GamePassageRevealAction()
+            retval.__dict__ = d['obj_content']
+            return retval
+         if d['obj_name'] == 'GameObjectRevealAction':
+            retval = GameObjectRevealAction()
+            retval.__dict__ = d['obj_content']
+            return retval
+      return d;
 
 class GameSolver:
 
@@ -583,7 +611,7 @@ class GameInternal:
       return self.won_
 
 class GameObjectUseAction:
-   def __init__( self, subjectname, toolname, resultname ):
+   def __init__( self, subjectname='', toolname='', resultname='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.resultname        = resultname
@@ -626,7 +654,7 @@ class GameObjectUseAction:
       return None
 
 class GamePassageRevealAction:
-   def __init__( self, subjectname, toolname, identifier ):
+   def __init__( self, subjectname='', toolname='', identifier='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
       self.identifier        = identifier
@@ -655,7 +683,7 @@ class GamePassageRevealAction:
             passage.make_visible()
 
 class GameObjectRevealAction:
-   def __init__( self, subjectname, toolname ):
+   def __init__( self, subjectname='', toolname='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
 
@@ -760,7 +788,7 @@ class GameObject:
          self.childObjects.append( child )
 
 class GamePassage:
-   def __init__( self, identifier, room_name1, room_name2, direction1, direction2, attributes = [] ):
+   def __init__( self, identifier='', room_name1='', room_name2='', direction1='', direction2='', attributes = [] ):
       self.identifier = identifier
       self.room_name1 = room_name1
       self.room_name2 = room_name2
