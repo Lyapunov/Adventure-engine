@@ -24,25 +24,52 @@ class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       # Test game1, just to start with something
 
-      self.text = """[
-        [
-         [ ["GameObject", {"attributes": [], "childObjects": [["GameObject", {"attributes": ["immobile"], "childObjects": [], "name": "table"}],
-                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "candle"}],
-                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "match"}],
-                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "bird"}],
-                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "stone"}],
-                                                             ["GameObject", {"attributes": ["immobile", "invisible"], "childObjects": [], "name": "picture"}]], "name": "dark room"}],
-           ["GameObject", {"attributes": [], "childObjects": [["GameObject", {"attributes": ["immobile"], "childObjects": [["GameObject", {"attributes": [], "childObjects": [], "name": "knife"}]], "name": "cabinet"}]], "name": "bathroom"}], 
-           ["GameObject", {"attributes": [], "childObjects": [], "name": "secret room"}]],
-         [ ["GameObject", {"attributes": [], "childObjects": [], "name": "burning candle"} ],
-           ["GameObject", {"attributes": [], "childObjects": [], "name": "injured bird"}] ],
-         [ ["GamePassage", {"room_name2": "bathroom", "room_name1": "dark room", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11}],
-           ["GamePassage", {"room_name2": "secret room", "room_name1": "dark room", "direction2": "E", "attributes": ["invisible"], "direction1": "W", "identifier": 12}] ],
-         [ ["GameObjectUseAction", {"subjectname": "candle", "toolname": "match", "resultname": "burning candle"}],
-           ["GameObjectUseAction", {"subjectname": "bird", "toolname": "stone", "resultname": "injured bird"}],
-           ["GamePassageRevealAction", {"subjectname": "picture", "toolname": "", "identifier": 12}] ],
-         [ ["GameObjectRevealAction", {"subjectname": "picture", "toolname": "burning candle"}]], "secret room", {"go#dark room": "dark room", "go#bathroom": "bathroom"}]
-       ]"""
+      self.text_game_description = """
+            [
+            [{"obj_content": {"attributes": [],
+                              "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "table"}, "obj_name": "GameObject"},
+                                               {"obj_content": {"attributes": [], "childObjects": [], "name": "candle"}, "obj_name": "GameObject"},
+                                               {"obj_content": {"attributes": [], "childObjects": [], "name": "match"}, "obj_name": "GameObject"},
+                                               {"obj_content": {"attributes": [], "childObjects": [], "name": "bird"}, "obj_name": "GameObject"},
+                                               {"obj_content": {"attributes": [], "childObjects": [], "name": "stone"}, "obj_name": "GameObject"},
+                                               {"obj_content": {"attributes": ["immobile", "invisible"], "childObjects": [], "name": "picture"}, "obj_name": "GameObject"}],
+                              "name": "dark room"},
+              "obj_name": "GameObject"},
+             {"obj_content": {"attributes": [],
+                              "childObjects": [{"obj_content": {"attributes": ["immobile"],
+                                                                "childObjects": [{"obj_content": {"attributes": [], "childObjects": [], "name": "knife"}, "obj_name": "GameObject"}],
+                                                                "name": "cabinet"},
+                                                "obj_name": "GameObject"}],
+                              "name": "bathroom"},
+              "obj_name": "GameObject"},
+             {"obj_content": {"attributes": [],
+                              "childObjects": [],
+                              "name": "secret room"},
+              "obj_name": "GameObject"}],
+            [{"obj_content": {"attributes": [],
+                              "childObjects": [],
+                              "name": "burning candle"},
+              "obj_name": "GameObject"},
+             {"obj_content": {"attributes": [],
+                              "childObjects": [],
+                              "name": "injured bird"},
+              "obj_name": "GameObject"}],
+            [{"obj_content": {"room_name2": "bathroom", "room_name1": "dark room", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},
+              "obj_name": "GamePassage"},
+             {"obj_content": {"room_name2": "secret room", "room_name1": "dark room", "direction2": "E", "attributes": ["invisible"], "direction1": "W", "identifier": 12},
+              "obj_name": "GamePassage"}],
+            [{"obj_content": {"subjectname": "candle", "toolname": "match", "resultname": "burning candle"},
+              "obj_name": "GameObjectUseAction"},
+             {"obj_content": {"subjectname": "bird", "toolname": "stone", "resultname": "injured bird"},
+              "obj_name": "GameObjectUseAction"},
+             {"obj_content": {"subjectname": "picture", "toolname": "", "identifier": 12},
+              "obj_name": "GamePassageRevealAction"}],
+            [{"obj_content": {"subjectname": "picture", "toolname": "burning candle"},
+              "obj_name": "GameObjectRevealAction"}],
+            "secret room",
+            {"go#dark room": "dark room", "go#bathroom": "bathroom"}
+            ]
+      """
 
       self.game1 = Game( [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
                                                           GameObject( 'candle' ),
@@ -602,6 +629,12 @@ class ThrillerTest(unittest.TestCase):
       text_game_description = json.dumps( array_game_description, cls=GameEncoder );
       array_game_description_reconstructed = GameDecoder().decode( text_game_description );
       assert( array_game_description == array_game_description_reconstructed )
+
+   def test_json_deserializer_serializer(self):
+      array_game_description = GameDecoder().decode( self.text_game_description );
+      text_game_description2 = json.dumps( array_game_description, cls=GameEncoder );
+      array_game_description2 = GameDecoder().decode( text_game_description2 );
+      assert( array_game_description == array_game_description2 )
 
 if __name__ == '__main__' :
    unittest.main()
