@@ -20,6 +20,27 @@ class ThrillerTest(unittest.TestCase):
 
    def setUp( self ):
       # Test game1, just to start with something
+
+      self.text = """[
+        [
+         [ ["GameObject", {"attributes": [], "childObjects": [["GameObject", {"attributes": ["immobile"], "childObjects": [], "name": "table"}],
+                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "candle"}],
+                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "match"}],
+                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "bird"}],
+                                                             ["GameObject", {"attributes": [], "childObjects": [], "name": "stone"}],
+                                                             ["GameObject", {"attributes": ["immobile", "invisible"], "childObjects": [], "name": "picture"}]], "name": "dark room"}],
+           ["GameObject", {"attributes": [], "childObjects": [["GameObject", {"attributes": ["immobile"], "childObjects": [["GameObject", {"attributes": [], "childObjects": [], "name": "knife"}]], "name": "cabinet"}]], "name": "bathroom"}], 
+           ["GameObject", {"attributes": [], "childObjects": [], "name": "secret room"}]],
+         [ ["GameObject", {"attributes": [], "childObjects": [], "name": "burning candle"} ],
+           ["GameObject", {"attributes": [], "childObjects": [], "name": "injured bird"}] ],
+         [ ["GamePassage", {"room_name2": "bathroom", "room_name1": "dark room", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11}],
+           ["GamePassage", {"room_name2": "secret room", "room_name1": "dark room", "direction2": "E", "attributes": ["invisible"], "direction1": "W", "identifier": 12}] ],
+         [ ["GameObjectUseAction", {"subjectname": "candle", "toolname": "match", "resultname": "burning candle"}],
+           ["GameObjectUseAction", {"subjectname": "bird", "toolname": "stone", "resultname": "injured bird"}],
+           ["GamePassageRevealAction", {"subjectname": "picture", "toolname": "", "identifier": 12}] ],
+         [ ["GameObjectRevealAction", {"subjectname": "picture", "toolname": "burning candle"}]], "secret room", {"go#dark room": "dark room", "go#bathroom": "bathroom"}]
+       ]"""
+
       self.game1 = Game( [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
                                                           GameObject( 'candle' ),
                                                           GameObject( 'match' ),
