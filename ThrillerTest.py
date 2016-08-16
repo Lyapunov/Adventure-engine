@@ -602,8 +602,6 @@ class ThrillerTest(unittest.TestCase):
       text_game_description = json.dumps( array_game_description, cls=GameEncoder );
       array_game_description_reconstructed = GameDecoder().decode( text_game_description );
       assert( array_game_description == array_game_description_reconstructed )
-#      print array_game_description_reconstructed
-
 
 if __name__ == '__main__' :
    unittest.main()

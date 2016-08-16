@@ -625,6 +625,12 @@ class GameObjectUseAction(CommonEquality):
       self.toolname          = toolname
       self.resultname        = resultname
 
+   def __str__( self ):
+      return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
+
+   def __repr__( self ):
+      return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
+
    def subject_to_reveal( self ):
       return []
 
@@ -668,6 +674,12 @@ class GamePassageRevealAction(CommonEquality):
       self.toolname          = toolname
       self.identifier        = identifier
 
+   def __str__( self ):
+      return "GamePassageRevealAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.identifier );
+
+   def __repr__( self ):
+      return "GamePassageRevealAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.identifier );
+
    def subject_to_reveal( self ):
       return [ '@#passage#@' ] # although it looks strange, the real subject is a passage which is not an ordinary object TODO: find a better name, remove this woraround
 
@@ -695,6 +707,12 @@ class GameObjectRevealAction(CommonEquality):
    def __init__( self, subjectname='', toolname='' ):
       self.subjectname       = subjectname
       self.toolname          = toolname
+
+   def __str__( self ):
+      return "GameObjectRevealAction( '%s', '%s' )" % ( self.subjectname, self.toolname );
+
+   def __repr__( self ):
+      return "GameObjectRevealAction( '%s', '%s' )" % ( self.subjectname, self.toolname );
 
    def subject_to_reveal( self ):
       return [ self.subjectname ]
@@ -735,7 +753,10 @@ class GameObject(CommonEquality):
       self.childObjects = cobs
 
    def __str__( self ):
-      return "GameObject( %s, %s, %s )" % ( self.name, self.attributes, self.childObjects );
+      return "GameObject( '%s', %s, %s )" % ( self.name, self.attributes, self.childObjects );
+
+   def __repr__( self ):
+      return "GameObject( '%s', %s, %s )" % ( self.name, self.attributes, self.childObjects );
 
    def get_hash_name( self ):
       return 'go#' + self.name
@@ -807,6 +828,12 @@ class GamePassage(CommonEquality):
       self.direction1 = direction1
       self.direction2 = direction2
       self.attributes = attributes
+
+   def __str__( self ):
+      return "GamePassage( '%s', '%s', '%s', '%s', '%s', %s )" % ( self.identifier, self.room_name1, self.room_name2, self.direction1, self.direction2, self.attributes );
+
+   def __repr__( self ):
+      return "GamePassage( '%s', '%s', '%s', '%s', '%s', %s )" % ( self.identifier, self.room_name1, self.room_name2, self.direction1, self.direction2, self.attributes );
 
    def get_ordered_name( self ):
       if ( self.room_name1 < self.room_name2 ):
