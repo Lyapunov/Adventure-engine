@@ -1,58 +1,6 @@
 import copy
 import sys
 
-class Deserializer:
-   @staticmethod
-   def name_serializable_string():
-      return 'string'
-   @staticmethod
-   def name_serializable_list():
-      return 'list'
-   @staticmethod
-   def deserialize( inputS, container ):
-      head = inputS[0]
-      inputS.remove( inputS[0] )
-      if head == '_' + Deserializer.name_serializable_string():
-         SerializableString.deserializeInternal( inputS, container ) 
-      elif head == '_' + Deserializer.name_serializable_list():
-         SerializableList.deserializeInternal( inputS, container ) 
-      else:
-         raise Exception('Invalid input.')
-      if len( inputS ) == 0: 
-         raise Exception('Invalid input')
-      inputS.remove( inputS[0] )
-
-class SerializableObject:
-   def serialize( self, outS ):
-      outS.append( '_' + self.marker ) 
-      self.serializeInternal( outS )
-      outS.append( '_end' + self.marker ) 
-
-class SerializableList(SerializableObject):
-   def __init__( self, mylist ):
-      self.mylist = mylist
-      self.marker = Deserializer.name_serializable_list()
-   def serializeInternal( self, outS ):
-      for i in self.mylist:
-         i.serialize( outS )
-   @staticmethod
-   def deserializeInternal( inputS, container ):
-      current = []
-      while ( inputS[0] != '_end' + Deserializer.name_serializable_list() ) and len( inputS ) > 0:
-         Deserializer.deserialize( inputS, current )
-      container.append( current )
-
-class SerializableString(SerializableObject):
-   def __init__( self,string ):
-      self.string = string
-      self.marker = Deserializer.name_serializable_string()
-   def serializeInternal( self, outS ):
-      outS.append( self.string )
-   @staticmethod
-   def deserializeInternal( inputS, container ):
-      container.append( inputS[0] )
-      inputS.remove( inputS[0] )
-
 class GameSolver:
 
    def solveInternal( self, game, solution ):
