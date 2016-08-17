@@ -23,6 +23,14 @@ class GameEncoder(json.JSONEncoder):
          return { 'obj_name': 'GamePassageRevealAction', 'obj_content': obj.__dict__ }
       if isinstance( obj, GameObjectRevealAction ):
          return { 'obj_name': 'GameObjectRevealAction', 'obj_content': obj.__dict__ }
+      if isinstance( obj, Game ):
+         return [ obj.game_internal.rooms,
+                  obj.game_internal.limbo,
+                  obj.game_internal.passages,
+                  obj.game_internal.use_actions,
+                  obj.game_internal.views,
+                  obj.game_internal.final_room,
+                  obj.game_internal.descriptions ];
       return json.JSONEncoder.default(self, obj);
 
 class GameDecoder(json.JSONDecoder):
