@@ -102,23 +102,37 @@ class ThrillerTest(unittest.TestCase):
    def test_syntax_checker_wrong_game_1(self):
       # there is no room
       game_internal = Game( [], [], [], [], [], '', {} )
+      game_internal_text = '[[], [], [], [], [], "", {}]';
       assert ( GameSyntaxChecker().check( game_internal )  == 'must have at least one room' )
 
    def test_syntax_checker_wrong_game_2(self):
       # starting in the ending room
       game_internal = Game( [ GameObject( 'room1', [], []) ], [], [], [], [], 'room1', {} )
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "room1"}, "obj_name": "GameObject"}], [], [], [], [], "room1", {}]'
       assert ( GameSyntaxChecker().check( game_internal )  == 'cannot start in the ending room' )
 
    def test_syntax_checker_wrong_game_3(self):
       # starting in the ending room
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "room1"}, "obj_name": "GameObject"}], [], [], [], [], "final room", {}]'
       game_internal = Game( [ GameObject( 'room1', [], []) ], [], [], [], [], 'final room', {} )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room does not exist' )
 
    def test_syntax_checker_wrong_game_4(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "starting room"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "final room"   }, "obj_name": "GameObject"}], [], [], [], [], "final room", {}]'
       game_internal = Game( [ GameObject( 'starting room' ), GameObject( 'final room' ) ], [], [], [], [], 'final room', {} )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_5(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomD"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomD", "room_name1": "roomC", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 12},\
+                                 "obj_name": "GamePassage"}], [], [], "roomD", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ) ],
                             [],
@@ -128,6 +142,15 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_6(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomD"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomC", "room_name1": "roomB", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 12},\
+                                 "obj_name": "GamePassage"}], [], [], "roomD", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ) ],
                             [],
@@ -137,6 +160,23 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_7(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomD"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomE"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomF"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomE", "room_name1": "roomA", "direction2": "W", "attributes": [], "direction1": "E", "identifier": 12},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomB", "room_name1": "roomE", "direction2": "E", "attributes": [], "direction1": "N", "identifier": 13},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomE", "room_name1": "roomD", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 14},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomF", "room_name1": "roomC", "direction2": "W", "attributes": [], "direction1": "E", "identifier": 15},\
+                                 "obj_name": "GamePassage"}], [], [], "roomF", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ),
                               GameObject( 'roomE' ), GameObject( 'roomF' ) ],
@@ -150,6 +190,13 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_8(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "W", "identifier": 12},\
+                                 "obj_name": "GamePassage"}], [], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
@@ -157,6 +204,13 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
 
    def test_syntax_checker_wrong_game_9(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomA", "room_name1": "roomB", "direction2": "S", "attributes": [], "direction1": "W", "identifier": 12},\
+                                 "obj_name": "GamePassage"}], [], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
@@ -164,6 +218,14 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
 
    def test_syntax_checker_wrong_game_10(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomC", "room_name1": "roomB", "direction2": "S", "attributes": [], "direction1": "W", "identifier": 11},\
+                                 "obj_name": "GamePassage"}], [], [], "roomC", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ) ],
                             [],
                             [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
