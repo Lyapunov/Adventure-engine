@@ -636,6 +636,37 @@ class ThrillerTest(unittest.TestCase):
       array_game_description2 = GameDecoder().decode( text_game_description2 );
       assert( array_game_description == array_game_description2 )
 
+   def test_json_game_deserializer_serializer(self):
+      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomD"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomE"}, "obj_name": "GameObject"},\
+                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomF"}, "obj_name": "GameObject"}],\
+                             [],\
+                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomE", "room_name1": "roomA", "direction2": "W", "attributes": [], "direction1": "E", "identifier": 12},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomB", "room_name1": "roomE", "direction2": "E", "attributes": [], "direction1": "N", "identifier": 13},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomE", "room_name1": "roomD", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 14},\
+                                 "obj_name": "GamePassage"},\
+                              {"obj_content": {"room_name2": "roomF", "room_name1": "roomC", "direction2": "W", "attributes": [], "direction1": "E", "identifier": 15},\
+                                 "obj_name": "GamePassage"}], [], [], "roomF", {}]'
+      game_from_text = Game( GameDecoder().decode( game_internal_text ) )
+      game_internal = Game( [ [ GameObject( 'roomA' ), GameObject( 'roomB' ),
+                                GameObject( 'roomC' ), GameObject( 'roomD' ),
+                                GameObject( 'roomE' ), GameObject( 'roomF' ) ],
+                              [],
+                              [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
+                                GamePassage(12, 'roomA', 'roomE', 'E', 'W' ),
+                                GamePassage(13, 'roomE', 'roomB', 'N', 'E' ),
+                                GamePassage(14, 'roomD', 'roomE', 'N', 'S' ),
+                                GamePassage(15, 'roomC', 'roomF', 'E', 'W' ) ],
+                              [], [], 'roomF', {} ] )
+      assert( game_internal == game_from_text )
+
 if __name__ == '__main__' :
    unittest.main()
 
