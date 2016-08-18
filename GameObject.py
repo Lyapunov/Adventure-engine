@@ -409,7 +409,7 @@ class Game(CommonEquality):
       self.game_internal.view_refresh()
       return retval
 
-class GameInternal:
+class GameInternal(CommonEquality):
    def __init__( self, rooms, limbo, passages, use_actions, views, final_room, descriptions ):
       self.rooms        = rooms
       self.limbo        = limbo 
