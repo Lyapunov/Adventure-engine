@@ -360,7 +360,7 @@ class GameSyntaxChecker:
 
 
 class Game:
-   def __init__(  self, *args ):
+   def __init__( self, args ):
 #      print json.dumps( [ args ], cls=GameEncoder );
       rooms, limbo, passages, use_actions, views, final_room, descriptions = args
 
