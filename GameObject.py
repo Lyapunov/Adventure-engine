@@ -359,12 +359,20 @@ class GameSyntaxChecker:
       return ''
 
 
-class Game:
+class Game(CommonEquality):
    def __init__( self, args ):
 #      print json.dumps( [ args ], cls=GameEncoder );
       rooms, limbo, passages, use_actions, views, final_room, descriptions = args
 
       self.game_internal = GameInternal( rooms, limbo, passages, use_actions, views, final_room, descriptions )
+
+   def __str__( self ):
+#     return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
+      return json.dumps( self, cls=GameEncoder );
+
+   def __repr__( self ):
+#     return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
+      return json.dumps( self, cls=GameEncoder );
 
    # === Reading the status of the game board ===
 
