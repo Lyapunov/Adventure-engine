@@ -233,15 +233,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'passage identifiers are not unique' )
 
    def test_syntax_checker_wrong_game_11(self):
-      game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomD"}, "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
-                                 "obj_name": "GamePassage"},\
-                              {"obj_content": {"room_name2": "roomD", "room_name1": "roomC", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 12},\
-                                 "obj_name": "GamePassage"}], [], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomB' ),
                               GameObject( 'roomC' ), GameObject( 'roomD' ) ],
                             [],
@@ -251,17 +242,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'not all rooms are accessible' )
  
    def test_syntax_checker_wrong_game_12(self):
-      game_internal_text = '[[{"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "button"}, "obj_name": "GameObject"}], "name": "roomA"},\
-                                  "obj_name": "GameObject"},\
-                              {"obj_content": {\
-                                  "attributes": [], "childObjects": [], "name": "roomB"},\
-                                  "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": ["invisible"], "direction1": "N", "identifier": 11},\
-                                 "obj_name": "GamePassage"}],\
-                             [{"obj_content": {"subjectname": "button", "toolname": "", "identifier": 13}, "obj_name": "GamePassageRevealAction"}], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA', [], [ GameObject( 'button', [GameObjectAttribute.IMMOBILE], [] ) ] ),
                               GameObject( 'roomB' ) ],
                             [],
@@ -273,21 +253,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action' )
 
    def test_syntax_checker_wrong_game_13(self):
-      game_internal_text = '[[{"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "button1"}, "obj_name": "GameObject"},\
-                                                   {"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "button2"}, "obj_name": "GameObject"}],\
-                                  "name": "roomA" },\
-                               "obj_name": "GameObject"},\
-                              {"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [],\
-                                  "name": "roomB"},\
-                               "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": ["invisible"], "direction1": "N", "identifier": 11},\
-                                 "obj_name": "GamePassage"}],\
-                             [{"obj_content": {"subjectname": "button", "toolname": "", "identifier": 11}, "obj_name": "GamePassageRevealAction"}], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA',[], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),
                                                         GameObject( 'button2', [GameObjectAttribute.IMMOBILE], [] ) ] ),
                               GameObject( 'roomB' ) ],
@@ -301,17 +266,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found invalid object in an action' )
 
    def test_syntax_checker_wrong_game_14(self):
-      game_internal_text = '[[{"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "button1"}, "obj_name": "GameObject"},\
-                                                   {"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "button1"}, "obj_name": "GameObject"}],\
-                                  "name": "roomA"},\
-                                  "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": ["invisible"], "direction1": "N", "identifier": 11},\
-                                 "obj_name": "GamePassage"}],\
-                             [{"obj_content": {"subjectname": "button1", "toolname": "", "identifier": 11}, "obj_name": "GamePassageRevealAction"}], [], "roomB", {}]'
       game_internal = Game( [ GameObject( 'roomA', [], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),
                                                          GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ) ] ),
                               GameObject( 'roomB' ) ],
@@ -325,18 +279,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game_15(self):
-      game_internal_text = '[[{"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [], "name": "roomA"},\
-                               "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "roomB", "room_name1": "roomA", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},\
-                                 "obj_name": "GamePassage"},\
-                              {"obj_content": {"room_name2": "roomC", "room_name1": "roomB", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 12},\
-                                 "obj_name": "GamePassage"}], [], [], "roomC", {}]'
       game_internal = Game( [ GameObject( 'roomA' ), GameObject( 'roomC' ),
                               GameObject( 'roomB' ), GameObject( 'roomC' ) ],
                             [],
@@ -347,19 +289,6 @@ class ThrillerTest(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game16(self):
-      game_internal_text = '[[{"obj_content": {\
-                                  "attributes": [],\
-                                  "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "door"}, "obj_name": "GameObject"}], "name": "starting room"},\
-                               "obj_name": "GameObject"},\
-                              {"obj_content": {"attributes": [], "childObjects": [], "name": "ending room"}, "obj_name": "GameObject"}],\
-                             [],\
-                             [{"obj_content": {"room_name2": "ending room",\
-                                               "room_name1": "starting room",\
-                                               "direction2": "S",\
-                                               "attributes": ["invisible"],\
-                                               "direction1": "N",\
-                                               "identifier": 11}, "obj_name": "GamePassage"}],\
-                             [{"obj_content": {"subjectname": "", "toolname": "", "identifier": 11}, "obj_name": "GamePassageRevealAction"}], [], "ending room", {}]'
       game_internal = Game( [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
                               GameObject( 'ending room' ) ],
                             [],
@@ -380,8 +309,6 @@ class ThrillerTest(unittest.TestCase):
                             [],
                             'ending room', 
                             {} )
-#     my_text_game_description = json.dumps( game_internal, cls=GameEncoder );
-#     print my_text_game_description
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found invalid action with the same actor twice' )
 
