@@ -24,7 +24,7 @@ class ThrillerTest(unittest.TestCase):
    def setUp( self ):
       # Test game1, just to start with something
 
-      self.text_game_description = """
+      self.game1_blueprints = """
             [
             [{"obj_content": {"attributes": [],
                               "childObjects": [{"obj_content": {"attributes": ["immobile"], "childObjects": [], "name": "table"}, "obj_name": "GameObject"},
@@ -609,12 +609,12 @@ class ThrillerTest(unittest.TestCase):
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
    def test_json_serializer_deserializer(self):
-      text_game_description = json.dumps( self.game1.get_blueprints(), cls=GameEncoder );
-      array_game_description_reconstructed = GameDecoder().decode( text_game_description );
+      game1_blueprints = json.dumps( self.game1.get_blueprints(), cls=GameEncoder );
+      array_game_description_reconstructed = GameDecoder().decode( game1_blueprints );
       assert( self.game1.get_blueprints() == array_game_description_reconstructed )
 
    def test_json_deserializer_serializer(self):
-      array_game_description = GameDecoder().decode( self.text_game_description );
+      array_game_description = GameDecoder().decode( self.game1_blueprints );
       text_game_description2 = json.dumps( array_game_description, cls=GameEncoder );
       array_game_description2 = GameDecoder().decode( text_game_description2 );
       assert( array_game_description == array_game_description2 )
@@ -651,7 +651,7 @@ class ThrillerTest(unittest.TestCase):
       assert( game_internal == game_from_text )
 
    def test_json_game_deserializer_serializer_2(self):
-      game_from_text = Game( GameDecoder().decode( self.text_game_description ) )
+      game_from_text = Game( GameDecoder().decode( self.game1_blueprints ) )
       assert( self.game1 == game_from_text )
 
 if __name__ == '__main__' :
