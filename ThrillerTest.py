@@ -609,26 +609,9 @@ class ThrillerTest(unittest.TestCase):
                              ['use', 'bird', 'stone'], ['use', '', 'picture'], ['go', 'W']] )
 
    def test_json_serializer_deserializer(self):
-      array_game_description = [ [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
-                                                                  GameObject( 'candle' ),
-                                                                  GameObject( 'match' ),
-                                                                  GameObject( 'bird' ),
-                                                                  GameObject( 'stone' ),
-                                                                  GameObject( 'picture', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ) ] ),
-                                   GameObject( 'bathroom',  [], [ GameObject( 'cabinet', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
-                                   GameObject( 'secret room' ) ],
-                                 [ GameObject( 'burning candle' ),  GameObject( 'injured bird' ) ],
-                                 [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
-                                   GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ) ],
-                                 [ GameObjectUseAction( 'candle', 'match', 'burning candle' ),
-                                   GameObjectUseAction( 'bird',   'stone', 'injured bird' ),
-                                   GamePassageRevealAction( 'picture', '', 12 ) ],
-                                 [ GameObjectRevealAction(  'picture', 'burning candle' ) ],
-                                 'secret room',
-                                 { 'go#dark room' : 'dark room', 'go#bathroom' : 'bathroom' } ];
-      text_game_description = json.dumps( array_game_description, cls=GameEncoder );
+      text_game_description = json.dumps( self.game1.get_blueprints(), cls=GameEncoder );
       array_game_description_reconstructed = GameDecoder().decode( text_game_description );
-      assert( array_game_description == array_game_description_reconstructed )
+      assert( self.game1.get_blueprints() == array_game_description_reconstructed )
 
    def test_json_deserializer_serializer(self):
       array_game_description = GameDecoder().decode( self.text_game_description );
