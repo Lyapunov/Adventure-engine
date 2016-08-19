@@ -619,7 +619,7 @@ class ThrillerTest(unittest.TestCase):
       array_game_description2 = GameDecoder().decode( text_game_description2 );
       assert( array_game_description == array_game_description2 )
 
-   def test_json_game_deserializer_serializer(self):
+   def test_json_game_deserializer_serializer_1(self):
       game_internal_text = '[[{"obj_content": {"attributes": [], "childObjects": [], "name": "roomA"}, "obj_name": "GameObject"},\
                               {"obj_content": {"attributes": [], "childObjects": [], "name": "roomB"}, "obj_name": "GameObject"},\
                               {"obj_content": {"attributes": [], "childObjects": [], "name": "roomC"}, "obj_name": "GameObject"},\
@@ -649,6 +649,10 @@ class ThrillerTest(unittest.TestCase):
                                 GamePassage(15, 'roomC', 'roomF', 'E', 'W' ) ],
                               [], [], 'roomF', {} ] )
       assert( game_internal == game_from_text )
+
+   def test_json_game_deserializer_serializer_2(self):
+      game_from_text = Game( GameDecoder().decode( self.text_game_description ) )
+      assert( self.game1 == game_from_text )
 
 if __name__ == '__main__' :
    unittest.main()
