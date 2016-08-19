@@ -374,6 +374,9 @@ class Game(CommonEquality):
 #     return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
       return json.dumps( self, cls=GameEncoder );
 
+   def get_blueprints( self ):
+      return self.game_internal.get_blueprints(); 
+
    # === Reading the status of the game board ===
 
    def look( self ):
@@ -424,6 +427,16 @@ class GameInternal(CommonEquality):
       self.won_         = 0
       self.final_room   = final_room
       self.descriptions = descriptions
+      self.blueprints = [ copy.deepcopy( self.rooms ),
+                          copy.deepcopy( self.limbo ),
+                          copy.deepcopy( self.passages ),
+                          copy.deepcopy( self.use_actions ),
+                          copy.deepcopy( self.views ),
+                          copy.deepcopy( self.final_room ),
+                          copy.deepcopy( self.descriptions ) ]
+
+   def get_blueprints( self ):
+      return self.blueprints;
 
    def find_in_limbo_and_remove( self, name ):
       retval = None
