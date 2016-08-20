@@ -365,6 +365,11 @@ class Game(CommonEquality):
       rooms, limbo, passages, use_actions, views, final_room, descriptions = args
 
       self.game_internal = GameInternal( rooms, limbo, passages, use_actions, views, final_room, descriptions )
+      self.commands = { 'use'  : self.game_internal.use,
+                        'drop' : self.game_internal.drop,
+                        'take' : self.game_internal.take,
+                        'go'   : self.game_internal.go,
+                        'open' : self.game_internal.open }
 
    def __str__( self ):
 #     return "GameObjectUseAction( '%s', '%s', '%s' )" % ( self.subjectname, self.toolname, self.resultname );
@@ -397,18 +402,10 @@ class Game(CommonEquality):
    # === Manipulating the game board ===
 
    def do_it( self, command, arg1, arg2 = '' ):
-      if command == 'use':
-         retval = self.game_internal.use( arg1, arg2 )
-      elif command == 'drop':
-         retval = self.game_internal.drop( arg1 )
-      elif command == 'take':
-         retval = self.game_internal.take( arg1 )
-      elif command == 'go':
-         retval = self.game_internal.go( arg1 )
-      elif command == 'open':
-         retval = self.game_internal.open( arg1 )
-      else:
+      if self.commands[command] is None:
          raise Exception('Invalid command')
+      else:
+         retval = self.commands[command]( arg1, arg2 )
       self.game_internal.view_refresh()
       return retval
 
@@ -485,7 +482,11 @@ class GameInternal(CommonEquality):
       else:
          return None
 
-   def open( self, name ):
+   def open( self, name, other ):
+      if other != '':
+         raise Exception('Command takes has only one argument')
+         return None
+
       subject, entity = self.find( name )
       if subject is None:
          return False
@@ -513,10 +514,16 @@ class GameInternal(CommonEquality):
                return action.doIt( self )
          return None
 
-   def take( self, name ):
+   def take( self, name, other ):
+      if other != '':
+         raise Exception('Command takes has only one argument')
+         return None
       return self.move_between_entities( name, self.room, self.inventory )
 
-   def drop( self, name ):
+   def drop( self, name, other ):
+      if other != '':
+         raise Exception('Command takes has only one argument')
+         return None
       return self.move_between_entities( name, self.inventory, self.room )
 
    def has( self, name ):
@@ -625,7 +632,11 @@ class GameInternal(CommonEquality):
    def directions( self ):
       return self.directionsInternal( self.room.name )
 
-   def go( self, direction ):
+   def go( self, direction, other ):
+      if other != '':
+         raise Exception('Command takes has only one argument')
+         return None
+
       topology = self.directions()
       for [room_direction, room_name] in topology:
          if room_direction == direction:
