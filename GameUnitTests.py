@@ -13,7 +13,7 @@ from GameObject import GameSolver
 from GameObject import GameEncoder
 from GameObject import GameDecoder
 
-class ThrillerTest(unittest.TestCase):
+class GameUnitTests(unittest.TestCase):
 
    # TODO: (IDEA) descriptions and images, the entire view should be a completely separated layer,
    #       which just portrays the game objects according to their attributes
