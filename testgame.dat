@@ -40,5 +40,5 @@
 [{"obj_content": {"subjectname": "picture", "toolname": "burning candle"},
   "obj_name": "GameObjectRevealAction"}],
 "secret room",
-{"go#dark room": "You find yourself in a very dark room. You barelly recognize even the edges of the walls without an external light source. You have no memories about how you did get there. There can be something like a trap door on the ceiling, but it is concealed in the darkness. After taking careful steps and touching throgh the object, you find a passage to another room.", "go#bathroom": "bathroom"}
+{"go#dark room": "You find yourself in a very dark room. You barelly recognize even the edges of the walls without an external light source. You have no memories about how you did get there. There can be something like a trap door on the ceiling, but it is concealed in the darkness. After taking careful steps and touching throgh the object, you find a passage to another room.", "go#bathroom": "bathroom", "go#secret room": "Congratulations. You found an exit, and you won the game." }
 ]
