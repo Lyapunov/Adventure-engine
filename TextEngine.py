@@ -13,12 +13,22 @@ def main(argv):
       return
    gamefile = argv[1]
    print "Opening file", gamefile
+   print
    try:
       with open(gamefile,'r') as myfile:
          game_blueprints = myfile.read().replace('\n','')
          game = Game( GameDecoder().decode( game_blueprints ) )
+         looked = {}
 
-         print "You are in a", game.current_room()
+         if not game.current_room() in looked:
+            print game.look()
+            looked[game.current_room()] = True
+         else: 
+            print "You are in a", game.current_room()
+         print "You can go to the following directions:",
+         for dirdesc in game.directions():
+            print dirdesc[0],
+         print "."
    except IOError as e:
       print "I/O error({0}): {1}".format(e.errno, e.strerror)
 
