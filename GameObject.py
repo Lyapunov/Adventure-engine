@@ -537,7 +537,9 @@ class GameInternal(CommonEquality):
       return subject
 
    def look( self ):
-      return self.descriptions[self.room.get_hash_name()]
+      if self.room.get_hash_name() in self.descriptions:
+         return self.descriptions[self.room.get_hash_name()]
+      return ''
 
    def find( self, name ):
       return self.find_in_entities( name, [ self.inventory, self.room ] )
