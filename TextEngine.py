@@ -21,6 +21,10 @@ def main(argv):
          game = Game( GameDecoder().decode( game_blueprints ) )
    except IOError as e:
       print "I/O error({0}): {1}".format(e.errno, e.strerror)
+      return
+   except Exception as e:
+      print "Could not parse game file."
+      return
 
    looked = {}
    while True:
@@ -30,6 +34,10 @@ def main(argv):
          looked[game.current_room()] = True
       else: 
          print "You are in a", game.current_room()
+
+      if game.won():
+         break
+
       if len( game.stuffs() ) > 0:
           print "The following objects are in the room:", 
           for stuff in game.stuffs():
