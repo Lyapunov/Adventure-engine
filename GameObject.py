@@ -384,6 +384,9 @@ class Game(CommonEquality):
 
    # === Reading the status of the game board ===
 
+   def current_room( self ):
+      return self.game_internal.current_room()
+
    def look( self ):
       return self.game_internal.look()
 
@@ -431,6 +434,9 @@ class GameInternal(CommonEquality):
                           copy.deepcopy( self.views ),
                           copy.deepcopy( self.final_room ),
                           copy.deepcopy( self.descriptions ) ]
+
+   def current_room( self ):
+      return self.room.name
 
    def get_blueprints( self ):
       return self.blueprints;
