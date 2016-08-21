@@ -405,7 +405,7 @@ class Game(CommonEquality):
    # === Manipulating the game board ===
 
    def do_it( self, command, arg1, arg2 = '' ):
-      if self.commands[command] is None:
+      if not command in self.commands:
          raise Exception('Invalid command')
       else:
          retval = self.commands[command]( arg1, arg2 )
