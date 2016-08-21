@@ -40,7 +40,20 @@ def main(argv):
           for dirdesc in game.directions():
              print dirdesc[0],
           print "."
-      input = raw_input('>');
+
+      input_fields = []
+      while len(input_fields) <= 0:
+         input_fields = raw_input('>').split(); # better than split('')
+
+      if len(input_fields) > 3:
+         print "You cannot do that."
+
+      input_fields += ['',''] # to set a default value for not given params in an easy way
+
+      try:
+         game.do_it( input_fields[0], input_fields[1], input_fields[2] )
+      except Exception:
+         print "You cannot do that."
 
 
 if __name__ == "__main__":
