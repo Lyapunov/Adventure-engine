@@ -74,6 +74,27 @@
          var blueprints = JSON.parse( document.getElementById('blueprints').innerText );
          // console.log('blueprints: ', blueprints);
 
+         // weird, but adding functions to the blueprints recursively - doing the same things that in Python
+         function addFunctionsToObjectsRecursively( input ) {
+            if ( input instanceof Array ) {
+               for ( var i = 0; i < input.length; ++i ) {
+                  addFunctionsToObjectsRecursively( input[i] );
+               }
+               return;
+            }
+            if ( null == input.obj_content ) {
+               return;
+            }
+            if ( null != input.obj_content.childObjects ) {
+               addFunctionsToObjectsRecursively( input.obj_content.childObjects );
+            }
+            if ( null != input.obj_name ) {
+               console.log( "--->" + input.obj_name );
+            }
+         }
+
+         addFunctionsToObjectsRecursively( blueprints );
+
          function drawBackground() {
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
