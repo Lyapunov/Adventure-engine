@@ -809,10 +809,6 @@ class GameObject(CommonEquality):
    def get_hash_name( self ):
       return 'go#' + self.name
 
-   def make_equal_to( self, other ):
-      self.name         = other.name
-      self.childObjects = other.childObjects
-
    def is_visible( self ):
       if GameObjectAttribute.INVISIBLE in self.attributes:
          return False
