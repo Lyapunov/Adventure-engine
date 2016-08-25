@@ -91,9 +91,36 @@
             if ( null != input.obj_name ) {
                console.log( "--->" + input.obj_name );
             }
+
+            // Adding functions to object
+            switch ( input.obj_name ) {
+               case "GameObject" :  
+                  input.is_visible = function() { 
+                     return input.obj_content.attributes.indexOf( "invisible" ) == -1;
+                  }
+                  input.make_visible = function() {
+                     var index = input.obj_content.attributes.indexOf( "invisible" );
+                     input.obj_content.splice( index, 1 );
+                  }
+                  input.get_attributes = function() {
+                     return input.obj_content.attributes;
+                  }
+                  input.find = function( name ) {
+                     for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        if ( input.obj_content.childObjects[i].obj_content.name == name ) {
+                           return input.obj_content.childObjects[i];
+                        }
+                     }
+                     return null;
+                  }
+                  break;
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
+
+         // Smoke tests:
+         // console.log( blueprints[0][0].find( 'bird' ) );
 
          function drawBackground() {
             context.fillStyle = "black";
