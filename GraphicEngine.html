@@ -97,14 +97,14 @@
                case "GameObject" :  
                   input.is_visible = function() { 
                      return input.obj_content.attributes.indexOf( "invisible" ) == -1;
-                  }
+                  };
                   input.make_visible = function() {
                      var index = input.obj_content.attributes.indexOf( "invisible" );
                      input.obj_content.splice( index, 1 );
-                  }
+                  };
                   input.get_attributes = function() {
                      return input.obj_content.attributes;
-                  }
+                  };
                   input.find = function( name ) {
                      for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
                         if ( input.obj_content.childObjects[i].obj_content.name == name ) {
@@ -112,7 +112,39 @@
                         }
                      }
                      return null;
-                  }
+                  };
+                  input.children = function() {
+                     return input.obj_content.childObjects;
+                  };
+                  input.takable_child_names = function() {
+                     var retval = [];
+                     for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        if ( input.obj_content.childObjects[i].obj_content.attributes.indexOf( 'immobile' ) < 0
+                             && input.obj_content.childObjects[i].obj_content.attributes.indexOf( 'invisible' ) < 0 ) {
+                           retval.push( input.obj_content.childObjects[i].obj_content.name );
+                        }
+                     }
+                     return retval;
+                  };
+                  input.openable_child_names = function() {
+                     var retval = [];
+                     for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        if ( input.obj_content.childObjects[i].obj_content.childObjects.length > 0 ) {
+                           retval.push( input.obj_content.childObjects[i].obj_content.name );
+                        }
+                     }
+                     return retval;
+                  };
+                  input.descendants = function( add_top_children ) {
+                     var retval = [];
+                     if ( add_top_children ) {
+                        retval = retval.concat( input.children() );
+                     }
+                     for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        retval = retval.concat( input.obj_content.childObjects[i].children() );
+                     }
+                     return retval;
+                  };
                   break;
             }
          }
@@ -120,7 +152,13 @@
          addFunctionsToObjectsRecursively( blueprints );
 
          // Smoke tests:
+         // ------------
          // console.log( blueprints[0][0].find( 'bird' ) );
+         // console.log( blueprints[0][0].takable_child_names() );
+         // console.log( blueprints[0][0].openable_child_names() );
+         console.log( blueprints[0][0].children() );
+         console.log( blueprints[0][0].children() );
+         console.log( blueprints[0][0].descendants( true ) );
 
          function drawBackground() {
             context.fillStyle = "black";
