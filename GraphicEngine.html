@@ -145,6 +145,18 @@
                      }
                      return retval;
                   };
+                  input.take = function( name ) {
+                     for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        if ( name == input.obj_content.childObjects[i].obj_content.name 
+                             && input.obj_content.childObjects[i].obj_content.attributes.indexOf( 'immobile' ) < 0
+                             && input.obj_content.childObjects[i].obj_content.attributes.indexOf( 'invisible' ) < 0 ) {
+                           retval = input.obj_content.childObjects[i];
+                           input.obj_content.childObjects.splice( i, 1 );
+                           return retval;
+                        }
+                     }
+                     return null;
+                  }
                   break;
             }
          }
@@ -158,6 +170,9 @@
          // console.log( blueprints[0][0].openable_child_names() );
          // console.log( blueprints[0][0].children() );
          // console.log( blueprints[0][0].descendants( true ) );
+
+         // console.log( blueprints[0][0].take( 'bird' ) );
+         // console.log( blueprints[0][0].takable_child_names() );
 
          function drawBackground() {
             context.fillStyle = "black";
