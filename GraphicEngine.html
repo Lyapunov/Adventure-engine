@@ -136,6 +136,9 @@
                      return retval;
                   };
                   input.descendants = function( add_top_children ) {
+                     if ( typeof(add_top_children) == 'undefined' ) {
+                        add_top_children = 1
+                     }
                      var retval = [];
                      if ( add_top_children ) {
                         retval = retval.concat( input.children() );
@@ -163,6 +166,37 @@
                      }
                   }
                   break;
+               case "GamePassage" :  
+                  input.get_ordered_name = function() {
+                     if ( input.obj_content.room_name1 < input.obj_content.room_name2 ) {
+                        return [ input.obj_content.room_name1, input.obj_content.room_name2 ];
+                     } else {
+                        return [ input.obj_content.room_name2, input.obj_content.room_name1 ];
+                     }
+                  }
+                  input.make_visible = function () {
+                     var pos = input.obj_content.attributes.indexOf( 'invisible' );
+                     if ( pos >= 0 ) {
+                        input.obj_content.attributes( 'invisible', 1 );
+                     }
+                  }
+                  input.get_out_passage_from_room = function( roomname, visibility ) {
+                     if ( typeof(visibility) == 'undefined' ) {
+                        visibility = 1
+                     }
+                     if ( visibility
+                          && 0 <= input.obj_content.attributes.indexOf( 'invisible' ) ) {
+                        return null;
+                     }
+                     if ( roomname == input.obj_content.room_name1 ) {
+                        return [ input.obj_content.direction1,  input.obj_content.room_name2 ];
+                     }
+                     if ( roomname == input.obj_content.room_name2 ) {
+                        return [ input.obj_content.direction2,  input.obj_content.room_name1 ];
+                     }
+                     return null;
+                  }
+                  break;
             }
          }
 
@@ -183,6 +217,13 @@
          // console.log( blueprints[0][0].takable_child_names() );
          // blueprints[0][0].put( mybird );
          // console.log( blueprints[0][0].takable_child_names() );
+
+         // GamePassage:
+         // console.log( blueprints[2][0].get_ordered_name() );
+         // console.log( blueprints[2][1].get_ordered_name() );
+         // console.log( blueprints[2][0].get_out_passage_from_room('dark room') );
+         // console.log( blueprints[2][1].get_out_passage_from_room('dark room') );
+         // console.log( blueprints[2][1].get_out_passage_from_room('dark room',0) );
 
          function drawBackground() {
             context.fillStyle = "black";
