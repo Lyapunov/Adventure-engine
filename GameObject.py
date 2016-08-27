@@ -896,4 +896,5 @@ class GamePassage(CommonEquality):
             return [ self.direction1, self.room_name2 ]
          if self.room_name2 == roomname:
             return [ self.direction2, self.room_name1 ]
+         return None
 
