@@ -157,6 +157,11 @@
                      }
                      return null;
                   }
+                  input.put = function( obj ) {
+                     if ( obj != null ) {
+                        input.obj_content.childObjects.push( obj );
+                     }
+                  }
                   break;
             }
          }
@@ -165,13 +170,18 @@
 
          // Smoke tests:
          // ------------
+
+         // GameObject:
          // console.log( blueprints[0][0].find( 'bird' ) );
          // console.log( blueprints[0][0].takable_child_names() );
          // console.log( blueprints[0][0].openable_child_names() );
          // console.log( blueprints[0][0].children() );
          // console.log( blueprints[0][0].descendants( true ) );
 
-         // console.log( blueprints[0][0].take( 'bird' ) );
+         // console.log( blueprints[0][0].takable_child_names() );
+         // var mybird = blueprints[0][0].take( 'bird' );
+         // console.log( blueprints[0][0].takable_child_names() );
+         // blueprints[0][0].put( mybird );
          // console.log( blueprints[0][0].takable_child_names() );
 
          function drawBackground() {
