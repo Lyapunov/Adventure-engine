@@ -136,7 +136,7 @@
                      return retval;
                   };
                   input.descendants = function( add_top_children ) {
-                     if ( typeof(add_top_children) == 'undefined' ) {
+                     if ( typeof(add_top_children) === 'undefined' ) {
                         add_top_children = 1
                      }
                      var retval = [];
@@ -181,7 +181,7 @@
                      }
                   }
                   input.get_out_passage_from_room = function( roomname, visibility ) {
-                     if ( typeof(visibility) == 'undefined' ) {
+                     if ( typeof(visibility) === 'undefined' ) {
                         visibility = 1
                      }
                      if ( visibility
