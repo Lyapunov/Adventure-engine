@@ -250,14 +250,37 @@
                      return input.obj_content.subjectname == subjectname 
                             && input.obj_content.toolname == toolname;
                   };
+                  input.doIt = function( game ) {
+                     for( var i = 0; i < game.passages.length; ++i ) {
+                        if ( game.passages[i].identifier == input.obj_content.identifier ) {
+                           game.passages[i].make_visible();
+                        }
+                     }
+                  };
+                  break;
+               case "GameObjectRevealAction" :
+                  input.subject_to_reveal = function() {
+                     return [ input.obj_content.subjectname ];
+                  };
+                  input.get_actor_names = function() {
+                     if ( input.obj_content.subjectname < input.obj_content.toolname ) {
+                        return [ input.obj_content.subjectname, input.obj_content.toolname ];
+                     }
+                     return [ input.obj_content.toolname, input.obj_content.subjectname ];
+                  };
+                  input.get_passage_identifier = function () {
+                     return input.obj_content.identifier;
+                  };
+                  input.applicable = function( subjectname, toolname ) {
+                     return input.obj_content.subjectname == subjectname 
+                            && input.obj_content.toolname == toolname;
+                  };
                   input.showIt = function( game ) {
                      game.views.remove( input );
-                     pair1   = game.find( input.obj_content.subjectname );
-                     subject = pair1[0];
-                     entity  = pair1[1];
-                     pair2   = game.find( input.obj_content.toolname );
-                     tool    = pair2[0];
-                     entity  = pair2[1];
+                     var pair2   = game.find( input.obj_content.toolname );
+                     var tool    = pair2[0];
+                     var pair1   = game.find( input.obj_content.subjectname );
+                     var subject = pair1[0];
                      if ( tool != null && subject != null && !subject.is_visible() ) {
                         subject.make_visible();
                         return subject;
