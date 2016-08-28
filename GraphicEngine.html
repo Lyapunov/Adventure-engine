@@ -332,7 +332,17 @@
                }
                return null;
             };
+            this.winning = function() {
+               this.won = 1;
+            }
             this.setting_current_room = function( name ) {
+               var retval = this.find_room( name );
+               if ( retval != null ) {
+                  this.room = retval;
+                  if ( name == this.final_room ) {
+                     this.winning();
+                  }
+               }
             };
          }
 
@@ -368,6 +378,10 @@
          // console.log( game.find_in_limbo_and_remove('turbo killer') );
          // console.log( game.find_room('dark room') );
          // console.log( game.find_room('purple room') );
+
+         // console.log( game.current_room() );
+         // game.setting_current_room('bathroom');
+         // console.log( game.current_room() );
 
          function drawBackground() {
             context.fillStyle = "black";
