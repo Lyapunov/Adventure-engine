@@ -308,7 +308,22 @@
             this.descriptions = params[6];
             this.current_room = function () {
                return this.room.obj_content.name;
-            }
+            };
+            this.find_in_limbo_and_remove = function( name ) {
+               var retval = null;
+               var place = 0;
+               for ( var i = 0; i < this.limbo.length; ++i ) {
+                  if ( this.limbo[i].obj_content.name == name ) {
+                     retval = this.limbo[i].obj_content;
+                     place  = i;
+                     break;
+                  }
+               }
+               if ( retval != null ) {
+                  this.limbo.splice( place, 1 );
+               }
+               return retval;
+            };
          }
 
          addFunctionsToObjectsRecursively( blueprints );
@@ -339,6 +354,8 @@
          // console.log( blueprints[2][1].get_out_passage_from_room('dark room',0) );
 
          // console.log( game.current_room() );
+         // console.log( game.find_in_limbo_and_remove('burning candle') );
+         // console.log( game.find_in_limbo_and_remove('turbo killer') );
 
          function drawBackground() {
             context.fillStyle = "black";
