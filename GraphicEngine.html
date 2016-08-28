@@ -324,6 +324,16 @@
                }
                return retval;
             };
+            this.find_room = function( name ) {
+               for ( var i = 0; i < this.rooms.length; ++i ) {
+                  if ( this.rooms[i].obj_content.name == name ) {
+                     return this.rooms[i];
+                  }
+               }
+               return null;
+            };
+            this.setting_current_room = function( name ) {
+            };
          }
 
          addFunctionsToObjectsRecursively( blueprints );
@@ -356,6 +366,8 @@
          // console.log( game.current_room() );
          // console.log( game.find_in_limbo_and_remove('burning candle') );
          // console.log( game.find_in_limbo_and_remove('turbo killer') );
+         // console.log( game.find_room('dark room') );
+         // console.log( game.find_room('purple room') );
 
          function drawBackground() {
             context.fillStyle = "black";
