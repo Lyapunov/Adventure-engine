@@ -197,6 +197,42 @@
                      return null;
                   }
                   break;
+               case "GameObjectUseAction" :  
+                  input.subject_to_reveal = function() {
+                     return [];
+                  }
+                  input.get_actor_names = function() {
+                     if ( input.obj_content.subjectname < input.obj_content.toolname ) {
+                        return [ input.obj_content.subjectname, input.obj_content.toolname ];
+                     }
+                     return [ input.obj_content.toolname, input.obj_content.subjectname ];
+                  }
+                  input.applicable = function( subjectname, toolname ) {
+                     return input.obj_content.subjectname == subjectname 
+                            && input.obj_content.toolname == toolname;
+                  }
+                  input.perform = function( game ) {
+                     game.move_between_entities( input.obj_content.toolname, game.inventory, null );
+                     pair = game.find( input.obj_content.subjectname );
+                     subject = pair[0];
+                     entity  = pair[1];
+                     if ( subject != null ) {
+                        entity.take( subject.obj_content.name );
+                        retval = game.find_in_limbo_and_remove( input.obj_content.resultname );
+                        entity.put( retval );
+                        return retval;
+                     }
+                     return null;
+                  }
+                  input.showIt = function( game ) {
+                     game.views.remove( input );
+                     return input.perform( game );
+                  }
+                  input.doIt = function( game ) {
+                     game.use_actions.remove( input );
+                     return input.perform( game );
+                  }
+                  break;
             }
          }
 
