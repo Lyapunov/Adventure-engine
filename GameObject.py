@@ -691,8 +691,7 @@ class GameObjectUseAction(CommonEquality):
    def applicable( self, subjectname, toolname ):
       return self.subjectname == subjectname and self.toolname == toolname
 
-   def showIt( self, game ):
-      game.views.remove( self )
+   def perform( self, game ):
       game.move_between_entities( self.toolname, game.inventory, None )
       subject, entity = game.find( self.subjectname )
       if not subject is None:
@@ -702,16 +701,13 @@ class GameObjectUseAction(CommonEquality):
          return retval
       return None
 
+   def showIt( self, game ):
+      game.views.remove( self )
+      return self.perform( game );
+
    def doIt( self, game ):
       game.use_actions.remove( self )
-      game.move_between_entities( self.toolname, game.inventory, None )
-      subject, entity = game.find( self.subjectname )
-      if not subject is None:
-         entity.take( subject.name )
-         retval = game.find_in_limbo_and_remove( self.resultname )
-         entity.put( retval )
-         return retval
-      return None
+      return self.perform( game );
 
 class GamePassageRevealAction(CommonEquality):
    def __init__( self, subjectname='', toolname='', identifier='' ):
