@@ -159,12 +159,12 @@
                         }
                      }
                      return null;
-                  }
+                  };
                   input.put = function( obj ) {
                      if ( obj != null ) {
                         input.obj_content.childObjects.push( obj );
                      }
-                  }
+                  };
                   break;
                case "GamePassage" :  
                   input.get_ordered_name = function() {
@@ -173,13 +173,13 @@
                      } else {
                         return [ input.obj_content.room_name2, input.obj_content.room_name1 ];
                      }
-                  }
+                  };
                   input.make_visible = function () {
                      var pos = input.obj_content.attributes.indexOf( 'invisible' );
                      if ( pos >= 0 ) {
                         input.obj_content.attributes( 'invisible', 1 );
                      }
-                  }
+                  };
                   input.get_out_passage_from_room = function( roomname, visibility ) {
                      if ( typeof(visibility) === 'undefined' ) {
                         visibility = 1
@@ -195,22 +195,22 @@
                         return [ input.obj_content.direction2,  input.obj_content.room_name1 ];
                      }
                      return null;
-                  }
+                  };
                   break;
                case "GameObjectUseAction" :  
                   input.subject_to_reveal = function() {
                      return [];
-                  }
+                  };
                   input.get_actor_names = function() {
                      if ( input.obj_content.subjectname < input.obj_content.toolname ) {
                         return [ input.obj_content.subjectname, input.obj_content.toolname ];
                      }
                      return [ input.obj_content.toolname, input.obj_content.subjectname ];
-                  }
+                  };
                   input.applicable = function( subjectname, toolname ) {
                      return input.obj_content.subjectname == subjectname 
                             && input.obj_content.toolname == toolname;
-                  }
+                  };
                   input.perform = function( game ) {
                      game.move_between_entities( input.obj_content.toolname, game.inventory, null );
                      pair = game.find( input.obj_content.subjectname );
@@ -223,15 +223,47 @@
                         return retval;
                      }
                      return null;
-                  }
+                  };
                   input.showIt = function( game ) {
                      game.views.remove( input );
                      return input.perform( game );
-                  }
+                  };
                   input.doIt = function( game ) {
                      game.use_actions.remove( input );
                      return input.perform( game );
-                  }
+                  };
+                  break;
+               case "GamePassageRevealAction" :  
+                  input.subject_to_reveal = function() {
+                     return [ '@#passage#@'];
+                  };
+                  input.get_actor_names = function() {
+                     if ( input.obj_content.subjectname < input.obj_content.toolname ) {
+                        return [ input.obj_content.subjectname, input.obj_content.toolname ];
+                     }
+                     return [ input.obj_content.toolname, input.obj_content.subjectname ];
+                  };
+                  input.get_passage_identifier = function () {
+                     return input.obj_content.identifier;
+                  };
+                  input.applicable = function( subjectname, toolname ) {
+                     return input.obj_content.subjectname == subjectname 
+                            && input.obj_content.toolname == toolname;
+                  };
+                  input.showIt = function( game ) {
+                     game.views.remove( input );
+                     pair1   = game.find( input.obj_content.subjectname );
+                     subject = pair1[0];
+                     entity  = pair1[1];
+                     pair2   = game.find( input.obj_content.toolname );
+                     tool    = pair2[0];
+                     entity  = pair2[1];
+                     if ( tool != null && subject != null && !subject.is_visible() ) {
+                        subject.make_visible();
+                        return subject;
+                     }
+                     return null;
+                  };
                   break;
             }
          }
