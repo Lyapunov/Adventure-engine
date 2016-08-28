@@ -291,7 +291,26 @@
             }
          }
 
+         function GameInternal( params ) {
+            this.rooms = params[0]; 
+            this.limbo = params[1]; 
+            this.room  = null;
+            if ( this.rooms.length > 0 ) {
+               this.room = this.rooms[0];
+            }
+            this.passages     = params[2];
+            this.inventory    = { obj_content : { attributes: [], childObjects: [], name: "inventory"}, obj_name: "GameObject" }
+            addFunctionsToObjectsRecursively( this.inventory );
+            this.use_actions  = params[3];
+            this.views        = params[4];
+            this.won_         = 0;
+            this.final_room   = params[5];
+            this.descriptions = params[6];
+         }
+
          addFunctionsToObjectsRecursively( blueprints );
+
+         var game = new GameInternal( blueprints );
 
          // Smoke tests:
          // ------------
