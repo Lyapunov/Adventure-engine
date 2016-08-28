@@ -682,9 +682,6 @@ class GameObjectUseAction(CommonEquality):
    def subject_to_reveal( self ):
       return []
 
-   def get_result_name( self ):
-      return resultname
-
    def get_actor_names( self ):
       if self.subjectname < self.toolname:
          return [ self.subjectname, self.toolname ]
