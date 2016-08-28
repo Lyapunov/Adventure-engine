@@ -306,6 +306,9 @@
             this.won_         = 0;
             this.final_room   = params[5];
             this.descriptions = params[6];
+            this.current_room = function () {
+               return this.room.obj_content.name;
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
@@ -334,6 +337,8 @@
          // console.log( blueprints[2][0].get_out_passage_from_room('dark room') );
          // console.log( blueprints[2][1].get_out_passage_from_room('dark room') );
          // console.log( blueprints[2][1].get_out_passage_from_room('dark room',0) );
+
+         // console.log( game.current_room() );
 
          function drawBackground() {
             context.fillStyle = "black";
