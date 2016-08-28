@@ -334,7 +334,7 @@
             };
             this.winning = function() {
                this.won = 1;
-            }
+            };
             this.setting_current_room = function( name ) {
                var retval = this.find_room( name );
                if ( retval != null ) {
@@ -344,6 +344,9 @@
                   }
                }
             };
+            this.won = function () {
+               return this.won_;
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
