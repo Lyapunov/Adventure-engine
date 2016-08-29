@@ -368,6 +368,15 @@
                   }
                }
             };
+            this.find_in_entities = function ( name, entities ) {
+               for ( var i = 0; i < entities.length; ++i ) {
+                  var attempt = entities[i].find( name );
+                  if ( attempt != null ) {
+                     return [ attempt, entities[i] ];
+                  }
+               }
+               return [null, null];
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
