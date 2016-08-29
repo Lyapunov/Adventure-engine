@@ -346,7 +346,28 @@
             };
             this.won = function () {
                return this.won_;
-            }
+            };
+            this.move_between_entities = function( name, from_entity, to_entity ) {
+               var subject = from_entity.take( name );
+               if ( subject != null ) {
+                  to_entity.put( name );
+                  return subject;
+               }
+               return null;
+            };
+            this.view_refresh = function () {
+               var sorrounding_objects = [];
+               sorrounding_objects.concat( this.inventory.obj_content.childObjects );
+               sorrounding_objects.concat( this.room.obj_content.childObjects );
+               for ( var i = 0; i < this.views.length; ++i ) {
+                  var action = this.views[i];
+                  var pair1  = this.find( action.obj_content.subjectname );
+                  var pair2  = this.find( action.obj_content.toolname );
+                  if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0], pair2[0] ) ) {
+                     action.showIt( this );
+                  }
+               }
+            };
          }
 
          addFunctionsToObjectsRecursively( blueprints );
