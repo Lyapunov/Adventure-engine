@@ -385,6 +385,19 @@
                }
                return null;
             }
+            this.open = function ( name, other ) {
+               if ( other != null ) {
+                  return 0;
+               }
+               var pair = this.find( name );
+               if ( pair[0] == null ) {
+                  return 0;
+               }
+               while ( pair[0].children().lenght > 0 ) {
+                  pair[1].put(pair[0].take( pair[0].children()[0].obj_content.name ) );
+               }
+               return 1;
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
