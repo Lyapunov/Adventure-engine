@@ -398,6 +398,36 @@
                }
                return 1;
             }
+            this.use_internal = function( subjectname, toolname ) {
+               if ( subjectname == '' ) {
+                  return null;
+               }
+               var pair1 = this.find( subjectname );
+               if ( pair1[0] == null ) {
+                  return null;
+               }
+               if ( toolname == '' ) {
+                  for ( var i = 0; i < this.use_actions.length; ++i ) {
+                     var action = this.use_actions[i];
+                     if ( action.applicable( pair1[0].obj_content.name, '' ) ) {
+                        return action.doIt( this );
+                     }
+                  }
+                  return null;
+               } else {
+                  var pair2 = this.find( toolname );
+                  if ( pair2[0] == null ) {
+                     return null;
+                  }
+                  for ( var i = 0; i < this.use_actions.length; ++i ) {
+                     var action = this.use_actions[i];
+                     if ( action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
+                        return action.doIt( this );
+                     }
+                  }
+                  return null;
+               }
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
