@@ -95,6 +95,9 @@
             // Adding functions to object
             switch ( input.obj_name ) {
                case "GameObject" :  
+                  input.get_hash_name = function() {
+                     return "go#" + input.obj_content.name;
+                  }
                   input.is_visible = function() { 
                      return input.obj_content.attributes.indexOf( "invisible" ) == -1;
                   };
@@ -439,7 +442,19 @@
                   return 0;
                }
                return input.move_between_entities( name, this.inventory, this.room );
-            }
+            };
+            this.has = function( name ) {
+               var subject = this.inventory.find( name );
+               return subject;
+            };
+            this.look = function() {
+               var desc = this.descriptions[this.room.get_hash_name()];
+               if ( desc == undefined ) {
+                  return '';
+               } else {
+                  return desc;
+               }
+            };
          }
 
          addFunctionsToObjectsRecursively( blueprints );
