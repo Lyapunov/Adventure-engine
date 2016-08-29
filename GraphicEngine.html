@@ -377,6 +377,14 @@
                }
                return [null, null];
             }
+            this.find_room = function ( name ) {
+               for ( var i = 0; i < this.rooms.length; ++i ) {
+                  if ( this.rooms[i].obj_content.name == name ) {
+                     return this.rooms[i];
+                  }
+               }
+               return null;
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
