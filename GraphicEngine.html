@@ -457,6 +457,16 @@
             };
             this.find = function( name ) {
                return this.find_in_entities( name, [ this.inventory, this.room ] );
+            };
+            this.use  = function( subjectname, toolname ) {
+               if ( typeof(toolname) === 'undefined' ) {
+                  toolname = '';
+               }
+               var retval = this.use_internal( subjectname, toolname );
+               if ( retval != null ) {
+                  return retval;
+               }
+               return this.use_internal( toolname, subjectname );
             }
          }
 
