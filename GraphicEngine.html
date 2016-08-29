@@ -455,6 +455,9 @@
                   return desc;
                }
             };
+            this.find = function( name ) {
+               return this.find_in_entities( name, [ this.inventory, this.room ] );
+            }
          }
 
          addFunctionsToObjectsRecursively( blueprints );
