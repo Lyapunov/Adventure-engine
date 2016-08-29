@@ -376,7 +376,7 @@
                   }
                }
                return [null, null];
-            }
+            };
             this.find_room = function ( name ) {
                for ( var i = 0; i < this.rooms.length; ++i ) {
                   if ( this.rooms[i].obj_content.name == name ) {
@@ -384,7 +384,7 @@
                   }
                }
                return null;
-            }
+            };
             this.open = function ( name, other ) {
                if ( other != null ) {
                   return 0;
@@ -397,7 +397,7 @@
                   pair[1].put(pair[0].take( pair[0].children()[0].obj_content.name ) );
                }
                return 1;
-            }
+            };
             this.use_internal = function( subjectname, toolname ) {
                if ( subjectname == '' ) {
                   return null;
@@ -427,6 +427,18 @@
                   }
                   return null;
                }
+            };
+            this.take = function( name, other ) {
+               if ( other != null ) {
+                  return 0;
+               }
+               return input.move_between_entities( name, this.room, this.inventory );
+            };
+            this.drop = function( name, other ) {
+               if ( other != null ) {
+                  return 0;
+               }
+               return input.move_between_entities( name, this.inventory, this.room );
             }
          }
 
