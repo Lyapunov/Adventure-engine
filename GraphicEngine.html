@@ -519,7 +519,33 @@
                }
                return retval;
             };
-         }
+         };
+
+         function Game( params ) {
+            this.game_internal = new GameInternal( params );
+            this.commands = { 'use'  : this.game_internal.use,
+                              'drop' : this.game_internal.drop,
+                              'take' : this.game_internal.take,
+                              'go'   : this.game_internal.go,
+                              'open' : this.game_internal.open };
+            this.current_room = function () { return this.game_internal.current_room(); };
+            this.look         = function () { return this.game_internal.look(); };
+            this.directions   = function () { return this.game_internal.directions(); };
+            this.has          = function ( name ) { return this.has( name ); };
+            this.stuffs       = function () { return this.stuffs(); };
+            this.won          = function () { return this.won(); };
+            this.do_it        = function ( command, arg1, arg2 ) {
+               if ( typeof(arg2) === 'undefined' ) {
+                  arg2 = '';
+               }
+               if ( command in this.commands ) {
+                  var retval = this.commands[ command ]( arg1, arg2 );
+                  input.game_internal.view_refresh()
+                  return retval;
+               }
+               return null;
+            };
+         };
 
          addFunctionsToObjectsRecursively( blueprints );
 
