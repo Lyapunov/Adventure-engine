@@ -467,7 +467,27 @@
                   return retval;
                }
                return this.use_internal( toolname, subjectname );
-            }
+            };
+            this.directionsInternal = function( roomname, visibility ) {
+               if ( typeof(visibility) === 'undefined' ) {
+                  visibility = 1;
+               }
+               var retval = [];
+               for ( var i = 0; i < this.passages.length; ++i ) {
+                  var passage = this.passages[i];
+                  var tmp = passage.get_out_passage_from_room(roomname, visibility)
+                  if ( tmp != null ) {
+                     retval.push( tmp );
+                  }
+               }
+               return retval;
+            };
+            // find_path_between_rooms - not implementing
+            // accessible_room_names   - not implementing
+            // can_anything_to_do      - not implementing
+            // get_subject_names_and_tool_names - not implementing
+            // applicable_uses         - not implementing
+            // applicable_views        - not implementing
          }
 
          addFunctionsToObjectsRecursively( blueprints );
