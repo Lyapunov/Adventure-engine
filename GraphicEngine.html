@@ -488,6 +488,37 @@
             // get_subject_names_and_tool_names - not implementing
             // applicable_uses         - not implementing
             // applicable_views        - not implementing
+            this.directions = function() {
+               return this.directionsInternal( this.room.obj_content.name );
+            };
+            this.go = function( direction, other ) {
+               if ( other != "" ) {
+                  return null;
+               }
+               var topology = this.directions();
+               for ( var i = 0; i < topology.length; ++i ) {
+                  var pair = topology[i];
+                  if ( pair[0] == direction ) {
+                     this.setting_current_room( pair[1] );
+                     return this.room;
+                  }
+               }
+               return null;
+            };
+            this.stuffs = function() {
+               var retval = [];
+               var chlds = this.room.children();
+               for ( var i = 0; i < chlds.length; ++i ) {
+                  var subject = chlds[i];
+                  if ( subject.obj_content.attributes.indexOf('invisible') < 0 ) {
+                     var appearance = this.room.find( subject.obj_content.name );
+                     if ( appearance != null ) {
+                        retval.push( appearance.obj_content.name );
+                     }
+                  }
+               }
+               return retval;
+            };
          }
 
          addFunctionsToObjectsRecursively( blueprints );
@@ -526,6 +557,8 @@
          // console.log( game.current_room() );
          // game.setting_current_room('bathroom');
          // console.log( game.current_room() );
+         // console.log( game.stuffs() );
+         console.log( game.directions() );
 
          function drawBackground() {
             context.fillStyle = "black";
