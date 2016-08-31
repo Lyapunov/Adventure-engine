@@ -1,6 +1,7 @@
 import copy
 import sys
 import json
+import re
 
 # http://stackoverflow.com/questions/390250/elegant-ways-to-support-equivalence-equality-in-python-classes
 class CommonEquality(object):
@@ -304,6 +305,14 @@ class GameSyntaxChecker:
             return False
       return True
 
+   def check_stuff_names_are_proper( self, game ):
+      # print self.get_all_stuff_names( game, 1 )
+      regex = re.compile('^[a-z]+$')
+      for stuff in self.get_all_stuff_names( game, 1 ):
+         if not regex.match( stuff ):
+            return False
+      return True
+
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
          return "must have at least one room"
@@ -355,6 +364,9 @@ class GameSyntaxChecker:
 
       if not self.check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( game ):
          return 'there must be exactly one action for each invisible object which reveals it'
+
+      if not self.check_stuff_names_are_proper( game ):
+         return 'game object names can contain only lower case alphabets and _.'
 
       return ''
 
