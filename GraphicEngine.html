@@ -74,6 +74,10 @@
          var blueprints = JSON.parse( document.getElementById('blueprints').innerText );
          // console.log('blueprints: ', blueprints);
 
+         var game_object_pictures = {};
+         var game_object_x = {};
+         var game_object_y = {};
+
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
             if ( input instanceof Array ) {
@@ -89,7 +93,11 @@
                addFunctionsToObjectsRecursively( input.obj_content.childObjects );
             }
             if ( null != input.obj_name ) {
-               console.log( "--->" + input.obj_name );
+               if ( input.obj_name == "GameObject" ) {
+                  game_object_pictures[ "go#" + input.obj_content.name ] = input.obj_content.name + ".png";
+                  game_object_x[ "go#" + input.obj_content.name ] = 0;
+                  game_object_y[ "go#" + input.obj_content.name ] = 0;
+               }
             }
 
             // Adding functions to object
@@ -548,6 +556,8 @@
          };
 
          addFunctionsToObjectsRecursively( blueprints );
+
+         console.log( game_object_pictures );
 
          var game = new GameInternal( blueprints );
 
