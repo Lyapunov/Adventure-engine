@@ -6,6 +6,7 @@ import sys
 
 from GameObject import Game
 from GameObject import GameDecoder
+from GameObject import GameSyntaxChecker
 
 def main(argv):
    if len(argv) != 2:
@@ -24,6 +25,10 @@ def main(argv):
       return
    except Exception as e:
       print "Could not parse game file."
+      return
+   result = GameSyntaxChecker().check( game );
+   if result != "":
+      print "Error: ", result;
       return
 
    looked = {}
