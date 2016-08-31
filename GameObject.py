@@ -306,8 +306,7 @@ class GameSyntaxChecker:
       return True
 
    def check_stuff_names_are_proper( self, game ):
-      # print self.get_all_stuff_names( game, 1 )
-      regex = re.compile('^[a-z]+$')
+      regex = re.compile('[0-9,a-z,A-Z,_]+$')
       for stuff in self.get_all_stuff_names( game, 1 ):
          if not regex.match( stuff ):
             return False

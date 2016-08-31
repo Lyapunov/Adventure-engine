@@ -33,7 +33,7 @@ class GameUnitTests(unittest.TestCase):
                                                {"obj_content": {"attributes": [], "childObjects": [], "name": "bird"}, "obj_name": "GameObject"},
                                                {"obj_content": {"attributes": [], "childObjects": [], "name": "stone"}, "obj_name": "GameObject"},
                                                {"obj_content": {"attributes": ["immobile", "invisible"], "childObjects": [], "name": "picture"}, "obj_name": "GameObject"}],
-                              "name": "dark room"},
+                              "name": "dark_room"},
               "obj_name": "GameObject"},
              {"obj_content": {"attributes": [],
                               "childObjects": [{"obj_content": {"attributes": ["immobile"],
@@ -44,52 +44,52 @@ class GameUnitTests(unittest.TestCase):
               "obj_name": "GameObject"},
              {"obj_content": {"attributes": [],
                               "childObjects": [],
-                              "name": "secret room"},
+                              "name": "secret_room"},
               "obj_name": "GameObject"}],
             [{"obj_content": {"attributes": [],
                               "childObjects": [],
-                              "name": "burning candle"},
+                              "name": "burning_candle"},
               "obj_name": "GameObject"},
              {"obj_content": {"attributes": [],
                               "childObjects": [],
-                              "name": "injured bird"},
+                              "name": "injured_bird"},
               "obj_name": "GameObject"}],
-            [{"obj_content": {"room_name2": "bathroom", "room_name1": "dark room", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},
+            [{"obj_content": {"room_name2": "bathroom", "room_name1": "dark_room", "direction2": "S", "attributes": [], "direction1": "N", "identifier": 11},
               "obj_name": "GamePassage"},
-             {"obj_content": {"room_name2": "secret room", "room_name1": "dark room", "direction2": "E", "attributes": ["invisible"], "direction1": "W", "identifier": 12},
+             {"obj_content": {"room_name2": "secret_room", "room_name1": "dark_room", "direction2": "E", "attributes": ["invisible"], "direction1": "W", "identifier": 12},
               "obj_name": "GamePassage"}],
-            [{"obj_content": {"subjectname": "candle", "toolname": "match", "resultname": "burning candle"},
+            [{"obj_content": {"subjectname": "candle", "toolname": "match", "resultname": "burning_candle"},
               "obj_name": "GameObjectUseAction"},
-             {"obj_content": {"subjectname": "bird", "toolname": "stone", "resultname": "injured bird"},
+             {"obj_content": {"subjectname": "bird", "toolname": "stone", "resultname": "injured_bird"},
               "obj_name": "GameObjectUseAction"},
              {"obj_content": {"subjectname": "picture", "toolname": "", "identifier": 12},
               "obj_name": "GamePassageRevealAction"}],
-            [{"obj_content": {"subjectname": "picture", "toolname": "burning candle"},
+            [{"obj_content": {"subjectname": "picture", "toolname": "burning_candle"},
               "obj_name": "GameObjectRevealAction"}],
-            "secret room",
-            {"go#dark room": "dark room", "go#bathroom": "bathroom"}
+            "secret_room",
+            {"go#dark_room": "dark_room", "go#bathroom": "bathroom"}
             ]
       """
 
-      self.game1 = Game( [ [ GameObject( 'dark room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
+      self.game1 = Game( [ [ GameObject( 'dark_room', [], [ GameObject( 'table', [GameObjectAttribute.IMMOBILE], [] ), 
                                                             GameObject( 'candle' ),
                                                             GameObject( 'match' ),
                                                             GameObject( 'bird' ),
                                                             GameObject( 'stone' ),
                                                             GameObject( 'picture', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ) ] ),
                              GameObject( 'bathroom',  [], [ GameObject( 'cabinet', [GameObjectAttribute.IMMOBILE], [ GameObject( 'knife' ) ] ) ] ),
-                             GameObject( 'secret room' ) ],
-                           [ GameObject( 'burning candle' ),  GameObject( 'injured bird' ) ],
-                           [ GamePassage( 11, 'dark room', 'bathroom'   , 'N', 'S' ),
-                             GamePassage( 12, 'dark room', 'secret room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ) ],
-                           [ GameObjectUseAction( 'candle', 'match', 'burning candle' ),
-                             GameObjectUseAction( 'bird',   'stone', 'injured bird' ),
+                             GameObject( 'secret_room' ) ],
+                           [ GameObject( 'burning_candle' ),  GameObject( 'injured_bird' ) ],
+                           [ GamePassage( 11, 'dark_room', 'bathroom'   , 'N', 'S' ),
+                             GamePassage( 12, 'dark_room', 'secret_room', 'W', 'E',  [GameObjectAttribute.INVISIBLE] ) ],
+                           [ GameObjectUseAction( 'candle', 'match', 'burning_candle' ),
+                             GameObjectUseAction( 'bird',   'stone', 'injured_bird' ),
                              GamePassageRevealAction( 'picture', '', 12 ) ],
-                           [ GameObjectRevealAction(  'picture', 'burning candle' ) ],
-                           'secret room',
-                           { 'go#dark room' : 'dark room', 'go#bathroom' : 'bathroom' } ] );
-      assert ( self.game1.look() == 'dark room' )
-      assert ( self.game1.has( 'burning candle' ) is None )
+                           [ GameObjectRevealAction(  'picture', 'burning_candle' ) ],
+                           'secret_room',
+                           { 'go#dark_room' : 'dark_room', 'go#bathroom' : 'bathroom' } ] );
+      assert ( self.game1.look() == 'dark_room' )
+      assert ( self.game1.has( 'burning_candle' ) is None )
       assert ( self.game1.has( 'candle' ) is None )
       assert ( self.game1.has( 'match' )  is None )
       assert ( 'candle' in self.game1.stuffs() )
@@ -111,11 +111,11 @@ class GameUnitTests(unittest.TestCase):
 
    def test_syntax_checker_wrong_game_3(self):
       # starting in the ending room
-      game_internal = Game( [ [ GameObject( 'room1', [], []) ], [], [], [], [], 'final room', {} ] )
+      game_internal = Game( [ [ GameObject( 'room1', [], []) ], [], [], [], [], 'final_room', {} ] )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room does not exist' )
 
    def test_syntax_checker_wrong_game_4(self):
-      game_internal = Game( [ [ GameObject( 'starting room' ), GameObject( 'final room' ) ], [], [], [], [], 'final room', {} ] )
+      game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ], [], [], [], [], 'final_room', {} ] )
       assert ( GameSyntaxChecker().check( game_internal )  == 'final room is not reachable' )
 
    def test_syntax_checker_wrong_game_5(self):
@@ -227,25 +227,25 @@ class GameUnitTests(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game16(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
-                                GameObject( 'ending room' ) ],
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( '', '', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found an action without actors' )
 
    def test_syntax_checker_wrong_game17(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
-                                GameObject( 'ending room' ) ],
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'door', 11 ) ],
                               [],
-                              'ending room', 
+                              'ending_room', 
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'found invalid action with the same actor twice' )
@@ -309,80 +309,80 @@ class GameUnitTests(unittest.TestCase):
       assert ( verdict  == 'found two objects with the same name' )
 
    def test_syntax_checker_wrong_game22(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'box',  [GameObjectAttribute.IMMOBILE], 
                                                                       [GameObject( 'key', [GameObjectAttribute.IMMOBILE] ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'not top level stuffs cannot have attributes' )
 
    def test_syntax_checker_wrong_game23(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'keypart1' ),
                                                                    GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'keypart2' ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [ GameObject( 'key', [GameObjectAttribute.INVISIBLE] ) ],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ),
                                 GameObjectUseAction( 'keypart1', 'keypart2', 'key' ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'not top level stuffs cannot have attributes' )
 
    def test_syntax_checker_wrong_game24(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'key', [GameObjectAttribute.INVISIBLE] ) ] ),
-                                GameObject( 'middle room'  , [], [ GameObject( 'burning candle' ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'key', [GameObjectAttribute.INVISIBLE] ) ] ),
+                                GameObject( 'middle_room'  , [], [ GameObject( 'burning_candle' ),
                                                                    GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
-                                GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
+                              [ GamePassage( 11, 'middle_room',   'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
+                                GamePassage( 12, 'starting_room', 'middle_room' , 'N', 'S' ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
-                              [ GameObjectRevealAction( 'burning candle', 'key') ],
-                              'ending room',
+                              [ GameObjectRevealAction( 'burning_candle', 'key') ],
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
 
    def test_syntax_checker_wrong_game25(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'key' , [GameObjectAttribute.IMMOBILE] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == "at least one of the action's actors must be mobile" )
 
    def test_syntax_checker_wrong_game26(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ),
                                                                    GameObject( 'key' ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'there must be exactly one action for each invisible object which reveals it' )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game
-      game_internal = Game( [ [ GameObject( 'starting room' ), GameObject( 'final room' ) ],
+      game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'final room', 'N', 'S' ) ], [], [], 'final room', {} ] )
+                              [ GamePassage( 11, 'starting_room', 'final_room', 'N', 'S' ) ], [], [], 'final_room', {} ] )
       assert ( GameSyntaxChecker().check( game_internal )  == '' )
       assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ] ] )
 
@@ -407,41 +407,41 @@ class GameUnitTests(unittest.TestCase):
       assert ( GameSolver().solve( game_internal )  == [ [ 'go', 'N' ], [ 'go', 'E' ], [ 'go', 'S' ], [ 'go', 'E' ], [ 'go', 'E' ] ] )
 
    def test_syntax_checker_good_game3(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
-                                GameObject( 'ending room' ) ],
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', '', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       assert ( GameSolver().solve( game_internal ) == [['use', '', 'door'], ['go', 'N']] )
 
    def test_syntax_checker_good_game4(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'key' ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       assert ( GameSolver().solve( game_internal ) == [['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game5(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
@@ -449,16 +449,16 @@ class GameUnitTests(unittest.TestCase):
       assert ( solution == [['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game6(self):
-      game_internal = Game( [ [ GameObject( 'starting room' ),
-                                GameObject( 'middle room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room' ),
+                                GameObject( 'middle_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                  GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'key' ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
-                                GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
+                              [ GamePassage( 11, 'middle_room',   'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
+                                GamePassage( 12, 'starting_room', 'middle_room' , 'N', 'S' ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
@@ -466,33 +466,33 @@ class GameUnitTests(unittest.TestCase):
       assert ( solution == [['go', 'N'],['open', 'box'], ['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game7(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'key',  [GameObjectAttribute.INVISIBLE] ) ] ),
-                                GameObject( 'middle room'  , [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
-                                                                   GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'burning candle' ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'key',  [GameObjectAttribute.INVISIBLE] ) ] ),
+                                GameObject( 'middle_room'  , [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+                                                                   GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'burning_candle' ) ] ) ] ),
+                                GameObject( 'ending_room' ) ],
                               [],
-                              [ GamePassage( 11, 'middle room',   'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
-                                GamePassage( 12, 'starting room', 'middle room' , 'N', 'S' ) ],
+                              [ GamePassage( 11, 'middle_room',   'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ),
+                                GamePassage( 12, 'starting_room', 'middle_room' , 'N', 'S' ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ) ],
-                              [ GameObjectRevealAction(  'key',  'burning candle') ],
-                              'ending room',
+                              [ GameObjectRevealAction(  'key',  'burning_candle') ],
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
-      assert ( solution == [['go', 'N'], ['open', 'box'], ['take', 'burning candle'], ['go', 'S'], ['take', 'key'], ['go', 'N'], ['use', 'door', 'key'], ['go', 'N']] )
+      assert ( solution == [['go', 'N'], ['open', 'box'], ['take', 'burning_candle'], ['go', 'S'], ['take', 'key'], ['go', 'N'], ['use', 'door', 'key'], ['go', 'N']] )
 
    def test_syntax_checker_good_game8(self):
-      game_internal = Game( [ [ GameObject( 'starting room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'keypart1' ),
                                                                    GameObject( 'box',  [GameObjectAttribute.IMMOBILE], [GameObject( 'keypart2' ) ] ) ] ),
-                                GameObject( 'ending room' ) ],
+                                GameObject( 'ending_room' ) ],
                               [ GameObject( 'key' ) ],
-                              [ GamePassage( 11, 'starting room', 'ending room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
                               [ GamePassageRevealAction( 'door', 'key', 11 ),
                                 GameObjectUseAction( 'keypart1', 'keypart2', 'key' ) ],
                               [],
-                              'ending room',
+                              'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == '' )
@@ -525,7 +525,7 @@ class GameUnitTests(unittest.TestCase):
       assert ( not object1 is None )
       assert ( not 'bird' in self.game1.stuffs() )
       assert ( self.game1.has( 'stone' ) is None )
-      assert ( 'injured bird' in self.game1.stuffs() )
+      assert ( 'injured_bird' in self.game1.stuffs() )
 
       object2 = self.game1.do_it( 'use', 'stone', 'bird' )
       assert ( object2 is None )
@@ -534,19 +534,19 @@ class GameUnitTests(unittest.TestCase):
       self.game1.do_it( 'take', 'stone' )
       self.game1.do_it( 'take', 'bird' )
       object1 = self.game1.do_it( 'use', 'stone', 'bird' )
-      assert ( not self.game1.has( 'injured bird' ) is None )
+      assert ( not self.game1.has( 'injured_bird' ) is None )
 
    def test_action_hit_the_bird_with_the_stone_but_use_params_are_reversed(self):
       self.game1.do_it( 'take', 'stone' )
       self.game1.do_it( 'use',  'bird', 'stone' )
-      assert ( 'injured bird' in self.game1.stuffs() )
+      assert ( 'injured_bird' in self.game1.stuffs() )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_without_taking_it_first(self):
       self.game1.do_it( 'take', 'match' )
       self.game1.do_it( 'use',  'candle', 'match' )
 
       assert( not 'candle' in self.game1.stuffs() )
-      assert( 'burning candle' in self.game1.stuffs() )
+      assert( 'burning_candle' in self.game1.stuffs() )
       assert( 'picture' in self.game1.stuffs() )
 
    def test_room_goes_light_from_dark_if_we_burn_the_candle_with_taking_it_first(self):
@@ -554,16 +554,16 @@ class GameUnitTests(unittest.TestCase):
       self.game1.do_it( 'take', 'match' )
       self.game1.do_it( 'use',  'candle', 'match' )
 
-      assert ( not self.game1.has( 'burning candle' ) is None )
+      assert ( not self.game1.has( 'burning_candle' ) is None )
       assert( 'picture' in self.game1.stuffs() )
 
    def test_moving_between_rooms(self):
       self.game1.do_it( 'go', 'N')
       assert( self.game1.look() == 'bathroom' )
-      assert ( self.game1.directions() == [['S', 'dark room']] )
+      assert ( self.game1.directions() == [['S', 'dark_room']] )
 
       self.game1.do_it( 'go', 'S')
-      assert( self.game1.look() == 'dark room' )
+      assert( self.game1.look() == 'dark_room' )
 
    def test_opening_objects(self):
       self.game1.do_it( 'go', 'N')
@@ -576,17 +576,17 @@ class GameUnitTests(unittest.TestCase):
       self.game1.do_it( 'go', 'N')
       self.game1.do_it( 'drop', 'candle')
       self.game1.do_it( 'go', 'S')
-      assert( self.game1.look() == 'dark room' )
+      assert( self.game1.look() == 'dark_room' )
       assert( not 'candle' in self.game1.stuffs() )
 
    def test_recognizing_a_new_object_through_a_view_and_it_becomes_permanent(self):
       self.game1.do_it( 'take',  'match' )
       object1 = self.game1.do_it( 'use', 'candle', 'match' )
-      self.game1.do_it( 'take', 'burning candle')
+      self.game1.do_it( 'take', 'burning_candle')
       self.game1.do_it( 'go', 'N')
-      self.game1.do_it( 'drop', 'burning candle')
+      self.game1.do_it( 'drop', 'burning_candle')
       self.game1.do_it( 'go', 'S')
-      assert( self.game1.look() == 'dark room' )
+      assert( self.game1.look() == 'dark_room' )
       assert( 'picture' in self.game1.stuffs() )
 
    def test_finding_a_new_passage(self):
@@ -594,7 +594,7 @@ class GameUnitTests(unittest.TestCase):
       assert( 'picture' in self.game1.stuffs() )
 
       self.game1.do_it( 'use','picture')
-      assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret room']] )
+      assert ( self.game1.directions() == [['N', 'bathroom'], ['W', 'secret_room']] )
 
    def test_winning_the_game(self):
       self.test_finding_a_new_passage()     
