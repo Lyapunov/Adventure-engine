@@ -94,9 +94,11 @@
             }
             if ( null != input.obj_name ) {
                if ( input.obj_name == "GameObject" ) {
-                  game_object_pictures[ "go#" + input.obj_content.name ] = input.obj_content.name + ".png";
-                  game_object_x[ "go#" + input.obj_content.name ] = 0;
-                  game_object_y[ "go#" + input.obj_content.name ] = 0;
+                  if ( input.obj_content.name != "inventory" ) {
+                     game_object_pictures[ "go#" + input.obj_content.name ] = input.obj_content.name + ".png";
+                     game_object_x[ "go#" + input.obj_content.name ] = 0;
+                     game_object_y[ "go#" + input.obj_content.name ] = 0;
+                  }
                }
             }
 
