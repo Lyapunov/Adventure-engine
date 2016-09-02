@@ -75,8 +75,7 @@
          // console.log('blueprints: ', blueprints);
 
          var game_object_pictures = {};
-         var game_object_x = {};
-         var game_object_y = {};
+         var game_object_xy = {};
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
@@ -96,8 +95,7 @@
                if ( input.obj_name == "GameObject" ) {
                   if ( input.obj_content.name != "inventory" ) {
                      game_object_pictures[ "go#" + input.obj_content.name ] = input.obj_content.name + ".png";
-                     game_object_x[ "go#" + input.obj_content.name ] = 0;
-                     game_object_y[ "go#" + input.obj_content.name ] = 0;
+                     game_object_xy[ "go#" + input.obj_content.name ] = [0, 0];
                   }
                }
             }
