@@ -118,7 +118,6 @@
                   };
                   input.find = function( name ) {
                      for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
-                        console.log( input );
                         if ( input.obj_content.childObjects[i].obj_content.name == name ) {
                            return input.obj_content.childObjects[i];
                         }
@@ -361,7 +360,7 @@
                var subject = from_entity.take( name );
                if ( subject != null ) {
                   if ( to_entity != null ) {
-                     to_entity.put( name );
+                     to_entity.put( subject );
                   }
                   return subject;
                }
@@ -444,7 +443,6 @@
                if ( other != '' ) {
                   return 0;
                }
-               console.log( self.current_room() );
                return self.move_between_entities( name, self.room, self.inventory );
             };
             this.drop = function( name, other ) {
