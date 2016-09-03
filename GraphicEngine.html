@@ -118,6 +118,7 @@
                   };
                   input.find = function( name ) {
                      for ( var i = 0; i < input.obj_content.childObjects.length; ++i ) {
+                        console.log( input );
                         if ( input.obj_content.childObjects[i].obj_content.name == name ) {
                            return input.obj_content.childObjects[i];
                         }
@@ -303,6 +304,7 @@
          }
 
          function GameInternal( params ) {
+            var self = this;
             this.rooms        = params[0]; 
             this.limbo        = params[1]; 
             this.room         = this.rooms[0];
@@ -315,40 +317,40 @@
             this.final_room   = params[5];
             this.descriptions = params[6];
             this.current_room = function () {
-               return this.room.obj_content.name;
+               return self.room.obj_content.name;
             };
             this.find_in_limbo_and_remove = function( name ) {
                var retval = null;
                var place = 0;
-               for ( var i = 0; i < this.limbo.length; ++i ) {
-                  if ( this.limbo[i].obj_content.name == name ) {
-                     retval = this.limbo[i].obj_content;
+               for ( var i = 0; i < self.limbo.length; ++i ) {
+                  if ( self.limbo[i].obj_content.name == name ) {
+                     retval = self.limbo[i].obj_content;
                      place  = i;
                      break;
                   }
                }
                if ( retval != null ) {
-                  this.limbo.splice( place, 1 );
+                  self.limbo.splice( place, 1 );
                }
                return retval;
             };
             this.find_room = function( name ) {
-               for ( var i = 0; i < this.rooms.length; ++i ) {
-                  if ( this.rooms[i].obj_content.name == name ) {
-                     return this.rooms[i];
+               for ( var i = 0; i < self.rooms.length; ++i ) {
+                  if ( self.rooms[i].obj_content.name == name ) {
+                     return self.rooms[i];
                   }
                }
                return null;
             };
             this.winning = function() {
-               this.won = 1;
+               self.won = 1;
             };
             this.setting_current_room = function( name ) {
-               var retval = this.find_room( name );
+               var retval = self.find_room( name );
                if ( retval != null ) {
-                  this.room = retval;
-                  if ( name == this.final_room ) {
-                     this.winning();
+                  self.room = retval;
+                  if ( name == self.final_room ) {
+                     self.winning();
                   }
                }
             };
@@ -367,14 +369,14 @@
             };
             this.view_refresh = function () {
                var sorrounding_objects = [];
-               sorrounding_objects.concat( this.inventory.obj_content.childObjects );
-               sorrounding_objects.concat( this.room.obj_content.childObjects );
-               for ( var i = 0; i < this.views.length; ++i ) {
-                  var action = this.views[i];
-                  var pair1  = this.find( action.obj_content.subjectname );
-                  var pair2  = this.find( action.obj_content.toolname );
+               sorrounding_objects.concat( self.inventory.obj_content.childObjects );
+               sorrounding_objects.concat( self.room.obj_content.childObjects );
+               for ( var i = 0; i < self.views.length; ++i ) {
+                  var action = self.views[i];
+                  var pair1  = self.find( action.obj_content.subjectname );
+                  var pair2  = self.find( action.obj_content.toolname );
                   if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0], pair2[0] ) ) {
-                     action.showIt( this );
+                     action.showIt( self );
                   }
                }
             };
@@ -388,9 +390,9 @@
                return [null, null];
             };
             this.find_room = function ( name ) {
-               for ( var i = 0; i < this.rooms.length; ++i ) {
-                  if ( this.rooms[i].obj_content.name == name ) {
-                     return this.rooms[i];
+               for ( var i = 0; i < self.rooms.length; ++i ) {
+                  if ( self.rooms[i].obj_content.name == name ) {
+                     return self.rooms[i];
                   }
                }
                return null;
@@ -399,7 +401,7 @@
                if ( other != '' ) {
                   return 0;
                }
-               var pair = this.find( name );
+               var pair = self.find( name );
                if ( pair[0] == null ) {
                   return 0;
                }
@@ -412,27 +414,27 @@
                if ( subjectname == '' ) {
                   return null;
                }
-               var pair1 = this.find( subjectname );
+               var pair1 = self.find( subjectname );
                if ( pair1[0] == null ) {
                   return null;
                }
                if ( toolname == '' ) {
-                  for ( var i = 0; i < this.use_actions.length; ++i ) {
-                     var action = this.use_actions[i];
+                  for ( var i = 0; i < self.use_actions.length; ++i ) {
+                     var action = self.use_actions[i];
                      if ( action.applicable( pair1[0].obj_content.name, '' ) ) {
-                        return action.doIt( this );
+                        return action.doIt( self );
                      }
                   }
                   return null;
                } else {
-                  var pair2 = this.find( toolname );
+                  var pair2 = self.find( toolname );
                   if ( pair2[0] == null ) {
                      return null;
                   }
-                  for ( var i = 0; i < this.use_actions.length; ++i ) {
-                     var action = this.use_actions[i];
+                  for ( var i = 0; i < self.use_actions.length; ++i ) {
+                     var action = self.use_actions[i];
                      if ( action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
-                        return action.doIt( this );
+                        return action.doIt( self );
                      }
                   }
                   return null;
@@ -442,21 +444,21 @@
                if ( other != '' ) {
                   return 0;
                }
-               console.log( this.current_room() );
-               return this.move_between_entities( name, this.room, this.inventory );
+               console.log( self.current_room() );
+               return self.move_between_entities( name, self.room, self.inventory );
             };
             this.drop = function( name, other ) {
                if ( other != '' ) {
                   return 0;
                }
-               return this.move_between_entities( name, this.inventory, this.room );
+               return self.move_between_entities( name, self.inventory, self.room );
             };
             this.has = function( name ) {
-               var subject = this.inventory.find( name );
+               var subject = self.inventory.find( name );
                return subject;
             };
             this.look = function() {
-               var desc = this.descriptions[this.room.get_hash_name()];
+               var desc = self.descriptions[self.room.get_hash_name()];
                if ( desc == undefined ) {
                   return '';
                } else {
@@ -464,25 +466,25 @@
                }
             };
             this.find = function( name ) {
-               return this.find_in_entities( name, [ this.inventory, this.room ] );
+               return self.find_in_entities( name, [ self.inventory, self.room ] );
             };
             this.use  = function( subjectname, toolname ) {
                if ( typeof(toolname) === 'undefined' ) {
                   toolname = '';
                }
-               var retval = this.use_internal( subjectname, toolname );
+               var retval = self.use_internal( subjectname, toolname );
                if ( retval != null ) {
                   return retval;
                }
-               return this.use_internal( toolname, subjectname );
+               return self.use_internal( toolname, subjectname );
             };
             this.directionsInternal = function( roomname, visibility ) {
                if ( typeof(visibility) === 'undefined' ) {
                   visibility = 1;
                }
                var retval = [];
-               for ( var i = 0; i < this.passages.length; ++i ) {
-                  var passage = this.passages[i];
+               for ( var i = 0; i < self.passages.length; ++i ) {
+                  var passage = self.passages[i];
                   var tmp = passage.get_out_passage_from_room(roomname, visibility)
                   if ( tmp != null ) {
                      retval.push( tmp );
@@ -497,29 +499,29 @@
             // applicable_uses         - not implementing
             // applicable_views        - not implementing
             this.directions = function() {
-               return this.directionsInternal( this.room.obj_content.name );
+               return self.directionsInternal( self.room.obj_content.name );
             };
             this.go = function( direction, other ) {
                if ( other != "" ) {
                   return null;
                }
-               var topology = this.directions();
+               var topology = self.directions();
                for ( var i = 0; i < topology.length; ++i ) {
                   var pair = topology[i];
                   if ( pair[0] == direction ) {
-                     this.setting_current_room( pair[1] );
-                     return this.room;
+                     self.setting_current_room( pair[1] );
+                     return self.room;
                   }
                }
                return null;
             };
             this.stuffs = function() {
                var retval = [];
-               var chlds = this.room.children();
+               var chlds = self.room.children();
                for ( var i = 0; i < chlds.length; ++i ) {
                   var subject = chlds[i];
                   if ( subject.obj_content.attributes.indexOf('invisible') < 0 ) {
-                     var appearance = this.room.find( subject.obj_content.name );
+                     var appearance = self.room.find( subject.obj_content.name );
                      if ( appearance != null ) {
                         retval.push( appearance.obj_content.name );
                      }
@@ -530,6 +532,7 @@
          };
 
          function Game( params ) {
+            var self = this;
             this.game_internal = new GameInternal( params );
             this.commands = { 'use'  : this.game_internal.use,
                               'drop' : this.game_internal.drop,
@@ -549,7 +552,7 @@
                }
                if ( command in this.commands ) {
                   var retval = this.commands[ command ]( arg1, arg2 );
-                  this.game_internal.view_refresh();
+                  self.game_internal.view_refresh();
                   return retval;
                }
                return null;
