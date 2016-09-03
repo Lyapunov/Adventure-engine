@@ -542,13 +542,14 @@
             this.has          = function ( name ) { return this.has( name ); };
             this.stuffs       = function () { return this.stuffs(); };
             this.won          = function () { return this.won(); };
+            this.inventory    = function () { return this.game_internal.inventory.takable_child_names(); };
             this.do_it        = function ( command, arg1, arg2 ) {
                if ( typeof(arg2) === 'undefined' ) {
                   arg2 = '';
                }
                if ( command in this.commands ) {
                   var retval = this.commands[ command ]( arg1, arg2 );
-                  input.game_internal.view_refresh()
+                  this.game_internal.view_refresh()
                   return retval;
                }
                return null;
@@ -559,7 +560,7 @@
 
          console.log( game_object_pictures );
 
-         var game = new GameInternal( blueprints );
+         var game = new Game( blueprints );
 
          // Smoke tests:
          // ------------
@@ -584,17 +585,20 @@
          // console.log( blueprints[2][1].get_out_passage_from_room('dark_room') );
          // console.log( blueprints[2][1].get_out_passage_from_room('dark_room',0) );
 
-         // console.log( game.current_room() );
-         // console.log( game.find_in_limbo_and_remove('burning_candle') );
-         // console.log( game.find_in_limbo_and_remove('turbo killer') );
-         // console.log( game.find_room('dark_room') );
-         // console.log( game.find_room('purple room') );
+         // console.log( game_internal.current_room() );
+         // console.log( game_internal.find_in_limbo_and_remove('burning_candle') );
+         // console.log( game_internal.find_in_limbo_and_remove('turbo killer') );
+         // console.log( game_internal.find_room('dark_room') );
+         // console.log( game_internal.find_room('purple room') );
 
-         // console.log( game.current_room() );
-         // game.setting_current_room('bathroom');
-         // console.log( game.current_room() );
-         // console.log( game.stuffs() );
-         // console.log( game.directions() );
+         // console.log( game_internal.current_room() );
+         // game_internal.setting_current_room('bathroom');
+         // console.log( game_internal.current_room() );
+         // console.log( game_internal.stuffs() );
+         // console.log( game_internal.directions() );
+         game.do_it('take', 'match');
+         game.do_it('take', 'candle');
+         console.log( game.inventory() );
 
          function drawBackground() {
             context.fillStyle = "black";
