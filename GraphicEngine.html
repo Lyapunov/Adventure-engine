@@ -303,12 +303,9 @@
          }
 
          function GameInternal( params ) {
-            this.rooms = params[0]; 
-            this.limbo = params[1]; 
-            this.room  = null;
-            if ( this.rooms.length > 0 ) {
-               this.room = this.rooms[0];
-            }
+            this.rooms        = params[0]; 
+            this.limbo        = params[1]; 
+            this.room         = this.rooms[0];
             this.passages     = params[2];
             this.inventory    = { obj_content : { attributes: [], childObjects: [], name: "inventory"}, obj_name: "GameObject" }
             addFunctionsToObjectsRecursively( this.inventory );
@@ -445,6 +442,7 @@
                if ( other != '' ) {
                   return 0;
                }
+               console.log( this.current_room() );
                return this.move_between_entities( name, this.room, this.inventory );
             };
             this.drop = function( name, other ) {
