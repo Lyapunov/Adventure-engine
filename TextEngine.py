@@ -63,6 +63,9 @@ def main(argv):
 
       input_fields += ['',''] # to set a default value for not given params in an easy way
 
+      if input_fields[1] == '' and input_fields[2] == '' and input_fields[0] in [ 'quit', 'exit' ]:
+         break 
+
       try:
          game.do_it( input_fields[0], input_fields[1], input_fields[2] )
       except Exception:
