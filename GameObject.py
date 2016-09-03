@@ -413,6 +413,9 @@ class Game(CommonEquality):
    def won( self ):
       return self.game_internal.won()
 
+   def inventory( self ):
+      return self.game_internal.inventory.takable_child_names()
+
    # === Manipulating the game board ===
 
    def do_it( self, command, arg1, arg2 = '' ):
