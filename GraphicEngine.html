@@ -361,7 +361,9 @@
             this.move_between_entities = function( name, from_entity, to_entity ) {
                var subject = from_entity.take( name );
                if ( subject != null ) {
-                  to_entity.put( name );
+                  if ( to_entity != null ) {
+                     to_entity.put( name );
+                  }
                   return subject;
                }
                return null;
