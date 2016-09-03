@@ -549,7 +549,7 @@
                }
                if ( command in this.commands ) {
                   var retval = this.commands[ command ]( arg1, arg2 );
-                  this.game_internal.view_refresh()
+                  this.game_internal.view_refresh();
                   return retval;
                }
                return null;
