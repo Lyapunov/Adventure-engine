@@ -63,8 +63,18 @@ def main(argv):
 
       input_fields += ['',''] # to set a default value for not given params in an easy way
 
-      if input_fields[1] == '' and input_fields[2] == '' and input_fields[0] in [ 'quit', 'exit' ]:
-         break 
+      if input_fields[1] == '' and input_fields[2] == '':
+         if input_fields[0] in [ 'quit', 'exit' ]:
+            break 
+         if input_fields[0] in [ 'inventory' ]:
+            if len( game.inventory() ) > 0:
+               print 'You have the following items:',
+               for item in game.inventory():
+                  print item,
+               print
+            else:
+               print 'You have no items.'
+            continue
 
       try:
          game.do_it( input_fields[0], input_fields[1], input_fields[2] )
