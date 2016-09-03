@@ -539,9 +539,9 @@
             this.current_room = function () { return this.game_internal.current_room(); };
             this.look         = function () { return this.game_internal.look(); };
             this.directions   = function () { return this.game_internal.directions(); };
-            this.has          = function ( name ) { return this.has( name ); };
-            this.stuffs       = function () { return this.stuffs(); };
-            this.won          = function () { return this.won(); };
+            this.has          = function ( name ) { return this.game_internal.has( name ); };
+            this.stuffs       = function () { return this.game_internal.stuffs(); };
+            this.won          = function () { return this.game_internal.won(); };
             this.inventory    = function () { return this.game_internal.inventory.takable_child_names(); };
             this.do_it        = function ( command, arg1, arg2 ) {
                if ( typeof(arg2) === 'undefined' ) {
@@ -594,10 +594,11 @@
          // console.log( game_internal.current_room() );
          // game_internal.setting_current_room('bathroom');
          // console.log( game_internal.current_room() );
-         // console.log( game_internal.stuffs() );
-         // console.log( game_internal.directions() );
+         console.log( game.stuffs() );
+         console.log( game.directions() );
          game.do_it('take', 'match');
          game.do_it('take', 'candle');
+         console.log( game.stuffs() );
          console.log( game.inventory() );
 
          function drawBackground() {
