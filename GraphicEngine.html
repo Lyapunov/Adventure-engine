@@ -397,7 +397,7 @@
                return null;
             };
             this.open = function ( name, other ) {
-               if ( other != null ) {
+               if ( other != '' ) {
                   return 0;
                }
                var pair = this.find( name );
@@ -440,16 +440,16 @@
                }
             };
             this.take = function( name, other ) {
-               if ( other != null ) {
+               if ( other != '' ) {
                   return 0;
                }
-               return input.move_between_entities( name, this.room, this.inventory );
+               return this.move_between_entities( name, this.room, this.inventory );
             };
             this.drop = function( name, other ) {
-               if ( other != null ) {
+               if ( other != '' ) {
                   return 0;
                }
-               return input.move_between_entities( name, this.inventory, this.room );
+               return this.move_between_entities( name, this.inventory, this.room );
             };
             this.has = function( name ) {
                var subject = this.inventory.find( name );
@@ -514,6 +514,7 @@
                return null;
             };
             this.stuffs = function() {
+               console.log('fuck the pizza');
                var retval = [];
                var chlds = this.room.children();
                for ( var i = 0; i < chlds.length; ++i ) {
