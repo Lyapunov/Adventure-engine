@@ -655,7 +655,7 @@
             curX = event.clientX;
             curY = event.clientY;
             if ( placing && moved != "" ) {
-               game_object_xy[ moved ] = [ curX, curY ];
+               game_object_xy[ moved ] = [ curX - images[ moved ].width / 2, curY - images[ moved ].height / 2 ];
             }
          };
 
