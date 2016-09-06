@@ -76,7 +76,7 @@
          // console.log('blueprints: ', blueprints);
 
          var game_object_pictures = {};
-         var game_object_xy = {};
+         var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0,0],"dark_room":[0,0],"knife":[0,0],"cabinet":[0,0],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[0,0],"injured_bird":[0,0]};
          var images = new Object();
          images['cursor'] = new Image();
          images['cursor'].src = "cursor.png";
@@ -99,7 +99,6 @@
                if ( input.obj_name == "GameObject" ) {
                   if ( input.obj_content.name != "inventory" ) {
                      game_object_pictures[ input.obj_content.name ] = input.obj_content.name + ".png";
-                     game_object_xy[ input.obj_content.name ] = [0, 0];
                      images[ input.obj_content.name ] = new Image();
                      images[ input.obj_content.name ].src = input.obj_content.name + ".png";
                   }
@@ -614,7 +613,11 @@
             context.drawImage(images[ game.current_room() ], 0, 0);
             var stfs = game.stuffs();
             for ( var i = 0; i < stfs.length; ++i ) {
-               context.drawImage(images[ stfs[i] ], 0, 0);
+               if ( !( stfs[i] in game_object_xy ) ) {
+                  game_object_xy[ stfs[i] ] = [0, 0];
+               }
+               var xy = game_object_xy[ stfs[i] ];
+               context.drawImage(images[ stfs[i] ], xy[0], xy[1]);
             }
          }
 
@@ -624,13 +627,36 @@
             context.drawImage(images['cursor'], 0, 0, 135, 210, curX, curY, 20, 31);
          }
 
-         mainItem.onmousedown = function(event) {};
+         var placing = 1;
+         var moved = "";
 
-         mainItem.onmouseup = function(event) {};
+         mainItem.onmousedown = function(event) {
+            if ( placing ) {
+               var stfs = game.stuffs();
+               for ( var i = 0; i < stfs.length; ++i ) {
+                  var ident = stfs[i];
+                  var xy = game_object_xy[ ident ];
+                  if ( event.clientX >= xy[0] && event.clientX < xy[0] + images[ ident ].width
+                    && event.clientY >= xy[1] && event.clientY < xy[1] + images[ ident ].height ) {
+                     moved = ident;
+                  }
+               }
+            }
+         };
+
+         mainItem.onmouseup = function(event) {
+            if ( placing ) {
+               moved = "";
+               console.log( JSON.stringify( game_object_xy ) );
+            }
+         };
 
          mainItem.onmousemove = function(event) {
             curX = event.clientX;
             curY = event.clientY;
+            if ( placing && moved != "" ) {
+               game_object_xy[ moved ] = [ curX, curY ];
+            }
          };
 
          // common functions 
