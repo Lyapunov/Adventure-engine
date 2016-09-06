@@ -5,6 +5,7 @@
          body {
             margin : 0px;
             padding: 0px;
+            cursor : none;
          }
       </style>
 
@@ -76,6 +77,9 @@
 
          var game_object_pictures = {};
          var game_object_xy = {};
+         var images = new Object();
+         images['cursor'] = new Image();
+         images['cursor'].src = "cursor.png";
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
@@ -94,8 +98,10 @@
             if ( null != input.obj_name ) {
                if ( input.obj_name == "GameObject" ) {
                   if ( input.obj_content.name != "inventory" ) {
-                     game_object_pictures[ "go#" + input.obj_content.name ] = input.obj_content.name + ".png";
-                     game_object_xy[ "go#" + input.obj_content.name ] = [0, 0];
+                     game_object_pictures[ input.obj_content.name ] = input.obj_content.name + ".png";
+                     game_object_xy[ input.obj_content.name ] = [0, 0];
+                     images[ input.obj_content.name ] = new Image();
+                     images[ input.obj_content.name ].src = input.obj_content.name + ".png";
                   }
                }
             }
@@ -605,12 +611,29 @@
          function drawBackground() {
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
+            context.drawImage(images[ game.current_room() ], 0, 0);
          }
+
+         var curX = 0;
+         var curY = 0;
+         function drawCursor() {
+            context.drawImage(images['cursor'], 0, 0, 135, 210, curX, curY, 20, 31);
+         }
+
+         mainItem.onmousedown = function(event) {};
+
+         mainItem.onmouseup = function(event) {};
+
+         mainItem.onmousemove = function(event) {
+            curX = event.clientX;
+            curY = event.clientY;
+         };
 
          // common functions 
          function drawScene() {
             setTimeout( function() {
                drawBackground();
+               drawCursor();
                ANIMATION = requestAnimationFrame(drawScene);
             }, 1000 / fps );
          }
