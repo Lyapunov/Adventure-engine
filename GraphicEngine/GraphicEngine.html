@@ -601,17 +601,21 @@
          // console.log( game_internal.current_room() );
          // game_internal.setting_current_room('bathroom');
          // console.log( game_internal.current_room() );
-         console.log( game.stuffs() );
-         console.log( game.directions() );
-         game.do_it('take', 'match');
-         game.do_it('take', 'candle');
-         console.log( game.stuffs() );
-         console.log( game.inventory() );
+         // console.log( game.stuffs() );
+         // console.log( game.directions() );
+         // game.do_it('take', 'match');
+         // game.do_it('take', 'candle');
+         // console.log( game.stuffs() );
+         // console.log( game.inventory() );
 
          function drawBackground() {
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
             context.drawImage(images[ game.current_room() ], 0, 0);
+            var stfs = game.stuffs();
+            for ( var i = 0; i < stfs.length; ++i ) {
+               context.drawImage(images[ stfs[i] ], 0, 0);
+            }
          }
 
          var curX = 0;
