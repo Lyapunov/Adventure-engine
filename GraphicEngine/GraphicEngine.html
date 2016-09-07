@@ -410,6 +410,9 @@
                if ( pair[0] == null ) {
                   return 0;
                }
+               if ( pair[0].children().length == 0 ) {
+                  return 0;
+               }
                while ( pair[0].children().length > 0 ) {
                   pair[1].put(pair[0].take( pair[0].children()[0].obj_content.name ) );
                }
@@ -701,9 +704,9 @@
                      var xy = game_object_xy[ ident ];
                      if ( event.clientX >= xy[0] && event.clientX < xy[0] + images[ ident ].width
                        && event.clientY >= xy[1] && event.clientY < xy[1] + images[ ident ].height ) {
-                           game.do_it( 'use', ident );
-                           game.do_it( 'open', ident );
+                        if ( !game.do_it( 'open', ident ) && game.do_it( 'use', ident ) == null ) {
                            game.do_it( 'take', ident );
+                        }
                      }
                   }
                }
