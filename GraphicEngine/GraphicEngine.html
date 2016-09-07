@@ -76,7 +76,7 @@
          // console.log('blueprints: ', blueprints);
 
          var game_object_pictures = {};
-         var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0,0],"dark_room":[0,0],"knife":[0,0],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[0,0],"injured_bird":[0,0]};
+         var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0,0],"dark_room":[0,0],"knife":[314.5,313],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[0,0],"injured_bird":[0,0]};
          var game_direction_areas = {"dark_room#N":[499,157,31,37],"bathroom#S":[0,354,639,45]};
          var images = new Object();
          images['cursor'] = new Image();
@@ -410,7 +410,7 @@
                if ( pair[0] == null ) {
                   return 0;
                }
-               while ( pair[0].children().lenght > 0 ) {
+               while ( pair[0].children().length > 0 ) {
                   pair[1].put(pair[0].take( pair[0].children()[0].obj_content.name ) );
                }
                return 1;
@@ -646,7 +646,7 @@
          var areadir = 0;
 
          function keyHandler(e) {
-           console.log(e);
+           // console.log(e);
            switch( e.keyCode ) {
              case 80:
                placing = 1 - placing;
