@@ -684,12 +684,27 @@
                }
             } else {
                var drs = game.directions();
+               var moving = 0;
                for ( var i = 0; i < drs.length; ++i ) {
                   var ident = game.current_room() + '#' + drs[i][0];
                   var xywh = game_direction_areas[ident];
                   if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
                     && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
                      game.do_it( 'go', drs[i][0] );
+                     moving = 1;
+                  }
+               }
+               if ( !moving ) {
+                  var stfs = game.stuffs();
+                  for ( var i = 0; i < stfs.length; ++i ) {
+                     var ident = stfs[i];
+                     var xy = game_object_xy[ ident ];
+                     if ( event.clientX >= xy[0] && event.clientX < xy[0] + images[ ident ].width
+                       && event.clientY >= xy[1] && event.clientY < xy[1] + images[ ident ].height ) {
+                           game.do_it( 'use', ident );
+                           game.do_it( 'open', ident );
+                           game.do_it( 'take', ident );
+                     }
                   }
                }
             }
