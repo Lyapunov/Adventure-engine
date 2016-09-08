@@ -25,6 +25,7 @@ def main(argv):
       return
    except Exception as e:
       print "Could not parse game file."
+      print e
       return
    result = GameSyntaxChecker().check( game );
    if result != "":
