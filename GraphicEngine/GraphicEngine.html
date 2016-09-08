@@ -778,8 +778,12 @@
                      var cell = Math.floor( event.clientX / inventory_spacing );
                      var invtr = game.inventory();
                      if ( cell < invtr.length ) {
-                        selection = invtr[cell];
-                        return;
+                        if ( selection != "" ) {
+                           game.do_it( 'use', invtr[cell], selection );
+                        } else {
+                           selection = invtr[cell];
+                           return;
+                        }
                      }
                   }
                }
