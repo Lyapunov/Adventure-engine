@@ -268,8 +268,9 @@ class GameSyntaxChecker:
       for action in allactions:
          if action.subject_to_reveal():
             for actor in action.get_actor_names():
-               if actor in actors:
-                  return False
+               if not actor in action.subject_to_reveal():
+                   if actor in actors:
+                      return False
       return True
 
    def check_no_actions_with_two_immobile_actors( self, game ):
