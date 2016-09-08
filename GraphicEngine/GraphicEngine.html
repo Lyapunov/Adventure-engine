@@ -613,6 +613,17 @@
 
          var inventory_spacing = 60;
 
+         function drawNormalizedItem( names, x, y ) {
+            var wi = images[ names ].width;
+            var he = images[ names ].height;
+            if ( wi > inventory_spacing || he > inventory_spacing ) {
+               var scale = Math.min(inventory_spacing / wi, inventory_spacing / he );
+               wi = wi * scale;
+               he = he * scale;
+            }
+            context.drawImage(images[ names ], x - wi / 2, y - he / 2, wi, he);
+         }
+
          function drawBackground() {
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
@@ -627,14 +638,7 @@
             }
             var invtr = game.inventory();
             for ( var i = 0; i < invtr.length; ++i ) {
-               var wi = images[ invtr[i] ].width;
-               var he = images[ invtr[i] ].height;
-               if ( wi > inventory_spacing || he > inventory_spacing ) {
-                  var scale = Math.min(inventory_spacing / wi, inventory_spacing / he );
-                  wi = wi * scale;
-                  he = he * scale;
-               }
-               context.drawImage(images[ invtr[i] ], i * inventory_spacing + inventory_spacing / 2 - wi / 2, 400 + inventory_spacing / 2 - he / 2, wi, he);
+               drawNormalizedItem( invtr[i], i * inventory_spacing + inventory_spacing / 2, 400 + inventory_spacing / 2 );
             }
             var drs = game.directions();
             if ( placing ) {
