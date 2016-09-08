@@ -76,7 +76,7 @@
          // console.log('blueprints: ', blueprints);
 
          var game_object_pictures = {};
-         var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0,0],"dark_room":[0,0],"knife":[314.5,313],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[502,203],"injured_bird":[536,199]};
+         var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0.5,156.5],"dark_room":[0,0],"knife":[314.5,313],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[502,203],"injured_bird":[536,199]};
          var game_direction_areas = {"dark_room#N":[499,157,31,37],"bathroom#S":[0,354,639,45]};
          var images = new Object();
          images['cursor'] = new Image();
@@ -117,7 +117,9 @@
                   };
                   input.make_visible = function() {
                      var index = input.obj_content.attributes.indexOf( "invisible" );
-                     input.obj_content.splice( index, 1 );
+                     if ( index >= 0 ) {
+                        input.obj_content.attributes.splice( index, 1 );
+                     }
                   };
                   input.get_attributes = function() {
                      return input.obj_content.attributes;
@@ -242,7 +244,18 @@
                      return null;
                   };
                   input.showIt = function( game ) {
-                     game.views.remove( input );
+                     var vws = game.views;
+
+                     // removing itself
+                     var place = -1;
+                     for ( var i = 0; i < vws.length; ++i ) {
+                        if ( vws[i].obj_content.resultname = input.obj_content.resultname ) {
+                           place = i;
+                        }
+                     }
+                     if ( place >= 0 ) {
+                        game.views.splice( place, 1 );
+                     }
                      return input.perform( game );
                   };
                   input.doIt = function( game ) {
@@ -305,7 +318,19 @@
                             && input.obj_content.toolname == toolname;
                   };
                   input.showIt = function( game ) {
-                     game.views.remove( input );
+                     var vws = game.views;
+
+                     // removing itself
+                     var place = -1;
+                     for ( var i = 0; i < vws.length; ++i ) {
+                        if ( vws[i].obj_content.resultname = input.obj_content.resultname ) {
+                           place = i;
+                        }
+                     }
+                     if ( place >= 0 ) {
+                        game.views.splice( place, 1 );
+                     }
+
                      var pair2   = game.find( input.obj_content.toolname );
                      var tool    = pair2[0];
                      var pair1   = game.find( input.obj_content.subjectname );
@@ -392,7 +417,7 @@
                   var action = self.views[i];
                   var pair1  = self.find( action.obj_content.subjectname );
                   var pair2  = self.find( action.obj_content.toolname );
-                  if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0], pair2[0] ) ) {
+                  if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
                      action.showIt( self );
                   }
                }
