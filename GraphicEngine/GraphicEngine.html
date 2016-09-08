@@ -196,7 +196,7 @@
                   input.make_visible = function () {
                      var pos = input.obj_content.attributes.indexOf( 'invisible' );
                      if ( pos >= 0 ) {
-                        input.obj_content.attributes( 'invisible', 1 );
+                        input.obj_content.attributes.splice( 'invisible', 1 );
                      }
                   };
                   input.get_out_passage_from_room = function( roomname, visibility ) {
@@ -294,7 +294,7 @@
                   };
                   input.doIt = function( game ) {
                      for( var i = 0; i < game.passages.length; ++i ) {
-                        if ( game.passages[i].identifier == input.obj_content.identifier ) {
+                        if ( game.passages[i].obj_content.identifier == input.obj_content.identifier ) {
                            game.passages[i].make_visible();
                         }
                      }
