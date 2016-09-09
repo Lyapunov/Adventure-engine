@@ -418,9 +418,6 @@
                return null;
             };
             this.view_refresh = function () {
-               var sorrounding_objects = [];
-               sorrounding_objects.concat( self.inventory.obj_content.childObjects );
-               sorrounding_objects.concat( self.room.obj_content.childObjects );
                for ( var i = 0; i < self.views.length; ++i ) {
                   var action = self.views[i];
                   var pair1  = self.find( action.obj_content.subjectname );
@@ -480,13 +477,13 @@
                   }
                   return null;
                } else {
-                  var pair2 = self.find( toolname );
-                  if ( pair2[0] == null ) {
+                  var tlo = self.inventory.find( toolname );
+                  if ( tlo == null ) {
                      return null;
                   }
                   for ( var i = 0; i < self.use_actions.length; ++i ) {
                      var action = self.use_actions[i];
-                     if ( action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
+                     if ( action.applicable( pair1[0].obj_content.name, tlo.obj_content.name ) ) {
                         return action.doIt( self );
                      }
                   }
