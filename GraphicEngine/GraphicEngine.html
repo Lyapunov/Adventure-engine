@@ -83,11 +83,20 @@
 
          var fps = 25;
          var ANIMATION;
+         var redrawArea = null;
 
          var game_object_pictures = {};
          var images = new Object();
          images['cursor'] = new Image();
          images['cursor'].src = dirImgs + "cursor.png";
+         images['menuitem_button1'] = new Image();
+         images['menuitem_button1'].src = dirImgs + "menuitem_button1.png";
+         images['menuitem_button2'] = new Image();
+         images['menuitem_button2'].src = dirImgs + "menuitem_button2.png";
+         images['menuitem_screen1'] = new Image();
+         images['menuitem_screen1'].src = dirImgs + "menuitem_screen1.png";
+         images['menuitem_screen2'] = new Image();
+         images['menuitem_screen2'].src = dirImgs + "menuitem_screen2.png";
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
@@ -616,7 +625,6 @@
          };
 
          var game = null;
-         var redrawArea = null;
          var game_object_xy = null;
          var game_direction_areas = null;
 
@@ -910,6 +918,68 @@
             }
          }
 
+         function startScreenDrawCursor() {
+            preX = curX;
+            preY = curY;
+            context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
+         }
+
+         function startScreenDrawer() {
+            if ( redrawArea != null ) { 
+               var area = redrawArea;
+               context.fillStyle = "black";
+               context.fillRect(area[0],area[1],area[2],area[3]);
+               context.drawImage(images[ 'menuitem_screen1' ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
+
+               context.drawImage(images[ 'menuitem_button1' ], 230, 250);
+               startScreenDrawCursor();
+               redrawArea = null;
+            }
+         }
+
+         function startScreenInit() {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+         }
+
+         function startScreenOnMouseMove(event) {
+            curX = event.clientX;
+            curY = event.clientY;
+
+            // redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            // redrawArea = [0,0,10,10];
+            redrawArea = [Math.max( preX - inventory_spacing / 2 - 5, 0),
+                          Math.max( preY - inventory_spacing / 2 - 5, 0),
+                          preX + inventory_spacing / 2 + 5,
+                          preY + inventory_spacing / 2 + 5];
+         }
+
+         function startScreenOnMouseDown(event) {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+            curX = event.clientX;
+            curY = event.clientY;
+            if ( curX > 230
+                 && curY > 250
+                 && curX < 230 +  images[ 'menuitem_button1' ].width 
+                 && curY < 250 +  images[ 'menuitem_button1' ].height ) {
+               goGame();
+            }
+         }
+
+         function goGame() {
+            initGame();
+            mainItem.scenedrawer = gameSceneDrawer;
+            mainItem.onmousedown = gameOnMouseDown;
+            mainItem.onmouseup   = gameOnMouseUp;
+            mainItem.onmousemove = gameOnMouseMove;
+         }
+         
+         function goInitScreen() {
+            startScreenInit();
+            mainItem.scenedrawer = startScreenDrawer;
+            mainItem.onmousemove = startScreenOnMouseMove;
+            mainItem.onmousedown = startScreenOnMouseDown;
+         }
+
          // common functions 
          function drawScene() {
             setTimeout( function() {
@@ -936,11 +1006,7 @@
                addEventListener('keydown',gameKeyHandler,false);
             }
 
-            initGame();
-            mainItem.scenedrawer = gameSceneDrawer;
-            mainItem.onmousedown = gameOnMouseDown;
-            mainItem.onmouseup   = gameOnMouseUp;
-            mainItem.onmousemove = gameOnMouseMove;
+            goInitScreen();
          })();
       </script>
    </body>
