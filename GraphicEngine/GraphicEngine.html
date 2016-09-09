@@ -761,20 +761,6 @@
                   }
                }
             } else {
-               var drs = game.directions();
-               console.log( drs );
-               if ( selection == "" ) {
-                  for ( var i = 0; i < drs.length; ++i ) {
-                     var ident = game.current_room() + '_' + drs[i][0];
-                     var xywh = game_direction_areas[ident];
-                     if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
-                       && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
-                        game.do_it( 'go', drs[i][0] );
-                        return ;
-                     }
-                  }
-               }
-
                var stfs = game.stuffs();
                if ( event.clientY <= 400 ) {
                   var something = 0;
@@ -786,6 +772,7 @@
                         something = 1;
                         if ( selection == "" ) {
                            if ( game.do_it( 'open', ident ) || game.do_it( 'use', ident ) != null || game.do_it( 'take', ident ) ) {
+                              break;
                            }
                         } else {
                            var xy = game_object_xy[ ident ];
@@ -793,6 +780,7 @@
                            if ( res != null ) {
                               var tarid = res.obj_content.name;
                               game_object_xy[ tarid ] = xy;
+                              break;
                            }
                         }
                      }
@@ -800,6 +788,21 @@
                   if ( selection != "" && !something ) {
                      game.do_it( 'drop', selection );
                      game_object_xy[ selection ] = [ Math.floor( Math.random() * 320 ) + 160, 300 + Math.floor( Math.random() * 30 ) ];
+                  }
+                  if ( !something ) {
+                     var drs = game.directions();
+                     console.log( drs );
+                     if ( selection == "" ) {
+                        for ( var i = 0; i < drs.length; ++i ) {
+                           var ident = game.current_room() + '_' + drs[i][0];
+                           var xywh = game_direction_areas[ident];
+                           if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
+                             && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
+                              game.do_it( 'go', drs[i][0] );
+                              return ;
+                           }
+                        }
+                     }
                   }
                } else {
                   if ( event.clientY <= 400 + inventory_spacing ) {
