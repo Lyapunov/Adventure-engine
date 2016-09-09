@@ -65,6 +65,10 @@
          var mainItem     = document.getElementById('canvas');
          var context      = mainItem.getContext('2d');
 
+         var gameScreenWidth  = 640;
+         var gameScreenHeight = 480;
+         var gameScreenSeparatorY = 400;
+
          var screenWidth  = mainItem.width  = window.innerWidth  - 20;
          var screenHeight = mainItem.height = window.innerHeight - 20;
          var screenScale  = Math.min( screenWidth, screenHeight ) / 2;
@@ -762,7 +766,7 @@
                }
             } else {
                var stfs = game.stuffs();
-               if ( event.clientY <= 400 ) {
+               if ( event.clientY <= gameScreenSeparatorY ) {
 
                   var drs = game.directions();
                   console.log( drs );
@@ -822,7 +826,7 @@
                      }
                   }
                } else {
-                  if ( event.clientY <= 400 + inventory_spacing ) {
+                  if ( event.clientY <= gameScreenSeparatorY + inventory_spacing ) {
                      var cell = Math.floor( event.clientX / inventory_spacing );
                      var invtr = game.inventory();
                      if ( cell < invtr.length ) {
@@ -880,8 +884,8 @@
          }
 
          function initCanvas() {
-            screenWidth  = mainItem.width  = 640; //window.innerWidth  - 20;
-            screenHeight = mainItem.height = 480; // window.innerHeight - 20;
+            screenWidth  = mainItem.width  = gameScreenWidth; // window.innerWidth  - 20;
+            screenHeight = mainItem.height = gameScreenHeight; // window.innerHeight - 20;
             screenScale  = Math.min( screenWidth, screenHeight ) / 2;
             redraw = 1;
 
