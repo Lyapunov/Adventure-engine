@@ -81,8 +81,7 @@
          var fps = 25;
          var ANIMATION;
 
-         var blueprints = JSON.parse( document.getElementById('blueprints').innerText );
-         // console.log('blueprints: ', blueprints);
+         var game = null;
 
          var game_object_pictures = {};
          var game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0.5,156.5],"dark_room":[0,0],"knife":[314.5,313],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[502,203],"injured_bird":[536,199]};
@@ -617,9 +616,11 @@
             };
          };
 
-         addFunctionsToObjectsRecursively( blueprints );
-
-         var game = new Game( blueprints );
+         function initGame() {
+            var blueprints = JSON.parse( document.getElementById('blueprints').innerText );
+            addFunctionsToObjectsRecursively( blueprints );
+            game = new Game( blueprints );
+         }
 
          // Smoke tests:
          // ------------
@@ -675,13 +676,13 @@
             context.drawImage(images[ names ], x - wi / 2, y - he / 2, wi, he);
          }
 
-         function drawBackground( area ) {
+         function drawGameBackground( area ) {
             context.fillStyle = "black";
             context.fillRect(area[0],area[1],area[2],area[3]);
             context.drawImage(images[ game.current_room() ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
          }
 
-         function drawObjects() {
+         function drawGameObjects() {
             var stfs = game.stuffs();
             for ( var i = 0; i < stfs.length; ++i ) {
                if ( !( stfs[i] in game_object_xy ) ) {
@@ -725,7 +726,7 @@
          var preX = 0; // previous drawed cursor pos
          var preY = 0;
          var selection = "";
-         function drawCursor() {
+         function drawGameCursor() {
             preX = curX;
             preY = curY;
             if ( selection == "" ) {
@@ -741,7 +742,7 @@
 
          var redrawArea = null;
 
-         function keyHandler(e) {
+         function gameKeyHandler(e) {
            // console.log(e);
            switch( e.keyCode ) {
              case 80:
@@ -751,7 +752,7 @@
            }
          }
 
-         mainItem.onmousedown = function(event) {
+         function gameOnMouseDown(event) {
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             if ( areamoved != "" ) {
                areamoved = "";
@@ -859,7 +860,7 @@
             }
          };
 
-         mainItem.onmouseup = function(event) {
+         function gameOnMouseUp(event) {
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             if ( placing ) {
                if ( moved != "" ) {
@@ -872,7 +873,7 @@
             }
          };
 
-         mainItem.onmousemove = function(event) {
+         function gameOnMouseMove(event) {
             curX = event.clientX;
             curY = event.clientY;
 
@@ -896,19 +897,19 @@
          };
 
          // common functions 
-         function drawScene() {
+         function drawGameScene() {
             setTimeout( function() {
                if ( redrawArea != null ) { 
-                  drawBackground( redrawArea );
-                  drawObjects();
-                  drawCursor();
+                  drawGameBackground( redrawArea );
+                  drawGameObjects();
+                  drawGameCursor();
                   redrawArea = null;
                }
-               ANIMATION = requestAnimationFrame(drawScene);
+               ANIMATION = requestAnimationFrame(drawGameScene);
             }, 1000 / fps );
          }
 
-         function initCanvas() {
+         function initGameCanvas() {
             screenWidth  = mainItem.width  = gameScreenWidth;  // window.innerWidth  - 20;
             screenHeight = mainItem.height = gameScreenHeight; // window.innerHeight - 20;
             screenScale  = Math.min( screenWidth, screenHeight ) / 2;
@@ -916,15 +917,19 @@
 
             // starting the engine only if it is not running
             if ( !ANIMATION ) {
-               drawScene();
+               drawGameScene();
             }
          }
 
          //init
          (function() {
-            initCanvas();
-            addEventListener('resize', initCanvas, false);
-            addEventListener('keydown',keyHandler,false);
+            initGame();
+            initGameCanvas();
+            addEventListener('resize', initGameCanvas, false);
+            addEventListener('keydown',gameKeyHandler,false);
+            mainItem.onmousedown = gameOnMouseDown;
+            mainItem.onmouseup   = gameOnMouseUp;
+            mainItem.onmousemove = gameOnMouseMove;
          })();
       </script>
    </body>
