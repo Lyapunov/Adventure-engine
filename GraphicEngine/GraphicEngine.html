@@ -677,7 +677,7 @@
 
          function drawBackground( area ) {
             context.fillStyle = "black";
-            context.fillRect(0,0,screenWidth,screenHeight);
+            context.fillRect(area[0],area[1],area[2],area[3]);
             context.drawImage(images[ game.current_room() ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
          }
 
@@ -722,8 +722,12 @@
 
          var curX = 0;
          var curY = 0;
+         var preX = 0; // previous drawed cursor pos
+         var preY = 0;
          var selection = "";
          function drawCursor() {
+            preX = curX;
+            preY = curY;
             if ( selection == "" ) {
                context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
             } else {
@@ -741,14 +745,14 @@
            // console.log(e);
            switch( e.keyCode ) {
              case 80:
-               redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+               redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
                placing = 1 - placing;
                break;
            }
          }
 
          mainItem.onmousedown = function(event) {
-            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             if ( areamoved != "" ) {
                areamoved = "";
                console.log( JSON.stringify( game_direction_areas ) );
@@ -856,7 +860,7 @@
          };
 
          mainItem.onmouseup = function(event) {
-            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             if ( placing ) {
                if ( moved != "" ) {
                   console.log( JSON.stringify( game_object_xy ) );
@@ -869,10 +873,16 @@
          };
 
          mainItem.onmousemove = function(event) {
-            //redrawArea = [ curX - 5, curyY - 5, cursorWidth + 10, cursorHeight + 10 ];
-            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
             curX = event.clientX;
             curY = event.clientY;
+
+            // redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            // redrawArea = [0,0,10,10];
+            redrawArea = [Math.max( preX - inventory_spacing / 2 - 5, 0),
+                          Math.max( preY - inventory_spacing / 2 - 5, 0),
+                          preX + inventory_spacing / 2 + 5,
+                          preY + inventory_spacing / 2 + 5];
+
             if ( placing && moved != "" ) {
                game_object_xy[ moved ] = [ curX - images[ moved ].width / 2, curY - images[ moved ].height / 2 ];
             }
@@ -899,10 +909,10 @@
          }
 
          function initCanvas() {
-            screenWidth  = mainItem.width  = gameScreenWidth; // window.innerWidth  - 20;
+            screenWidth  = mainItem.width  = gameScreenWidth;  // window.innerWidth  - 20;
             screenHeight = mainItem.height = gameScreenHeight; // window.innerHeight - 20;
             screenScale  = Math.min( screenWidth, screenHeight ) / 2;
-            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
 
             // starting the engine only if it is not running
             if ( !ANIMATION ) {
