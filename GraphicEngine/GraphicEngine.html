@@ -62,6 +62,8 @@
       Your browser doesn't support html5 canvas.
       </canvas>
       <script>
+         var devMode = 1;
+
          var mainItem     = document.getElementById('canvas');
          var context      = mainItem.getContext('2d');
 
@@ -926,7 +928,9 @@
             initGame();
             initGameCanvas();
             addEventListener('resize', initGameCanvas, false);
-            addEventListener('keydown',gameKeyHandler,false);
+            if ( devMode ) {
+               addEventListener('keydown',gameKeyHandler,false);
+            }
             mainItem.onmousedown = gameOnMouseDown;
             mainItem.onmouseup   = gameOnMouseUp;
             mainItem.onmousemove = gameOnMouseMove;
