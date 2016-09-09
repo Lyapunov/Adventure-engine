@@ -75,6 +75,9 @@
          var screenHeight = mainItem.height = window.innerHeight - 20;
          var screenScale  = Math.min( screenWidth, screenHeight ) / 2;
 
+         var cursorWidth  = 20;
+         var cursorHeight = 30;
+
          var fps = 25;
          var ANIMATION;
 
@@ -672,10 +675,10 @@
             context.drawImage(images[ names ], x - wi / 2, y - he / 2, wi, he);
          }
 
-         function drawBackground() {
+         function drawBackground( area ) {
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
-            context.drawImage(images[ game.current_room() ], 0, 0);
+            context.drawImage(images[ game.current_room() ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
          }
 
          function drawObjects() {
@@ -722,7 +725,7 @@
          var selection = "";
          function drawCursor() {
             if ( selection == "" ) {
-               context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, 20, 31);
+               context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
             } else {
                drawNormalizedItem( selection, curX, curY );
             }
@@ -732,16 +735,20 @@
          var areamoved = "";
          var areadir = 0;
 
+         var redrawArea = null;
+
          function keyHandler(e) {
            // console.log(e);
            switch( e.keyCode ) {
              case 80:
+               redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
                placing = 1 - placing;
                break;
            }
          }
 
          mainItem.onmousedown = function(event) {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
             if ( areamoved != "" ) {
                areamoved = "";
                console.log( JSON.stringify( game_direction_areas ) );
@@ -849,6 +856,7 @@
          };
 
          mainItem.onmouseup = function(event) {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
             if ( placing ) {
                if ( moved != "" ) {
                   console.log( JSON.stringify( game_object_xy ) );
@@ -860,9 +868,9 @@
             }
          };
 
-         var redraw = 0;
          mainItem.onmousemove = function(event) {
-            redraw = 1;
+            //redrawArea = [ curX - 5, curyY - 5, cursorWidth + 10, cursorHeight + 10 ];
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
             curX = event.clientX;
             curY = event.clientY;
             if ( placing && moved != "" ) {
@@ -880,10 +888,11 @@
          // common functions 
          function drawScene() {
             setTimeout( function() {
-               if ( redraw ) { 
-                  drawBackground();
+               if ( redrawArea != null ) { 
+                  drawBackground( redrawArea );
                   drawObjects();
                   drawCursor();
+                  redrawArea = null;
                }
                ANIMATION = requestAnimationFrame(drawScene);
             }, 1000 / fps );
@@ -893,7 +902,7 @@
             screenWidth  = mainItem.width  = gameScreenWidth; // window.innerWidth  - 20;
             screenHeight = mainItem.height = gameScreenHeight; // window.innerHeight - 20;
             screenScale  = Math.min( screenWidth, screenHeight ) / 2;
-            redraw = 1;
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
 
             // starting the engine only if it is not running
             if ( !ANIMATION ) {
