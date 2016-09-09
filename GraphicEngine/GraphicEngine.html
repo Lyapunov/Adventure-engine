@@ -409,7 +409,7 @@
                return null;
             };
             this.winning = function() {
-               self.won = 1;
+               self.won_ = 1;
             };
             this.setting_current_room = function( name ) {
                var retval = self.find_room( name );
@@ -618,6 +618,9 @@
                if ( command in this.commands ) {
                   var retval = this.commands[ command ]( arg1, arg2 );
                   self.game_internal.view_refresh();
+                  if ( self.won() ) {
+                     goEndScreen();
+                  }
                   return retval;
                }
                return null;
@@ -842,7 +845,6 @@
                   }
                   if ( !something ) {
                      var drs = game.directions();
-                     console.log( drs );
                      if ( selection == "" ) {
                         for ( var i = 0; i < drs.length; ++i ) {
                            var ident = game.current_room() + '_' + drs[i][0];
@@ -918,6 +920,8 @@
             }
          }
 
+         // === Start screen related codes
+
          function startScreenDrawCursor() {
             preX = curX;
             preY = curY;
@@ -930,7 +934,6 @@
                context.fillStyle = "black";
                context.fillRect(area[0],area[1],area[2],area[3]);
                context.drawImage(images[ 'menuitem_screen1' ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
-
                context.drawImage(images[ 'menuitem_button1' ], 230, 250);
                startScreenDrawCursor();
                redrawArea = null;
@@ -966,6 +969,7 @@
          }
 
          function goGame() {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             initGame();
             mainItem.scenedrawer = gameSceneDrawer;
             mainItem.onmousedown = gameOnMouseDown;
@@ -974,10 +978,67 @@
          }
          
          function goInitScreen() {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             startScreenInit();
             mainItem.scenedrawer = startScreenDrawer;
             mainItem.onmousemove = startScreenOnMouseMove;
             mainItem.onmousedown = startScreenOnMouseDown;
+         }
+
+         function goEndScreen() {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+            endScreenInit();
+            mainItem.scenedrawer = endScreenDrawer;
+            mainItem.onmousemove = endScreenOnMouseMove;
+            mainItem.onmousedown = endScreenOnMouseDown;
+         }
+
+         // === End screen related codes
+
+         function endScreenDrawCursor() {
+            preX = curX;
+            preY = curY;
+            context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
+         }
+
+         function endScreenDrawer() {
+            if ( redrawArea != null ) { 
+               var area = redrawArea;
+               context.fillStyle = "black";
+               context.fillRect(area[0],area[1],area[2],area[3]);
+               context.drawImage(images[ 'menuitem_screen2' ], area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
+               context.drawImage(images[ 'menuitem_button2' ], 230, 250);
+               endScreenDrawCursor();
+               redrawArea = null;
+            }
+         }
+
+         function endScreenInit() {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+         }
+
+         function endScreenOnMouseMove(event) {
+            curX = event.clientX;
+            curY = event.clientY;
+
+            // redrawArea = [0, 0, gameScreenWidth, gameScreenHeight ];
+            // redrawArea = [0,0,10,10];
+            redrawArea = [Math.max( preX - inventory_spacing / 2 - 5, 0),
+                          Math.max( preY - inventory_spacing / 2 - 5, 0),
+                          preX + inventory_spacing / 2 + 5,
+                          preY + inventory_spacing / 2 + 5];
+         }
+
+         function endScreenOnMouseDown(event) {
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+            curX = event.clientX;
+            curY = event.clientY;
+            if ( curX > 230
+                 && curY > 250
+                 && curX < 230 +  images[ 'menuitem_button2' ].width 
+                 && curY < 250 +  images[ 'menuitem_button2' ].height ) {
+               goInitScreen();
+            }
          }
 
          // common functions 
