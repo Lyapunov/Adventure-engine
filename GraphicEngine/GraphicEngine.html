@@ -10,7 +10,7 @@
       </style>
 
    </head>
-   <body>
+   <body bgcolor="000000">
       <div id="blueprints" style="visibility:hidden; display:none">
 [
 [{"obj_content": {"attributes": [],
@@ -851,7 +851,9 @@
             }
          };
 
+         var redraw = 0;
          mainItem.onmousemove = function(event) {
+            redraw = 1;
             curX = event.clientX;
             curY = event.clientY;
             if ( placing && moved != "" ) {
@@ -869,16 +871,19 @@
          // common functions 
          function drawScene() {
             setTimeout( function() {
-               drawBackground();
-               drawCursor();
+               if ( redraw ) { 
+                  drawBackground();
+                  drawCursor();
+               }
                ANIMATION = requestAnimationFrame(drawScene);
             }, 1000 / fps );
          }
 
          function initCanvas() {
-            screenWidth  = mainItem.width  = window.innerWidth  - 20;
-            screenHeight = mainItem.height = window.innerHeight - 20;
+            screenWidth  = mainItem.width  = 640; //window.innerWidth  - 20;
+            screenHeight = mainItem.height = 480; // window.innerHeight - 20;
             screenScale  = Math.min( screenWidth, screenHeight ) / 2;
+            redraw = 1;
 
             // starting the engine only if it is not running
             if ( !ANIMATION ) {
