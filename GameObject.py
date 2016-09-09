@@ -481,7 +481,6 @@ class GameInternal(CommonEquality):
       return None
 
    def view_refresh( self ):
-      sorrounding_objects = [] + self.inventory.childObjects + self.room.childObjects
       for action in self.views:
          # cheating to make it faster
          subject, entity = self.find( action.subjectname )
