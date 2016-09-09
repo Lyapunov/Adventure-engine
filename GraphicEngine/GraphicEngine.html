@@ -73,9 +73,10 @@
 
          var dirImgs = "imgs/";
 
-         var screenWidth  = mainItem.width  = window.innerWidth  - 20;
-         var screenHeight = mainItem.height = window.innerHeight - 20;
-         var screenScale  = Math.min( screenWidth, screenHeight ) / 2;
+         // static size
+         mainItem.width  = gameScreenWidth; 
+         mainItem.height = gameScreenHeight;
+
 
          var cursorWidth  = 20;
          var cursorHeight = 30;
@@ -912,9 +913,6 @@
          }
 
          function initGameCanvas() {
-            screenWidth  = mainItem.width  = gameScreenWidth;  // window.innerWidth  - 20;
-            screenHeight = mainItem.height = gameScreenHeight; // window.innerHeight - 20;
-            screenScale  = Math.min( screenWidth, screenHeight ) / 2;
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
 
             // starting the engine only if it is not running
