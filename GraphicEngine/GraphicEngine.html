@@ -913,7 +913,10 @@
          // common functions 
          function drawScene() {
             setTimeout( function() {
-               mainItem.scenedrawer();
+               try {
+                  mainItem.scenedrawer();
+               } catch(err) {
+               }
                ANIMATION = requestAnimationFrame(drawScene);
             }, 1000 / fps );
          }
@@ -927,12 +930,13 @@
 
          //init
          (function() {
-            initGame();
             initCanvas();
             addEventListener('resize', initCanvas, false);
             if ( devMode ) {
                addEventListener('keydown',gameKeyHandler,false);
             }
+
+            initGame();
             mainItem.scenedrawer = gameSceneDrawer;
             mainItem.onmousedown = gameOnMouseDown;
             mainItem.onmouseup   = gameOnMouseUp;
