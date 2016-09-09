@@ -674,6 +674,9 @@
             context.fillStyle = "black";
             context.fillRect(0,0,screenWidth,screenHeight);
             context.drawImage(images[ game.current_room() ], 0, 0);
+         }
+
+         function drawObjects() {
             var stfs = game.stuffs();
             for ( var i = 0; i < stfs.length; ++i ) {
                if ( !( stfs[i] in game_object_xy ) ) {
@@ -877,6 +880,7 @@
             setTimeout( function() {
                if ( redraw ) { 
                   drawBackground();
+                  drawObjects();
                   drawCursor();
                }
                ANIMATION = requestAnimationFrame(drawScene);
