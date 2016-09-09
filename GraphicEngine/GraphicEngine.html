@@ -69,6 +69,8 @@
          var gameScreenHeight = 480;
          var gameScreenSeparatorY = 400;
 
+         var dirImgs = "imgs/";
+
          var screenWidth  = mainItem.width  = window.innerWidth  - 20;
          var screenHeight = mainItem.height = window.innerHeight - 20;
          var screenScale  = Math.min( screenWidth, screenHeight ) / 2;
@@ -84,7 +86,7 @@
          var game_direction_areas = {"dark_room_N":[499,157,31,37],"bathroom_S":[0,354,639,45],"dark_room_W":[25,205,125,96],"secret_room_E":[0,0,50,50]};
          var images = new Object();
          images['cursor'] = new Image();
-         images['cursor'].src = "cursor.png";
+         images['cursor'].src = dirImgs + "cursor.png";
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
@@ -105,16 +107,16 @@
                   if ( input.obj_content.name != "inventory" ) {
                      game_object_pictures[ input.obj_content.name ] = input.obj_content.name + ".png";
                      images[ input.obj_content.name ] = new Image();
-                     images[ input.obj_content.name ].src = input.obj_content.name + ".png";
+                     images[ input.obj_content.name ].src = dirImgs + input.obj_content.name + ".png";
                   }
                }
                if ( input.obj_name == "GamePassage" ) {
                   var name1 = input.obj_content.room_name1 + '_' + input.obj_content.direction1;
                   var name2 = input.obj_content.room_name2 + '_' + input.obj_content.direction2;
                   images[ name1 ] = new Image();
-                  images[ name1 ].src = name1 + ".png";
+                  images[ name1 ].src = dirImgs + name1 + ".png";
                   images[ name2 ] = new Image();
-                  images[ name2 ].src = name2 + ".png";
+                  images[ name2 ].src = dirImgs + name2 + ".png";
                }
             }
 
