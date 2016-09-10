@@ -1205,8 +1205,10 @@
                addEventListener('keydown',gameKeyHandler,false);
             }
 
-            goInitScreen();
             initCanvas();
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
+            goInitScreen();
+            redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
          };
       </script>
    </body>
