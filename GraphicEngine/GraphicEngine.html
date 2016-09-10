@@ -87,20 +87,12 @@
 
          var game_object_pictures = {};
          var images = new Object();
-         images['cursor'] = new Image();
-         images['cursor'].src = dirImgs + "cursor.png";
-         images['cursor_walk'] = new Image();
-         images['cursor_walk'].src = dirImgs + "cursor_walk.png";
-         images['cursor_hand'] = new Image();
-         images['cursor_hand'].src = dirImgs + "cursor_hand.png";
-         images['menuitem_button1'] = new Image();
-         images['menuitem_button1'].src = dirImgs + "menuitem_button1.png";
-         images['menuitem_button2'] = new Image();
-         images['menuitem_button2'].src = dirImgs + "menuitem_button2.png";
-         images['menuitem_screen1'] = new Image();
-         images['menuitem_screen1'].src = dirImgs + "menuitem_screen1.png";
-         images['menuitem_screen2'] = new Image();
-         images['menuitem_screen2'].src = dirImgs + "menuitem_screen2.png";
+
+         var static_image_list = [ 'cursor', 'cursor_walk', 'cursor_hand', 'menuitem_button1', 'menuitem_button2', 'menuitem_screen1', 'menuitem_screen2' ];
+         static_image_list.forEach( function( item ) {
+            images[item] = new Image();
+            images[item].src = dirImgs + item + ".png";
+         });
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
