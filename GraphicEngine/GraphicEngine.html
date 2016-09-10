@@ -63,6 +63,7 @@
       </canvas>
       <script>
          var devMode = 1;
+         var useSpriteSheet = 0;
 
          var mainItem     = document.getElementById('canvas');
          var context      = mainItem.getContext('2d');
@@ -77,7 +78,6 @@
          mainItem.width  = gameScreenWidth; 
          mainItem.height = gameScreenHeight;
 
-
          var cursorWidth  = 20;
          var cursorHeight = 30;
 
@@ -88,10 +88,15 @@
          var game_object_pictures = {};
          var images = new Object();
 
+         // https://www.leshylabs.com/apps/sstool/
+         var spriteSheet = new Image();
+
          var static_image_list = [ 'cursor', 'cursor_walk', 'cursor_hand', 'menuitem_button1', 'menuitem_button2', 'menuitem_screen1', 'menuitem_screen2' ];
          static_image_list.forEach( function( item ) {
-            images[item] = new Image();
-            images[item].src = dirImgs + item + ".png";
+            if ( !useSpriteSheet ) {
+               images[item] = new Image();
+               images[item].src = dirImgs + item + ".png";
+            }
          });
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
@@ -112,17 +117,21 @@
                if ( input.obj_name == "GameObject" ) {
                   if ( input.obj_content.name != "inventory" ) {
                      game_object_pictures[ input.obj_content.name ] = input.obj_content.name + ".png";
-                     images[ input.obj_content.name ] = new Image();
-                     images[ input.obj_content.name ].src = dirImgs + input.obj_content.name + ".png";
+                     if ( !useSpriteSheet ) {
+                        images[ input.obj_content.name ] = new Image();
+                        images[ input.obj_content.name ].src = dirImgs + input.obj_content.name + ".png";
+                     }
                   }
                }
                if ( input.obj_name == "GamePassage" ) {
                   var name1 = input.obj_content.room_name1 + '_' + input.obj_content.direction1;
                   var name2 = input.obj_content.room_name2 + '_' + input.obj_content.direction2;
-                  images[ name1 ] = new Image();
-                  images[ name1 ].src = dirImgs + name1 + ".png";
-                  images[ name2 ] = new Image();
-                  images[ name2 ].src = dirImgs + name2 + ".png";
+                  if ( !useSpriteSheet ) {
+                     images[ name1 ] = new Image();
+                     images[ name1 ].src = dirImgs + name1 + ".png";
+                     images[ name2 ] = new Image();
+                     images[ name2 ].src = dirImgs + name2 + ".png";
+                  }
                }
             }
 
@@ -680,34 +689,52 @@
          var inventory_spacing = 60;
 
          function drawItemA( name, x, y ) {
-            context.drawImage(images[name], x, y);
+            if ( !useSpriteSheet ) {
+               context.drawImage(images[name], x, y);
+               return;
+            }
          }
 
          function drawItemCenter( name, x, y ) {
-            context.drawImage(images[name], x - images[name].width / 2, y - images[name].height / 2);
+            if ( !useSpriteSheet ) {
+               context.drawImage(images[name], x - images[name].width / 2, y - images[name].height / 2);
+               return;
+            }
          }
 
          function drawItemB( name, x, y, w, h ) {
-            context.drawImage(images[name], x, y, w, h);
+            if ( !useSpriteSheet ) {
+               context.drawImage(images[name], x, y, w, h);
+               return;
+            }
          }
 
+         function drawNormalizedItem( name, x, y ) {
+            if ( !useSpriteSheet ) {
+               var wi = images[ name ].width;
+               var he = images[ name ].height;
+               if ( wi > inventory_spacing || he > inventory_spacing ) {
+                  var scale = Math.min(inventory_spacing / wi, inventory_spacing / he );
+                  wi = wi * scale;
+                  he = he * scale;
+               }
+               context.drawImage(images[name], x - wi / 2, y - he / 2, wi, he);
+               return;
+            }
+         }
+
+
          function drawItemF( name, sx, sy, sw, sh, tx, ty, tw, th ) {
-            context.drawImage(images[name], sx, sy, sw, sh, tx, ty, tw, th);
+            if ( !useSpriteSheet ) {
+               context.drawImage(images[name], sx, sy, sw, sh, tx, ty, tw, th);
+               return;
+            }
          }
 
          function existsImage( name ) {
-            return images[ name ].width > 0;
-         }
-
-         function drawNormalizedItem( names, x, y ) {
-            var wi = images[ names ].width;
-            var he = images[ names ].height;
-            if ( wi > inventory_spacing || he > inventory_spacing ) {
-               var scale = Math.min(inventory_spacing / wi, inventory_spacing / he );
-               wi = wi * scale;
-               he = he * scale;
+            if ( !useSpriteSheet ) {
+               return images[ name ].width > 0;
             }
-            drawItemB( names, x - wi / 2, y - he / 2, wi, he);
          }
 
          function drawGameBackground( area ) {
