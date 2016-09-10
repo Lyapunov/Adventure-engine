@@ -980,7 +980,7 @@
                           preX + inventory_spacing / 2 + 5,
                           preY + inventory_spacing / 2 + 5];
 
-            if ( placing && moved != "" ) {
+            if ( placing && moved != "" && !useSpriteSheet ) {
                game_object_xy[ moved ] = [ curX - images[ moved ].width / 2, curY - images[ moved ].height / 2 ];
             }
             if ( placing && areamoved != "" ) {
