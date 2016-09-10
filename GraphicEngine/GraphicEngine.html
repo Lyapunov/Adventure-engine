@@ -695,6 +695,10 @@
             context.drawImage(images[name], sx, sy, sw, sh, tx, ty, tw, th);
          }
 
+         function existsImage( name ) {
+            return images[ name ].width > 0;
+         }
+
          function drawNormalizedItem( names, x, y ) {
             var wi = images[ names ].width;
             var he = images[ names ].height;
@@ -744,7 +748,7 @@
                      game_direction_areas[ident] = [0,0,50,50];
                   }
                   var xywh = game_direction_areas[ident];
-                  if ( images[ ident ].width > 0 ) {
+                  if ( existsImage( ident ) ) {
                      drawItemCenter(ident, xywh[0] + xywh[2] / 2, xywh[1] + xywh[3] / 2);
                   }
                }
@@ -766,7 +770,7 @@
                   var drs = game.directions();
                   for ( var i = 0; i < drs.length; ++i ) {
                      var ident = game.current_room() + '_' + drs[i][0];
-                     if ( images[ident].width > 0 ) {
+                     if ( existsImage(ident) ) {
                         var xywh = game_direction_areas[ident];
                         if ( curX >= xywh[0] && curX < xywh[0] + xywh[2] 
                           && curY >= xywh[1] && curY < xywh[1] + xywh[3] ) {
@@ -857,7 +861,7 @@
                   if ( selection == "" ) {
                      for ( var i = 0; i < drs.length; ++i ) {
                         var ident = game.current_room() + '_' + drs[i][0];
-                        if ( images[ident].width > 0 ) {
+                        if ( existsImage(ident) ) {
                            var xywh = game_direction_areas[ident];
                            if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
                              && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
