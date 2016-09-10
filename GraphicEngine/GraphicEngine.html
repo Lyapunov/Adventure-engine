@@ -88,8 +88,22 @@
          var game_object_pictures = {};
          var images = new Object();
 
+         // How to create spritesheet:
          // https://www.leshylabs.com/apps/sstool/
          var spriteSheet = new Image();
+         var sprites = [{"name":"bathroom","x":641,"y":481,"width":640,"height":400},{"name":"bird","x":201,"y":0,"width":46,"height":70},{"name":"burning_candle","x":201,"y":120,"width":34,"height":74},{"name":"cabinet","x":0,"y":282,"width":222,"height":165},{"name":"candle","x":248,"y":116,"width":31,"height":72},{"name":"cursor_hand","x":46,"y":0,"width":40,"height":51},{"name":"cursor_walk","x":201,"y":71,"width":30,"height":48},{"name":"cursor","x":154,"y":0,"width":20,"height":33},{"name":"dark_room_W","x":248,"y":0,"width":135,"height":115},{"name":"dark_room","x":0,"y":929,"width":640,"height":400},{"name":"injured_bird","x":201,"y":195,"width":46,"height":70},{"name":"knife","x":0,"y":25,"width":45,"height":34},{"name":"match","x":223,"y":282,"width":21,"height":26},{"name":"menuitem_button1","x":0,"y":211,"width":200,"height":70},{"name":"menuitem_button2","x":384,"y":204,"width":200,"height":70},{"name":"menuitem_screen1","x":641,"y":0,"width":640,"height":480},{"name":"menuitem_screen2","x":0,"y":448,"width":640,"height":480},{"name":"picture","x":384,"y":0,"width":203,"height":203},{"name":"secret_room","x":641,"y":929,"width":640,"height":400},{"name":"stone","x":0,"y":0,"width":25,"height":24},{"name":"table","x":0,"y":60,"width":153,"height":150}];
+         if ( useSpriteSheet ) {
+            spriteSheet.src = "spritesheet.png";
+         }
+
+         function findSpriteDataByName( name ) {
+            for ( var i = 0; i < sprites.length; ++i ) {
+               if ( sprites[i].name == name ) {
+                  return sprites[i];
+               }
+            }
+            return null;
+         }
 
          var static_image_list = [ 'cursor', 'cursor_walk', 'cursor_hand', 'menuitem_button1', 'menuitem_button2', 'menuitem_screen1', 'menuitem_screen2' ];
          static_image_list.forEach( function( item ) {
@@ -692,6 +706,11 @@
             if ( !useSpriteSheet ) {
                context.drawImage(images[name], x, y);
                return;
+            } else {
+               var dat = findSpriteDataByName( name );
+               if ( dat != null ) {
+                  context.drawImage( spriteSheet, dat.x, dat.y, dat.width, dat.height, x, y, dat.width, dat.height );
+               }
             }
          }
 
@@ -699,6 +718,11 @@
             if ( !useSpriteSheet ) {
                context.drawImage(images[name], x - images[name].width / 2, y - images[name].height / 2);
                return;
+            } else {
+               var dat = findSpriteDataByName( name );
+               if ( dat != null ) {
+                  context.drawImage( spriteSheet, dat.x, dat.y, dat.width, dat.height, x - dat.width / 2, y - dat.height / 2, dat.width, dat.height );
+               }
             }
          }
 
@@ -706,6 +730,11 @@
             if ( !useSpriteSheet ) {
                context.drawImage(images[name], x, y, w, h);
                return;
+            } else {
+               var dat = findSpriteDataByName( name );
+               if ( dat != null ) {
+                  context.drawImage( spriteSheet, dat.x, dat.y, dat.width, dat.height, x, y, w, h );
+               }
             }
          }
 
@@ -720,6 +749,18 @@
                }
                context.drawImage(images[name], x - wi / 2, y - he / 2, wi, he);
                return;
+            } else {
+               var dat = findSpriteDataByName( name );
+               if ( dat != null ) {
+                  var wi = dat.width;
+                  var he = dat.height;
+                  if ( wi > inventory_spacing || he > inventory_spacing ) {
+                     var scale = Math.min(inventory_spacing / wi, inventory_spacing / he );
+                     wi = wi * scale;
+                     he = he * scale;
+                  }
+                  context.drawImage( spriteSheet, dat.x, dat.y, dat.width, dat.height, x - wi / 2, y - he / 2, wi, he );
+               }
             }
          }
 
@@ -727,19 +768,34 @@
             if ( !useSpriteSheet ) {
                context.drawImage(images[name], sx, sy, sw, sh, tx, ty, tw, th);
                return;
+            } else {
+               var dat = findSpriteDataByName( name );
+               context.drawImage(spriteSheet, dat.x + sx, dat.y + sy, sw, sh, tx, ty, tw, th);
+               return;
             }
          }
 
          function existsImage( name ) {
             if ( !useSpriteSheet ) {
                return images[ name ].width > 0;
+            } else {
+               return findSpriteDataByName( name ) != null;
             }
          }
 
          function belongsToImage( ident, x, y ) {
             var xy = game_object_xy[ ident ];
-            return x >= xy[0] && x < xy[0] + images[ ident ].width
-                   && y >= xy[1] && y < xy[1] + images[ ident ].height;
+            if ( !useSpriteSheet ) {
+               return x >= xy[0] && x < xy[0] + images[ ident ].width
+                      && y >= xy[1] && y < xy[1] + images[ ident ].height;
+            } else {
+               var dat = findSpriteDataByName( ident );
+               if ( dat == null ) {
+                  return false;
+               }
+               return x >= xy[0] && x < xy[0] + dat.width
+                      && y >= xy[1] && y < xy[1] + dat.height;
+            }
          }
 
          function belongsToArea( ident, x, y ) {
