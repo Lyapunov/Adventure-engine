@@ -723,7 +723,6 @@
             }
          }
 
-
          function drawItemF( name, sx, sy, sw, sh, tx, ty, tw, th ) {
             if ( !useSpriteSheet ) {
                context.drawImage(images[name], sx, sy, sw, sh, tx, ty, tw, th);
@@ -735,6 +734,18 @@
             if ( !useSpriteSheet ) {
                return images[ name ].width > 0;
             }
+         }
+
+         function belongsToImage( ident, x, y ) {
+            var xy = game_object_xy[ ident ];
+            return x >= xy[0] && x < xy[0] + images[ ident ].width
+                   && y >= xy[1] && y < xy[1] + images[ ident ].height;
+         }
+
+         function belongsToArea( ident, x, y ) {
+            var xywh = game_direction_areas[ident];
+            return x >= xywh[0] && x < xywh[0] + xywh[2] 
+                   && y >= xywh[1] && y < xywh[1] + xywh[3];
          }
 
          function drawGameBackground( area ) {
@@ -798,11 +809,9 @@
                   for ( var i = 0; i < drs.length; ++i ) {
                      var ident = game.current_room() + '_' + drs[i][0];
                      if ( existsImage(ident) ) {
-                        var xywh = game_direction_areas[ident];
-                        if ( curX >= xywh[0] && curX < xywh[0] + xywh[2] 
-                          && curY >= xywh[1] && curY < xywh[1] + xywh[3] ) {
+                        if ( belongsToArea(ident, curX, curY ) ) {
                            drawItemCenter("cursor_walk", curX, curY);
-                           return ;
+                           return;
                         }
                      }
                   }
@@ -810,9 +819,7 @@
                   var stfs = game.stuffs();
                   for ( var i = 0; i < stfs.length; ++i ) {
                      var ident = stfs[i];
-                     var xy = game_object_xy[ ident ];
-                     if ( curX >= xy[0] && curX < xy[0] + images[ ident ].width
-                       && curY >= xy[1] && curY < xy[1] + images[ ident ].height ) {
+                     if ( belongsToImage( ident, curX, curY ) ) {
                         drawItemCenter("cursor_hand", curX, curY);
                         return;
                      }
@@ -862,9 +869,7 @@
                var stfs = game.stuffs();
                for ( var i = 0; i < stfs.length; ++i ) {
                   var ident = stfs[i];
-                  var xy = game_object_xy[ ident ];
-                  if ( event.clientX >= xy[0] && event.clientX < xy[0] + images[ ident ].width
-                    && event.clientY >= xy[1] && event.clientY < xy[1] + images[ ident ].height ) {
+                  if ( belongsToImage( ident, event.clientX, event.clientY ) ) {
                      moved = ident;
                   }
                }
@@ -872,9 +877,7 @@
                   var drs = game.directions();
                   for ( var i = 0; i < drs.length; ++i ) {
                      var ident = game.current_room() + '_' + drs[i][0];
-                     var xywh = game_direction_areas[ident];
-                     if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
-                       && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
+                     if ( belongsToArea(ident, event.clientX, event.clientY ) ) {
                         areamoved = ident;
                         areadir   = 1;
                      }
@@ -902,9 +905,7 @@
                   var something = 0;
                   for ( var i = 0; i < stfs.length; ++i ) {
                      var ident = stfs[i];
-                     var xy = game_object_xy[ ident ];
-                     if ( event.clientX >= xy[0] && event.clientX < xy[0] + images[ ident ].width
-                       && event.clientY >= xy[1] && event.clientY < xy[1] + images[ ident ].height ) {
+                     if ( belongsToImage( ident, event.clientX, event.clientY ) ) {
                         something = 1;
                         if ( selection == "" ) {
                            if ( game.do_it( 'open', ident ) || game.do_it( 'use', ident ) != null || game.do_it( 'take', ident ) ) {
@@ -930,9 +931,7 @@
                      if ( selection == "" ) {
                         for ( var i = 0; i < drs.length; ++i ) {
                            var ident = game.current_room() + '_' + drs[i][0];
-                           var xywh = game_direction_areas[ident];
-                           if ( event.clientX >= xywh[0] && event.clientX < xywh[0] + xywh[2] 
-                             && event.clientY >= xywh[1] && event.clientY < xywh[1] + xywh[3] ) {
+                           if ( belongsToArea(ident, event.clientX, event.clientY ) ) {
                               game.do_it( 'go', drs[i][0] );
                               return ;
                            }
@@ -1017,13 +1016,15 @@
                context.fillStyle = "black";
                context.fillRect(area[0],area[1],area[2],area[3]);
                drawItemF('menuitem_screen1', area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
-               drawItemA('menuitem_button1', 230, 250);
+               var xy = game_object_xy[ 'menuitem_button1' ];
+               drawItemA('menuitem_button1', xy[0], xy[1]);
                startScreenDrawCursor();
                redrawArea = null;
             }
          }
 
          function startScreenInit() {
+            game_object_xy = { 'menuitem_button1': [230,250] };
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
          }
 
@@ -1043,10 +1044,7 @@
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             curX = event.clientX;
             curY = event.clientY;
-            if ( curX > 230
-                 && curY > 250
-                 && curX < 230 +  images[ 'menuitem_button1' ].width 
-                 && curY < 250 +  images[ 'menuitem_button1' ].height ) {
+            if ( belongsToImage( 'menuitem_button1', curX, curY ) ) {
                goGame();
             }
          }
@@ -1090,13 +1088,15 @@
                context.fillStyle = "black";
                context.fillRect(area[0],area[1],area[2],area[3]);
                drawItemF('menuitem_screen2', area[0], area[1], area[2], area[3], area[0], area[1], area[2], area[3]);
-               drawItemA('menuitem_button2', 230, 250);
+               var xy = game_object_xy[ 'menuitem_button2' ];
+               drawItemA('menuitem_button2', xy[0], xy[1]);
                endScreenDrawCursor();
                redrawArea = null;
             }
          }
 
          function endScreenInit() {
+            game_object_xy = { 'menuitem_button2': [230,250] };
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
          }
 
@@ -1116,10 +1116,7 @@
             redrawArea = [0, 0, gameScreenWidth, gameScreenHeight];
             curX = event.clientX;
             curY = event.clientY;
-            if ( curX > 230
-                 && curY > 250
-                 && curX < 230 +  images[ 'menuitem_button2' ].width 
-                 && curY < 250 +  images[ 'menuitem_button2' ].height ) {
+            if ( belongsToImage( 'menuitem_button2', curX, curY ) ) {
                goInitScreen();
             }
          }
