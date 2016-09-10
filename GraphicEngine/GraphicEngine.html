@@ -89,6 +89,10 @@
          var images = new Object();
          images['cursor'] = new Image();
          images['cursor'].src = dirImgs + "cursor.png";
+         images['cursor_walk'] = new Image();
+         images['cursor_walk'].src = dirImgs + "cursor_walk.png";
+         images['cursor_hand'] = new Image();
+         images['cursor_hand'].src = dirImgs + "cursor_hand.png";
          images['menuitem_button1'] = new Image();
          images['menuitem_button1'].src = dirImgs + "menuitem_button1.png";
          images['menuitem_button2'] = new Image();
@@ -747,8 +751,48 @@
          function drawGameCursor() {
             preX = curX;
             preY = curY;
-            if ( selection == "" ) {
-               context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
+
+            if ( !placing ) {
+
+               if ( selection == "" ) {
+                  var drs = game.directions();
+                  for ( var i = 0; i < drs.length; ++i ) {
+                     var ident = game.current_room() + '_' + drs[i][0];
+                     if ( images[ident].width > 0 ) {
+                        var xywh = game_direction_areas[ident];
+                        if ( curX >= xywh[0] && curX < xywh[0] + xywh[2] 
+                          && curY >= xywh[1] && curY < xywh[1] + xywh[3] ) {
+                           context.drawImage(images["cursor_walk"], curX - images["cursor_walk"].width / 2, curY - images["cursor_walk"].height / 2 );
+                           return ;
+                        }
+                     }
+                  }
+
+                  var stfs = game.stuffs();
+                  for ( var i = 0; i < stfs.length; ++i ) {
+                     var ident = stfs[i];
+                     var xy = game_object_xy[ ident ];
+                     if ( curX >= xy[0] && curX < xy[0] + images[ ident ].width
+                       && curY >= xy[1] && curY < xy[1] + images[ ident ].height ) {
+                        context.drawImage(images["cursor_hand"], curX - images["cursor_hand"].width / 2, curY - images["cursor_hand"].height / 2 );
+                        return;
+                     }
+                  }
+
+                  for ( var i = 0; i < drs.length; ++i ) {
+                     var ident = game.current_room() + '_' + drs[i][0];
+                     var xywh = game_direction_areas[ident];
+                     if ( curX >= xywh[0] && curX < xywh[0] + xywh[2] 
+                       && curY >= xywh[1] && curY < xywh[1] + xywh[3] ) {
+                        context.drawImage(images["cursor_walk"], curX - images["cursor_walk"].width / 2, curY - images["cursor_walk"].height / 2 );
+                        return ;
+                     }
+                  }
+               }
+            }
+
+            if ( selection == "" || placing ) {
+               context.drawImage(images["cursor"], curX, curY);
             } else {
                drawNormalizedItem( selection, curX, curY );
             }
@@ -802,7 +846,6 @@
                if ( event.clientY <= gameScreenSeparatorY ) {
 
                   var drs = game.directions();
-                  console.log( drs );
                   if ( selection == "" ) {
                      for ( var i = 0; i < drs.length; ++i ) {
                         var ident = game.current_room() + '_' + drs[i][0];
@@ -925,7 +968,7 @@
          function startScreenDrawCursor() {
             preX = curX;
             preY = curY;
-            context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
+            context.drawImage(images["cursor"], curX, curY);
          }
 
          function startScreenDrawer() {
@@ -998,7 +1041,7 @@
          function endScreenDrawCursor() {
             preX = curX;
             preY = curY;
-            context.drawImage(images["cursor"], 0, 0, 135, 210, curX, curY, cursorWidth, cursorHeight);
+            context.drawImage(images["cursor"], curX, curY);
          }
 
          function endScreenDrawer() {
