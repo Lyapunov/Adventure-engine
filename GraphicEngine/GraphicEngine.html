@@ -92,9 +92,6 @@
          // https://www.leshylabs.com/apps/sstool/
          var spriteSheet = new Image();
          var sprites = [{"name":"bathroom","x":641,"y":481,"width":640,"height":400},{"name":"bird","x":201,"y":0,"width":46,"height":70},{"name":"burning_candle","x":201,"y":120,"width":34,"height":74},{"name":"cabinet","x":0,"y":282,"width":222,"height":165},{"name":"candle","x":248,"y":116,"width":31,"height":72},{"name":"cursor_hand","x":46,"y":0,"width":40,"height":51},{"name":"cursor_walk","x":201,"y":71,"width":30,"height":48},{"name":"cursor","x":154,"y":0,"width":20,"height":33},{"name":"dark_room_W","x":248,"y":0,"width":135,"height":115},{"name":"dark_room","x":0,"y":929,"width":640,"height":400},{"name":"injured_bird","x":201,"y":195,"width":46,"height":70},{"name":"knife","x":0,"y":25,"width":45,"height":34},{"name":"match","x":223,"y":282,"width":21,"height":26},{"name":"menuitem_button1","x":0,"y":211,"width":200,"height":70},{"name":"menuitem_button2","x":384,"y":204,"width":200,"height":70},{"name":"menuitem_screen1","x":641,"y":0,"width":640,"height":480},{"name":"menuitem_screen2","x":0,"y":448,"width":640,"height":480},{"name":"picture","x":384,"y":0,"width":203,"height":203},{"name":"secret_room","x":641,"y":929,"width":640,"height":400},{"name":"stone","x":0,"y":0,"width":25,"height":24},{"name":"table","x":0,"y":60,"width":153,"height":150}];
-         if ( useSpriteSheet ) {
-            spriteSheet.src = "spritesheet.png";
-         }
 
          function findSpriteDataByName( name ) {
             for ( var i = 0; i < sprites.length; ++i ) {
@@ -112,6 +109,17 @@
                images[item].src = dirImgs + item + ".png";
             }
          });
+
+         var game = null;
+         var game_object_xy = null;
+         var game_direction_areas = null;
+
+         if ( useSpriteSheet ) {
+            spriteSheet.onload = function() { main(); }
+            spriteSheet.src = "spritesheet.png";
+         } else {
+            main();
+         }
 
          // weird, but adding functions to the blueprints recursively - doing the same things that in Python
          function addFunctionsToObjectsRecursively( input ) {
@@ -645,10 +653,6 @@
                return null;
             };
          };
-
-         var game = null;
-         var game_object_xy = null;
-         var game_direction_areas = null;
 
          function initGame() {
             game_object_xy = {"table":[478,241],"candle":[508,205],"match":[582,263],"bird":[537,200],"stone":[532,264],"picture":[0.5,156.5],"dark_room":[0,0],"knife":[314.5,313],"cabinet":[376,195.5],"bathroom":[0,0],"secret_room":[0,0],"burning_candle":[502,203],"injured_bird":[536,199]};
@@ -1195,15 +1199,15 @@
          }
 
          //init
-         (function() {
-            initCanvas();
+         function main() {
             addEventListener('resize', initCanvas, false);
             if ( devMode ) {
                addEventListener('keydown',gameKeyHandler,false);
             }
 
             goInitScreen();
-         })();
+            initCanvas();
+         };
       </script>
    </body>
 </html>
