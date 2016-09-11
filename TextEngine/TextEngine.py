@@ -14,8 +14,10 @@ def main(argv):
       print "USAGE:", os.path.basename( argv[0] ), "<game dat file>"
       return
    gamefile = argv[1]
+   exit_commands = [ 'quit', 'exit' ]
+   inventory_commands = [ 'inventory' ];
    print "Opening file", gamefile
-   print
+   print 
    game = None;
    try:
       with open(gamefile,'r') as myfile:
@@ -32,6 +34,12 @@ def main(argv):
    if result != "":
       print "Error: ", result;
       return
+
+   print "Commands to use:", 
+   for command in game.commands.keys() + exit_commands + inventory_commands:
+      print command,
+   print
+   print
 
    looked = {}
    while True:
@@ -66,9 +74,9 @@ def main(argv):
       input_fields += ['',''] # to set a default value for not given params in an easy way
 
       if input_fields[1] == '' and input_fields[2] == '':
-         if input_fields[0] in [ 'quit', 'exit' ]:
+         if input_fields[0] in exit_commands:
             break 
-         if input_fields[0] in [ 'inventory' ]:
+         if input_fields[0] in inventory_commands:
             if len( game.inventory() ) > 0:
                print 'You have the following items:',
                for item in game.inventory():
