@@ -28,7 +28,7 @@ Click to the image to try the demo game, which was created with these tools.
 [![image of demogame](demo_game.png)](http://critic-fire-81205.bitballoon.com/)
 
 ## Development steps
-* Writing the JSON description first into a text file.
+* Writing the JSON description into a text file first.
 * Checking it with **DescriptionChecker.py**.
 * Creating the images for all room and game objects, and maybe for some game passages.
 * Adding the game description to **PointAndClickEngine.html**, adding the images to **imgs**, set *devMode=1*, *useSpriteSheet=0*, *sprites=[]*, *game_object_xy={};*, *game_direction_areas={};*.
