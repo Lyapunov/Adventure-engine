@@ -20,8 +20,8 @@ Codes are in Python and in JavaScript.
 
 ## Demo game
 
-A demo game, which was created with these tools, is playable here:
-[demo_game.png](http://critic-fire-81205.bitballoon.com/)
+Click to the image to try the demo game, which was created with these tools.
+[![image of demogame](demo_game.png)](http://critic-fire-81205.bitballoon.com/)
 
 ## Development step by step
 
