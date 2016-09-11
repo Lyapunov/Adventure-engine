@@ -3,7 +3,7 @@
 import json
 import os.path
 import sys
-sys.path.append("..")
+sys.path.append("../PyLib")
 
 from GameObject import Game
 from GameObject import GameDecoder
