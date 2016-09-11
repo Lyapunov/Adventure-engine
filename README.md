@@ -27,7 +27,9 @@ Codes are in Python and in JavaScript.
 Click to the image to try the demo game, which was created with these tools.
 [![image of demogame](demo_game.png)](http://critic-fire-81205.bitballoon.com/)
 
-## Development steps
+## How to use
+
+The steps of developing a new game:
 * Writing the JSON description into a text file first.
 * Checking it with **DescriptionChecker.py**.
 * Creating the images for all room and game objects, and maybe for some game passages.
