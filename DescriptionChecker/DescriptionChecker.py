@@ -8,6 +8,7 @@ sys.path.append("../PyLib")
 from GameObject import Game
 from GameObject import GameDecoder
 from GameObject import GameSyntaxChecker
+from GameObject import GameSolver
 
 def main(argv):
    if len(argv) != 2:
@@ -34,6 +35,10 @@ def main(argv):
       return
    else:
       print "Game description in",gamefile,"is error-free."
+   solution =  GameSolver().solve( game )
+   print
+   print "The solution is:"
+   print solution
 
 if __name__ == "__main__":
     main(sys.argv)
