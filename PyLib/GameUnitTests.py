@@ -378,6 +378,23 @@ class GameUnitTests(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == 'there must be exactly one action for each invisible object which reveals it' )
 
+   # This game is not solvable with the current engine, and broken. Door doesn't disappear, open_door is not
+   # immobile, so it cannot hide it, but passage reveal action won't work. The solver fails to find the solution.
+   def test_syntax_checker_wrong_game27(self):
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+                                                                   GameObject( 'key' , [] ) ] ),
+                                GameObject( 'ending_room' ) ],
+                              [ GameObject( 'open_door' ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GameObjectUseAction( 'key', 'door', 'open_door' ) ],
+                              [ GamePassageRevealAction( 'open_door', '', 11 )],
+                              'ending_room',
+                              {} ] )
+      verdict = GameSyntaxChecker().check( game_internal )
+      bp = json.dumps( game_internal, cls=GameEncoder );
+      print bp
+      assert ( verdict  == "" )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ],
