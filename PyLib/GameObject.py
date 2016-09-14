@@ -195,8 +195,8 @@ class GameSyntaxChecker:
       for action in allactions:
          for actor in action.get_actor_names():
             if not actor == '' and not actor in stuffs:
-               return False
-      return True
+               return actor
+      return None
 
    def check_subjects_to_reveal_are_invisible_in_actions( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
@@ -338,8 +338,9 @@ class GameSyntaxChecker:
       if not self.check_passage_identifiers_are_valid_in_actions( game ):
          return 'invalid passage identifiers in an action'
 
-      if not self.check_actors_are_valid_in_actions( game ):
-         return 'found invalid object in an action'
+      culprit = self.check_actors_are_valid_in_actions( game )
+      if culprit:
+         return 'found invalid object in an action, ' + culprit
 
       if not self.check_no_two_actors_with_the_same_name( game ):
          return 'found two objects with the same name'

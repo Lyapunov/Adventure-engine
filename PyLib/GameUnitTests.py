@@ -201,7 +201,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found invalid object in an action' )
+      assert ( verdict  == 'found invalid object in an action, button' )
 
    def test_syntax_checker_wrong_game_14(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),
