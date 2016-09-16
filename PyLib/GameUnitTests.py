@@ -363,7 +363,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == "at least one of the action's actors must be mobile" )
+      assert ( verdict  == "action actor key must be mobile" )
 
    def test_syntax_checker_wrong_game26(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE, GameObjectAttribute.INVISIBLE] ),
@@ -392,7 +392,7 @@ class GameUnitTests(unittest.TestCase):
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       bp = json.dumps( game_internal, cls=GameEncoder );
-      assert ( verdict  == "" )
+      assert ( verdict  == "action actor door must be mobile" )
 
    def test_syntax_checker_good_game1(self):
       # minimal valid game

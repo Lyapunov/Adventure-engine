@@ -281,14 +281,21 @@ class GameSyntaxChecker:
       for action in allactions:
          pair = action.get_actor_names()
          immobiles = 0
+         last_immobile = ""
          for one_name in pair:
             for obj in objects:
                if obj.name == one_name:
                   if GameObjectAttribute.IMMOBILE in obj.get_attributes():
                      immobiles += 1
+                     last_immobile = one_name
          if immobiles == 2:
-            return False
-      return True
+            return last_immobile
+         # The subject may can be immobile, but the tool cannot!
+         if immobiles == 1:
+            pair.remove( last_immobile )
+            if action.applicable( pair[0], last_immobile ):
+               return last_immobile
+      return ""
 
 
    def check_no_two_actors_with_the_same_name( self, game ):
@@ -360,8 +367,9 @@ class GameSyntaxChecker:
       if not self.check_subjects_to_reveal_are_invisible_in_actions( game ):
          return 'subjects of revealing actions must be invisible initially'
 
-      if not self.check_no_actions_with_two_immobile_actors( game ):
-         return "at least one of the action's actors must be mobile"
+      culprit = self.check_no_actions_with_two_immobile_actors( game )
+      if culprit :
+         return "action actor " + culprit + " must be mobile"
 
       if not self.check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( game ):
          return 'there must be exactly one action for each invisible object which reveals it'
