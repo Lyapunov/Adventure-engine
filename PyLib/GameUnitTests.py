@@ -392,7 +392,6 @@ class GameUnitTests(unittest.TestCase):
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
       bp = json.dumps( game_internal, cls=GameEncoder );
-      print bp
       assert ( verdict  == "" )
 
    def test_syntax_checker_good_game1(self):
