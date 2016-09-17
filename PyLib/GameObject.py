@@ -321,8 +321,8 @@ class GameSyntaxChecker:
    def check_not_top_level_stuffs_cannot_have_attributes( self, game ):
       for stuff in self.get_all_stuffs( game, 0, 0 ):
          if len( stuff.get_attributes() ) > 0:
-            return False
-      return True
+            return stuff.name
+      return ""
 
    def check_stuff_names_are_proper( self, game ):
       regex = re.compile('[0-9,a-z,A-Z,_]+$')
@@ -383,8 +383,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'found multiple actions for the same actor, ' + culprit
 
-      if not self.check_not_top_level_stuffs_cannot_have_attributes( game ):
-         return 'not top level stuffs cannot have attributes'
+      culprit = self.check_not_top_level_stuffs_cannot_have_attributes( game )
+      if culprit:
+         return 'not top level stuffs cannot have attributes, ' + culprit
 
       if not self.check_subjects_to_reveal_are_invisible_in_actions( game ):
          return 'subjects of revealing actions must be invisible initially'

@@ -320,7 +320,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'not top level stuffs cannot have attributes' )
+      assert ( verdict  == 'not top level stuffs cannot have attributes, key' )
 
    def test_syntax_checker_wrong_game23(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
@@ -335,7 +335,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'not top level stuffs cannot have attributes' )
+      assert ( verdict  == 'not top level stuffs cannot have attributes, key' )
 
    def test_syntax_checker_wrong_game24(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'key', [GameObjectAttribute.INVISIBLE] ) ] ),
