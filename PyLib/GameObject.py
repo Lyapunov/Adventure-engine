@@ -216,8 +216,8 @@ class GameSyntaxChecker:
             for obj in objects:
               if obj.name == subjectname:
                  if not GameObjectAttribute.INVISIBLE in obj.get_attributes():
-                    return False
-      return True
+                    return obj.name
+      return ""
 
    def check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
@@ -387,8 +387,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'not top level stuffs cannot have attributes, ' + culprit
 
-      if not self.check_subjects_to_reveal_are_invisible_in_actions( game ):
-         return 'subjects of revealing actions must be invisible initially'
+      culprit = self.check_subjects_to_reveal_are_invisible_in_actions( game )
+      if culprit:
+         return 'subjects of revealing actions must be invisible initially, ' + culprit
 
       culprit = self.check_no_actions_with_two_immobile_actors( game )
       if culprit :

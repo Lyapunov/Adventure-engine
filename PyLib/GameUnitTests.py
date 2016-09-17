@@ -350,7 +350,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'subjects of revealing actions must be invisible initially' )
+      assert ( verdict  == 'subjects of revealing actions must be invisible initially, burning_candle' )
 
    def test_syntax_checker_wrong_game25(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
