@@ -512,8 +512,8 @@ class GameUnitTests(unittest.TestCase):
       solution = GameSolver().solve( game_internal )
       assert ( solution == [['take', 'keypart1'], ['open', 'box'], ['take', 'keypart2'], ['use', 'keypart1', 'keypart2'], ['use', 'door', 'key'], ['go', 'N']] )
 
-   # This game is kind of strange, because use action + passage reval view = use passage reveal, so it
-   # just a complication. game10 shows the sense.
+   # Here use action + passage reval view = use passage reveal, so it is just 
+   # pure complication. game10 may make the possibility of the separaton more meaningful.
    def test_syntax_checker_good_game9(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'key' , [] ) ] ),
