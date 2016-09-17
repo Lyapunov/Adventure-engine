@@ -168,7 +168,7 @@ class GameUnitTests(unittest.TestCase):
                               [],
                               [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
                                 GamePassage(11, 'roomB', 'roomC', 'W', 'S' ) ], [], [], 'roomC', {} ] )
-      assert ( GameSyntaxChecker().check( game_internal )  == 'passage identifiers are not unique' )
+      assert ( GameSyntaxChecker().check( game_internal ) == 'passage identifiers are not unique, 11' )
 
    def test_syntax_checker_wrong_game_11(self):
       game_internal = Game( [ [ GameObject( 'roomA' ), GameObject( 'roomB' ),
