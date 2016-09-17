@@ -262,7 +262,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found multiple actions for the same actor' )
+      assert ( verdict  == 'found multiple actions for the same actor, button1' )
 
    def test_syntax_checker_wrong_game_19(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),
@@ -276,7 +276,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found multiple actions for the same actor' )
+      assert ( verdict  == 'found multiple actions for the same actor, button1' )
 
    def test_syntax_checker_wrong_game_20(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'handle1', [GameObjectAttribute.IMMOBILE], [] ),
@@ -291,7 +291,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found multiple actions for the same actor' )
+      assert ( verdict  == 'found multiple actions for the same actor, crowbar' )
 
    def test_syntax_checker_wrong_game_21(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'handle1', [GameObjectAttribute.IMMOBILE], [] ),

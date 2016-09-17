@@ -260,7 +260,10 @@ class GameSyntaxChecker:
       for action in allactions:
          pair = action.get_actor_names()
          if pair in actor_pairs:
-            return False
+            if pair[0] == '':
+               return pair[1]
+            else:
+               return pair[2]
          else:
             actor_pairs.append( pair )
 
@@ -270,7 +273,7 @@ class GameSyntaxChecker:
          if not action.subject_to_reveal():
             for actor in action.get_actor_names():
                if actor in actors:
-                  return False
+                  return actor
                else:
                   actors.append( actor )
       for action in allactions:
@@ -278,8 +281,8 @@ class GameSyntaxChecker:
             for actor in action.get_actor_names():
                if not actor in action.subject_to_reveal():
                    if actor in actors:
-                      return False
-      return True
+                      return actor
+      return ""
 
    def check_no_actions_with_two_immobile_actors( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
@@ -376,8 +379,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'found invalid action with the same actor twice, ' + culprit
 
-      if not self.check_no_multiple_actions( game ):
-         return 'found multiple actions for the same actor'
+      culprit = self.check_no_multiple_actions( game )
+      if culprit:
+         return 'found multiple actions for the same actor, ' + culprit
 
       if not self.check_not_top_level_stuffs_cannot_have_attributes( game ):
          return 'not top level stuffs cannot have attributes'
