@@ -154,14 +154,14 @@ class GameUnitTests(unittest.TestCase):
                               [],
                               [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
                                 GamePassage(12, 'roomA', 'roomB', 'W', 'S' ) ], [], [], 'roomB', {} ] )
-      assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the rooms roomA, roomB' )
 
    def test_syntax_checker_wrong_game_9(self):
       game_internal = Game( [ [ GameObject( 'roomA' ), GameObject( 'roomB' ) ],
                               [],
                               [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
                                 GamePassage(12, 'roomB', 'roomA', 'W', 'S' ) ], [], [], 'roomB', {} ] )
-      assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the same rooms' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'multiple passages between the rooms roomA, roomB' )
 
    def test_syntax_checker_wrong_game_10(self):
       game_internal = Game( [ [ GameObject( 'roomA' ), GameObject( 'roomB' ), GameObject( 'roomC' ) ],

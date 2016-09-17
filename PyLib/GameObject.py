@@ -161,10 +161,10 @@ class GameSyntaxChecker:
       for passage in game.game_internal.passages:
          edge = passage.get_ordered_name()
          if edge in ordered_edges:
-            return False
+            return edge[0]+', '+edge[1]
          else:
             ordered_edges.append( edge )
-      return True
+      return ""
 
    def check_all_passage_identifiers_are_unique( self, game ):
       ids = []
@@ -341,8 +341,9 @@ class GameSyntaxChecker:
       if not self.check_final_room_is_reachable( game ):
          return 'final room is not reachable' 
 
-      if not self.check_no_multiple_passages_between_rooms( game ):
-         return 'multiple passages between the same rooms'
+      culprit = self.check_no_multiple_passages_between_rooms( game )
+      if culprit:
+         return 'multiple passages between the rooms '+ culprit
 
       if not self.check_all_passage_identifiers_are_unique( game ):
          return 'passage identifiers are not unique'
