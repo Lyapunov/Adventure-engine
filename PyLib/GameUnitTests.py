@@ -376,7 +376,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'there must be exactly one action for each invisible object which reveals it' )
+      assert ( verdict  == 'there must be exactly one action for each invisible object which reveals it, door' )
 
    def test_syntax_checker_wrong_game27(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),

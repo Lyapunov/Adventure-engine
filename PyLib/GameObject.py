@@ -231,8 +231,8 @@ class GameSyntaxChecker:
                   if obj.name == subjectname:
                      counter += 1
             if not counter == 1:
-               return False
-      return True
+               return obj.name
+      return ""
 
    def check_no_actions_without_actors( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
@@ -395,8 +395,9 @@ class GameSyntaxChecker:
       if culprit :
          return "action actor " + culprit + " must be mobile"
 
-      if not self.check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( game ):
-         return 'there must be exactly one action for each invisible object which reveals it'
+      culprit = self.check_there_is_exactly_one_action_for_each_invisible_object_which_reveals_it( game )
+      if culprit:
+         return 'there must be exactly one action for each invisible object which reveals it, ' + culprit
 
       if not self.check_stuff_names_are_proper( game ):
          return 'game object names can contain only lower case alphabets and _.'
