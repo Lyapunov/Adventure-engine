@@ -382,10 +382,10 @@ class GameUnitTests(unittest.TestCase):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
                                                                    GameObject( 'key' , [] ) ] ),
                                 GameObject( 'ending_room' ) ],
-                              [ GameObject( 'open_door' ) ],
+                              [],
                               [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                              [ GameObjectUseAction( 'key', 'door', 'open_door' ) ],
-                              [ GamePassageRevealAction( 'open_door', '', 11 )],
+                              [ GamePassageRevealAction( 'key', 'door', 11 ) ],
+                              [],
                               'ending_room',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
