@@ -248,7 +248,7 @@ class GameUnitTests(unittest.TestCase):
                               'ending_room', 
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found invalid action with the same actor twice' )
+      assert ( verdict  == 'found invalid action with the same actor twice, door' )
 
    def test_syntax_checker_wrong_game_18(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),
