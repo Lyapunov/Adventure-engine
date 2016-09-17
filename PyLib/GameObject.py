@@ -310,10 +310,10 @@ class GameSyntaxChecker:
       stuffs = []
       for stuffname in self.get_all_stuff_names( game, 1 ):
          if stuffname in stuffs:
-            return False
+            return stuffname
          else:
             stuffs.append( stuffname )
-      return True
+      return ""
 
    def check_not_top_level_stuffs_cannot_have_attributes( self, game ):
       for stuff in self.get_all_stuffs( game, 0, 0 ):
@@ -365,8 +365,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'found invalid object in an action, ' + culprit
 
-      if not self.check_no_two_actors_with_the_same_name( game ):
-         return 'found two objects with the same name'
+      culprit = self.check_no_two_actors_with_the_same_name( game )
+      if culprit:
+         return 'found two objects with the same name, ' + culprit
 
       if not self.check_no_actions_without_actors( game ):
          return 'found an action without actors'

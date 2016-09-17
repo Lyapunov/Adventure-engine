@@ -214,7 +214,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found two objects with the same name' )
+      assert ( verdict  == 'found two objects with the same name, button1' )
 
    def test_syntax_checker_wrong_game_15(self):
       game_internal = Game( [ [ GameObject( 'roomA' ), GameObject( 'roomC' ),
@@ -224,7 +224,7 @@ class GameUnitTests(unittest.TestCase):
                                 GamePassage(12, 'roomB', 'roomC', 'N', 'S' ) ],
                               [], [], 'roomC', {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found two objects with the same name' )
+      assert ( verdict  == 'found two objects with the same name, roomC' )
 
    def test_syntax_checker_wrong_game16(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ) ] ),
@@ -306,7 +306,7 @@ class GameUnitTests(unittest.TestCase):
                               'roomB',
                               {} ] )
       verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == 'found two objects with the same name' )
+      assert ( verdict  == 'found two objects with the same name, handle1' )
 
    def test_syntax_checker_wrong_game22(self):
       game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
