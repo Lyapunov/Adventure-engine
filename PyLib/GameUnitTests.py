@@ -391,6 +391,20 @@ class GameUnitTests(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == "action actor door must be mobile" )
 
+   def test_syntax_checker_wrong_game28(self):
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+                                                                   GameObject( 'key' , [] ) ] ),
+                                GameObject( 'ending_room' ) ],
+                              [ GameObject( 'broken_key' ) ],
+                              [ GamePassage( 11, 'starting_room', 'strange_room' , 'W', 'E',  [] ),
+                                GamePassage( 12, 'strange_room', 'ending_room'   , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GameObjectUseAction( 'door', 'key', 'broken_key' ) ],
+                              [ GamePassageRevealAction( 'broken_key', '', 12 )],
+                              'ending_room',
+                              {} ] )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == "found not existing room in a passage: strange_room" )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ],

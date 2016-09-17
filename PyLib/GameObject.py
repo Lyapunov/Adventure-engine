@@ -176,6 +176,14 @@ class GameSyntaxChecker:
             ids.append( identifier )
       return True
 
+   def check_rooms_in_passages_exist( self, game ):
+      ordered_edges = []
+      for passage in game.game_internal.passages:
+         for roomname in passage.get_ordered_name():
+            if ( game.game_internal.find_room( roomname ) is None ):
+               return roomname
+      return ""
+
    def check_passage_identifiers_are_valid_in_actions( self, game ):
       ids = []
       for passage in game.game_internal.passages:
@@ -338,6 +346,10 @@ class GameSyntaxChecker:
 
       if not self.check_all_passage_identifiers_are_unique( game ):
          return 'passage identifiers are not unique'
+
+      culprit = self.check_rooms_in_passages_exist( game )
+      if culprit:
+         return 'found not existing room in a passage: ' + culprit
 
       if not self.check_all_room_is_reachable( game ):
          return 'not all rooms are accessible'
