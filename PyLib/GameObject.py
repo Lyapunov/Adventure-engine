@@ -492,10 +492,15 @@ class GameInternal(CommonEquality):
    def view_refresh( self ):
       for action in self.views:
          # cheating to make it faster
-         subject, entity = self.find( action.subjectname )
-         tool,    entity = self.find( action.toolname )
-         if not subject is None and not tool is None and action.applicable( subject.name, tool.name ):
-            action.showIt( self )
+         if action.toolname == '':
+            subject, entity = self.find( action.subjectname )
+            if not subject is None  and action.applicable( subject.name, '' ):
+               action.showIt( self )
+         else:
+            subject, entity = self.find( action.subjectname )
+            tool,    entity = self.find( action.toolname )
+            if not subject is None and not tool is None and action.applicable( subject.name, tool.name ):
+               action.showIt( self )
 
    def find_in_entities( self, name, entities ):
       for entity in entities:
@@ -760,7 +765,9 @@ class GamePassageRevealAction(CommonEquality):
       return self.subjectname == subjectname and self.toolname == toolname
 
    def showIt( self, game ):
-      raise Exception('Cannot use passage action as a view, it modifies the world')
+      for passage in game.passages:
+         if passage.identifier == self.identifier:
+            passage.make_visible()
  
    def doIt( self, game ):
       for passage in game.passages:

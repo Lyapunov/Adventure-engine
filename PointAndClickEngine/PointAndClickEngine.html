@@ -350,6 +350,13 @@
                         }
                      }
                   };
+                  input.showIt = function( game ) {
+                     for( var i = 0; i < game.passages.length; ++i ) {
+                        if ( game.passages[i].obj_content.identifier == input.obj_content.identifier ) {
+                           game.passages[i].make_visible();
+                        }
+                     }
+                  };
                   break;
                case "GameObjectRevealAction" :
                   input.subject_to_reveal = function() {
@@ -463,10 +470,18 @@
             this.view_refresh = function () {
                for ( var i = 0; i < self.views.length; ++i ) {
                   var action = self.views[i];
-                  var pair1  = self.find( action.obj_content.subjectname );
-                  var pair2  = self.find( action.obj_content.toolname );
-                  if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
-                     action.showIt( self );
+
+                  if ( action.obj_content.toolname == "" ) {
+                     var pair1  = self.find( action.obj_content.subjectname );
+                     if ( pair1[0] != null && action.applicable( pair1[0].obj_content.name, "" ) ) {
+                        action.showIt( self );
+                     }
+                  } else {
+                     var pair1  = self.find( action.obj_content.subjectname );
+                     var pair2  = self.find( action.obj_content.toolname );
+                     if ( pair1[0] != null && pair2[0] != null && action.applicable( pair1[0].obj_content.name, pair2[0].obj_content.name ) ) {
+                        action.showIt( self );
+                     }
                   }
                }
             };
