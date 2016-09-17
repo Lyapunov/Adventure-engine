@@ -188,7 +188,7 @@ class GameUnitTests(unittest.TestCase):
                               [],
                               'roomB',
                               {} ] )
-      assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'invalid passage identifiers in an action, 13' )
 
    def test_syntax_checker_wrong_game_13(self):
       game_internal = Game( [ [ GameObject( 'roomA',[], [ GameObject( 'button1', [GameObjectAttribute.IMMOBILE], [] ),

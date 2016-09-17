@@ -192,10 +192,10 @@ class GameSyntaxChecker:
       for passage in allactions:
          try:
             if not passage.get_passage_identifier() in ids:
-               return False
+               return passage.get_passage_identifier()
          except Exception:
             sys.exc_clear()
-      return True
+      return ""
 
    def check_actors_are_valid_in_actions( self, game ):
       allactions = game.game_internal.use_actions + game.game_internal.views
@@ -357,8 +357,9 @@ class GameSyntaxChecker:
       if culprit :
          return 'not all rooms are accessible, ' + culprit
 
-      if not self.check_passage_identifiers_are_valid_in_actions( game ):
-         return 'invalid passage identifiers in an action'
+      culprit = self.check_passage_identifiers_are_valid_in_actions( game )
+      if culprit :
+         return 'invalid passage identifiers in an action, ' + str(culprit)
 
       culprit = self.check_actors_are_valid_in_actions( game )
       if culprit:
