@@ -405,6 +405,13 @@ class GameUnitTests(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == "found not existing room in a passage: strange_room" )
 
+   def test_syntax_checker_wrong_game29(self):
+      game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final/room' ) ],
+                              [],
+                              [ GamePassage( 11, 'starting_room', 'final/room', 'N', 'S' ) ], [], [], 'final/room', {} ] )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict == 'game object names can contain only lower case alphabets and _, final/room' )
+
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ],

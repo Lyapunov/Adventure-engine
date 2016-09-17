@@ -328,8 +328,8 @@ class GameSyntaxChecker:
       regex = re.compile('[0-9,a-z,A-Z,_]+$')
       for stuff in self.get_all_stuff_names( game, 1 ):
          if not regex.match( stuff ):
-            return False
-      return True
+            return stuff
+      return ""
 
    def check( self, game ):
       if not self.check_must_have_at_least_one_room( game ):
@@ -399,8 +399,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'there must be exactly one action for each invisible object which reveals it, ' + culprit
 
-      if not self.check_stuff_names_are_proper( game ):
-         return 'game object names can contain only lower case alphabets and _.'
+      culprit = self.check_stuff_names_are_proper( game )
+      if culprit:
+         return 'game object names can contain only lower case alphabets and _, ' + culprit
 
       return ''
 
