@@ -391,21 +391,6 @@ class GameUnitTests(unittest.TestCase):
       verdict = GameSyntaxChecker().check( game_internal )
       assert ( verdict  == "action actor door must be mobile" )
 
-   # This game is not solvable with the current engine, and broken. Door doesn't disappear, open_door is not
-   # immobile, so it cannot hide it, but passage reveal action won't work. The solver fails to find the solution.
-   def test_syntax_checker_wrong_game28(self):
-      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
-                                                                   GameObject( 'key' , [] ) ] ),
-                                GameObject( 'ending_room' ) ],
-                              [ GameObject( 'open_door' ) ],
-                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
-                              [ GameObjectUseAction( 'door', 'key', 'open_door' ) ],
-                              [ GamePassageRevealAction( 'open_door', '', 11 )],
-                              'ending_room',
-                              {} ] )
-      verdict = GameSyntaxChecker().check( game_internal )
-      assert ( verdict  == "" )
-
    def test_syntax_checker_good_game1(self):
       # minimal valid game
       game_internal = Game( [ [ GameObject( 'starting_room' ), GameObject( 'final_room' ) ],
@@ -526,6 +511,38 @@ class GameUnitTests(unittest.TestCase):
       assert ( verdict  == '' )
       solution = GameSolver().solve( game_internal )
       assert ( solution == [['take', 'keypart1'], ['open', 'box'], ['take', 'keypart2'], ['use', 'keypart1', 'keypart2'], ['use', 'door', 'key'], ['go', 'N']] )
+
+   # This game is kind of strange, because use action + passage reval view = use passage reveal, so it
+   # just a complication. game10 shows the sense.
+   def test_syntax_checker_good_game9(self):
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+                                                                   GameObject( 'key' , [] ) ] ),
+                                GameObject( 'ending_room' ) ],
+                              [ GameObject( 'broken_key' ) ],
+                              [ GamePassage( 11, 'starting_room', 'ending_room' , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GameObjectUseAction( 'door', 'key', 'broken_key' ) ],
+                              [ GamePassageRevealAction( 'broken_key', '', 11 )],
+                              'ending_room',
+                              {} ] )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == "" )
+      assert ( GameSolver().solve( game_internal )  == [['take', 'key'], ['use', 'door', 'key'], ['go', 'N']] )
+
+   def test_syntax_checker_good_game10(self):
+      game_internal = Game( [ [ GameObject( 'starting_room', [], [ GameObject( 'door', [GameObjectAttribute.IMMOBILE] ),
+                                                                   GameObject( 'key' , [] ) ] ),
+                                GameObject( 'strange_room' ),
+                                GameObject( 'ending_room' ) ],
+                              [ GameObject( 'broken_key' ) ],
+                              [ GamePassage( 11, 'starting_room', 'strange_room' , 'W', 'E',  [] ),
+                                GamePassage( 12, 'strange_room', 'ending_room'   , 'N', 'S',  [GameObjectAttribute.INVISIBLE] ) ],
+                              [ GameObjectUseAction( 'door', 'key', 'broken_key' ) ],
+                              [ GamePassageRevealAction( 'broken_key', '', 12 )],
+                              'ending_room',
+                              {} ] )
+      verdict = GameSyntaxChecker().check( game_internal )
+      assert ( verdict  == "" )
+      assert ( GameSolver().solve( game_internal ) == [['take', 'key'], ['use', 'door', 'key'], ['go', 'W'], ['go', 'N']] )
 
    def test_take_and_drop_existing_object(self):
       subject = self.game1.do_it( 'take',  'candle' )
