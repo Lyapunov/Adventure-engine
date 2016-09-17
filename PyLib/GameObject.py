@@ -153,8 +153,8 @@ class GameSyntaxChecker:
       accessible_rooms = self.get_list_of_accessible_rooms( game )
       for room in game.game_internal.rooms:
          if not room.name in accessible_rooms:
-            return False
-      return True
+            return room.name
+      return ""
 
    def check_no_multiple_passages_between_rooms( self, game ):
       ordered_edges = []
@@ -353,8 +353,9 @@ class GameSyntaxChecker:
       if culprit:
          return 'found not existing room in a passage: ' + culprit
 
-      if not self.check_all_room_is_reachable( game ):
-         return 'not all rooms are accessible'
+      culprit = self.check_all_room_is_reachable( game )
+      if culprit :
+         return 'not all rooms are accessible, ' + culprit
 
       if not self.check_passage_identifiers_are_valid_in_actions( game ):
          return 'invalid passage identifiers in an action'

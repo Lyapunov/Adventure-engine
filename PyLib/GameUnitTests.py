@@ -177,7 +177,7 @@ class GameUnitTests(unittest.TestCase):
                               [ GamePassage(11, 'roomA', 'roomB', 'N', 'S' ),
                                 GamePassage(12, 'roomC', 'roomD', 'N', 'S' ) ],
                               [], [], 'roomB', {} ] )
-      assert ( GameSyntaxChecker().check( game_internal )  == 'not all rooms are accessible' )
+      assert ( GameSyntaxChecker().check( game_internal )  == 'not all rooms are accessible, roomC' )
  
    def test_syntax_checker_wrong_game_12(self):
       game_internal = Game( [ [ GameObject( 'roomA', [], [ GameObject( 'button', [GameObjectAttribute.IMMOBILE], [] ) ] ),
